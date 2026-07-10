@@ -314,3 +314,138 @@ function escapeHtml(str) {
     { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]
   ));
 }
+
+/* ---------- Topbar tracking search: full-field lookup + live suggestions ----------
+   Searches across the whole shipment record (tracking number, customer, destination,
+   order id, carrier, status, origin, email, exception id/reason) and shows a
+   suggestions dropdown as you type. Keyboard: ↑/↓ to move, Enter to open, Esc to close. */
+
+/** Wraps the first case-insensitive occurrence of `query` in `text` with <mark>, escaping the rest. */
+function highlightMatch(text, query) {
+  const str = String(text == null ? "" : text);
+  if (!query) return escapeHtml(str);
+  const idx = str.toLowerCase().indexOf(query.toLowerCase());
+  if (idx === -1) return escapeHtml(str);
+  return escapeHtml(str.slice(0, idx))
+    + "<mark>" + escapeHtml(str.slice(idx, idx + query.length)) + "</mark>"
+    + escapeHtml(str.slice(idx + query.length));
+}
+
+/** Returns up to 8 shipments matching `rawQuery` across all fields, best matches first. */
+function searchShipments(rawQuery) {
+  if (typeof ALL_SHIPMENTS === "undefined") return [];
+  const q = rawQuery.trim().toLowerCase();
+  if (!q) return [];
+  const qns = q.replace(/\s+/g, "");
+  const lower = (v) => String(v == null ? "" : v).toLowerCase();
+
+  const scored = [];
+  for (const s of ALL_SHIPMENTS) {
+    const trackNs = lower(s.tracking).replace(/\s+/g, "");
+    let score = -1;
+    if (trackNs === qns) score = 0;
+    else if (trackNs.startsWith(qns)) score = 1;
+    else if (trackNs.includes(qns)) score = 2;
+    else {
+      const fields = [s.customer, s.orderId, s.destination, s.origin, s.carrier,
+        s.status, s.email, s.id, s.serviceLevel, s.exceptionId, s.title];
+      if (fields.some((f) => f && lower(f).includes(q))) score = 3;
+    }
+    if (score !== -1) scored.push({ s, score });
+  }
+  scored.sort((a, b) => a.score - b.score);
+  return scored.slice(0, 8).map((x) => x.s);
+}
+
+function initTrackingSearch() {
+  const input = document.getElementById("tracking-search");
+  if (!input || typeof ALL_SHIPMENTS === "undefined") return;
+  const wrap = input.closest(".topbar-track");
+  if (!wrap) return;
+
+  const panel = document.createElement("div");
+  panel.className = "track-suggest";
+  panel.setAttribute("role", "listbox");
+  wrap.appendChild(panel);
+
+  let results = [];
+  let activeIdx = -1;
+
+  function itemHtml(s, q, i) {
+    const badgeCls = typeof statusBadgeClass !== "undefined" ? statusBadgeClass(s.status) : "badge-neutral";
+    const sub = [s.customer, s.destination, s.carrier, s.orderId]
+      .map((x) => highlightMatch(x, q)).join(" · ");
+    return `<div class="track-suggest-item" role="option" data-idx="${i}">
+        <div class="tsi-main">
+          <span class="tsi-tracking mono">${highlightMatch(s.tracking, q)}</span>
+          <span class="badge ${badgeCls}"><span class="sw"></span>${escapeHtml(s.status)}</span>
+        </div>
+        <div class="tsi-sub">${sub}</div>
+      </div>`;
+  }
+
+  function render(q) {
+    results = searchShipments(q);
+    activeIdx = -1;
+    if (!q) { close(); return; }
+    if (!results.length) {
+      panel.innerHTML = `<div class="track-suggest-empty">No shipments match &ldquo;${escapeHtml(q)}&rdquo;</div>`;
+      panel.classList.add("open");
+      return;
+    }
+    panel.innerHTML = `<div class="track-suggest-hint">${results.length} match${results.length > 1 ? "es" : ""}</div>`
+      + results.map((s, i) => itemHtml(s, q, i)).join("");
+    panel.classList.add("open");
+    panel.querySelectorAll(".track-suggest-item").forEach((el) => {
+      const idx = Number(el.dataset.idx);
+      // mousedown (not click) so it fires before the input's blur closes the panel
+      el.addEventListener("mousedown", (e) => { e.preventDefault(); go(idx); });
+      el.addEventListener("mousemove", () => { activeIdx = idx; paintActive(); });
+    });
+  }
+
+  function paintActive() {
+    panel.querySelectorAll(".track-suggest-item").forEach((el, i) => {
+      const on = i === activeIdx;
+      el.classList.toggle("active", on);
+      if (on) el.scrollIntoView({ block: "nearest" });
+    });
+  }
+
+  function go(i) {
+    const s = results[i];
+    if (!s) return;
+    input.value = "";
+    close();
+    location.href = `shipment-detail.html?id=${s.id}`;
+  }
+
+  function close() {
+    panel.classList.remove("open");
+    panel.innerHTML = "";
+    activeIdx = -1;
+  }
+
+  input.addEventListener("input", () => render(input.value));
+  input.addEventListener("focus", () => { if (input.value.trim()) render(input.value); });
+  input.addEventListener("blur", () => setTimeout(close, 120));
+  input.addEventListener("keydown", (e) => {
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (!panel.classList.contains("open")) render(input.value);
+      if (results.length) { activeIdx = Math.min(activeIdx + 1, results.length - 1); paintActive(); }
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (results.length) { activeIdx = Math.max(activeIdx - 1, 0); paintActive(); }
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (results.length) go(activeIdx >= 0 ? activeIdx : 0);
+      else if (input.value.trim()) toast(`No shipment found for “${input.value.trim()}”`, { icon: "ti-alert-circle" });
+    } else if (e.key === "Escape") {
+      close();
+      input.blur();
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initTrackingSearch);

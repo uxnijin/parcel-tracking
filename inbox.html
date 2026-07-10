@@ -114,6 +114,11 @@
 <div class="app-shell">
   <aside class="sidebar">
     <div class="sidebar-brand">ShipFlow</div>
+      <button class="sidebar-search" onclick="openCommandPalette()" aria-label="Search shipments, customers, or pages">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <span>Search…</span>
+        <kbd>&#8984;K</kbd>
+      </button>
     
     <nav class="nav-group">
       <span class="nav-label">Workspace</span>
@@ -139,29 +144,26 @@
 
   <div class="main">
     <header class="topbar">
-      <div class="topbar-search">
-        <i class="ti ti-search" aria-hidden="true"></i>
-        <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
+      <div class="topbar-lead">
+        <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
+        <h1>Inbox Scan</h1>
       </div>
       <div class="topbar-actions">
-        <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+        <div class="topbar-track">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="text" id="tracking-search" placeholder="Track a shipment…" autocomplete="off" aria-label="Search shipments by tracking, customer, or destination" />
+      </div>
         <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i></button>
         <div class="avatar">JD</div>
       </div>
     </header>
 
     <main class="content">
-      <div class="page-header">
-        <div class="page-title">
-          <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
-          <h1>Inbox Scan</h1>
-        </div>
-      </div>
 
       <!-- Disconnected State -->
       <div class="card inbox-connect" id="inbox-disconnected">
         <div class="inbox-connect__pitch">
-          <div class="inbox-connect__brand"><img src="assets/gmail-icon.svg" alt="" aria-hidden="true" /></div>
+          <div class="inbox-connect__brand"><img src="assets/gmail.png" alt="" aria-hidden="true" /></div>
           <h2>Turn shipping emails into tracked shipments</h2>
           <p class="inbox-connect__lead">
             Connect Gmail and ShipFlow reads your shipping confirmations, pulls out every tracking number, and lines them up for one-tap import — no forwarding, no copy-paste.
@@ -182,7 +184,7 @@
           </div>
           <div class="inbox-connect__cta">
             <button class="btn-primary" onclick="connectGmailFromInbox(event)" id="btn-inbox-connect-gmail" style="gap: 8px;">
-              <img src="assets/gmail-icon.svg" alt="" aria-hidden="true" style="width: 14px; height: auto;" />Connect Gmail
+              <img src="assets/gmail.png" alt="" aria-hidden="true" style="width: 14px; height: auto;" />Connect Gmail
             </button>
             <span class="inbox-connect__note">
               <i class="ti ti-shield-lock" aria-hidden="true" style="font-size:12px"></i>Secured by Google OAuth

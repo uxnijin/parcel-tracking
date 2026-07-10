@@ -35,6 +35,11 @@
 <div class="app-shell">
   <aside class="sidebar">
     <div class="sidebar-brand">ShipFlow</div>
+      <button class="sidebar-search" onclick="openCommandPalette()" aria-label="Search shipments, customers, or pages">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <span>Search…</span>
+        <kbd>&#8984;K</kbd>
+      </button>
     <nav class="nav-group">
       <span class="nav-label">Workspace</span>
       <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">—</span></a>
@@ -56,24 +61,21 @@
 
   <div class="main">
     <header class="topbar">
-      <div class="topbar-search">
-        <i class="ti ti-search" aria-hidden="true"></i>
-        <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
+      <div class="topbar-lead">
+        <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
+        <h1>Settings</h1>
       </div>
       <div class="topbar-actions">
-        <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+        <div class="topbar-track">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="text" id="tracking-search" placeholder="Track a shipment…" autocomplete="off" aria-label="Search shipments by tracking, customer, or destination" />
+      </div>
         <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i></button>
         <div class="avatar">JD</div>
       </div>
     </header>
 
     <main class="content">
-      <div class="page-header">
-        <div class="page-title">
-          <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
-          <h1>Settings</h1>
-        </div>
-      </div>
 
       <div class="settings-grid">
         <nav class="settings-nav">
@@ -157,7 +159,7 @@
 
               <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
                 <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <img src="assets/gmail-icon.svg" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
+                  <img src="assets/gmail.png" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
                 </div>
                 <div class="who" style="flex: 1;">
                   <div class="name" style="font-weight: 500;">Google Gmail</div>
@@ -197,7 +199,7 @@
 
               <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
                 <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <i class="ti ti-mail" aria-hidden="true" style="font-size: 20px; color: #0078D4;"></i>
+                  <img src="assets/outlook.png" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
                 </div>
                 <div class="who" style="flex: 1;">
                   <div class="name" style="font-weight: 500;">Microsoft Outlook</div>
@@ -258,7 +260,7 @@
 
               <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
                 <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <i class="ti ti-brand-shopify" aria-hidden="true" style="font-size: 20px; color: #95BF47;"></i>
+                  <img src="assets/shopify.png" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
                 </div>
                 <div class="who" style="flex: 1;">
                   <div class="name" style="font-weight: 500;">Shopify</div>

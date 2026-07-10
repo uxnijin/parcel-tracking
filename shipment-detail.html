@@ -18,6 +18,44 @@
   .attach-row:last-child { border-bottom: none; }
   .attach-row i { font-size: 17px; color: var(--text-secondary); }
   .attach-row .size { margin-left: auto; color: var(--text-muted); font-size: var(--fs-caption); }
+
+  /* ---------- Order status timeline ---------- */
+  .status-timeline { display: flex; flex-direction: column; }
+  .stl-item { display: flex; gap: var(--sp-3); position: relative; padding-bottom: var(--sp-5); }
+  .stl-item:last-child { padding-bottom: 0; }
+  .stl-item:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    left: 15px; top: 32px; bottom: -2px;
+    width: 2px;
+    background: var(--border);
+  }
+  .stl-item.done:not(:last-child)::before,
+  .stl-item.current:not(:last-child)::before { background: var(--border-success); }
+  .stl-item.exception:not(:last-child)::before { background: var(--border-danger); }
+
+  .stl-marker {
+    width: 32px; height: 32px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; font-size: 15px;
+    background: var(--surface-2); color: var(--text-muted);
+    border: 1.5px solid var(--border);
+    z-index: 1;
+  }
+  .stl-item.done .stl-marker { background: var(--bg-success); color: var(--text-success); border-color: var(--border-success); }
+  .stl-item.current .stl-marker { background: var(--fill-primary); color: var(--on-primary); border-color: var(--fill-primary); }
+  .stl-item.exception .stl-marker { background: var(--bg-danger); color: var(--text-danger); border-color: var(--border-danger); }
+
+  .stl-body { flex: 1; padding-top: 5px; min-width: 0; }
+  .stl-title { font-size: var(--fs-footnote); font-weight: 600; display: flex; align-items: center; gap: 8px; }
+  .stl-item.exception .stl-title { color: var(--text-danger); }
+  .stl-meta { font-size: var(--fs-caption); color: var(--text-muted); margin-top: 2px; line-height: 1.5; }
+  .stl-now {
+    font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
+    padding: 1px 7px; border-radius: 100px;
+    background: var(--fill-primary); color: var(--on-primary);
+    flex-shrink: 0;
+  }
 </style>
 </head>
 <body data-page="shipments">
@@ -25,6 +63,11 @@
 <div class="app-shell">
   <aside class="sidebar">
     <div class="sidebar-brand">ShipFlow</div>
+      <button class="sidebar-search" onclick="openCommandPalette()" aria-label="Search shipments, customers, or pages">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <span>Search…</span>
+        <kbd>&#8984;K</kbd>
+      </button>
     <nav class="nav-group">
       <span class="nav-label">Workspace</span>
       <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">—</span></a>
@@ -46,12 +89,19 @@
 
   <div class="main">
     <header class="topbar">
-      <div class="topbar-search">
-        <i class="ti ti-search" aria-hidden="true"></i>
-        <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
+      <div class="topbar-lead">
+        <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
+        <h1 id="det-title">SHP-10032</h1>
       </div>
       <div class="topbar-actions">
-        <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+        <button onclick="toast('Customer notified')"><i class="ti ti-mail" aria-hidden="true"></i>Notify customer</button>
+        <button onclick="toast('Editing not supported in mockup')"><i class="ti ti-edit" aria-hidden="true"></i>Edit</button>
+        <button class="btn-primary" id="btn-det-resolve" onclick="resolveShipmentDetail()"><i class="ti ti-check" aria-hidden="true"></i>Resolve</button>
+        <div class="topbar-divider"></div>
+        <div class="topbar-track">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="text" id="tracking-search" placeholder="Track a shipment…" autocomplete="off" aria-label="Search shipments by tracking, customer, or destination" />
+      </div>
         <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i><span class="dot"></span></button>
         <button class="icon-btn" aria-label="Settings" onclick="location.href='settings.html'"><i class="ti ti-settings" aria-hidden="true"></i></button>
         <div class="avatar">JD</div>
@@ -59,17 +109,6 @@
     </header>
 
     <main class="content">
-      <div class="page-header">
-        <div class="page-title">
-          <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
-          <h1 id="det-title">SHP-10032</h1>
-        </div>
-        <div class="flex gap-2">
-          <button onclick="toast('Customer notified')"><i class="ti ti-mail" aria-hidden="true"></i>Notify customer</button>
-          <button onclick="toast('Editing not supported in mockup')"><i class="ti ti-edit" aria-hidden="true"></i>Edit</button>
-          <button class="btn-primary" id="btn-det-resolve" onclick="resolveShipmentDetail()"><i class="ti ti-check" aria-hidden="true"></i>Resolve</button>
-        </div>
-      </div>
 
       <div class="detail-grid">
         <div>
@@ -82,7 +121,7 @@
 
           <div class="tab-panel active" id="panel-timeline">
             <div class="card">
-              <div class="timeline" id="det-timeline">
+              <div class="status-timeline" id="det-timeline">
                 <!-- populated by js/pages/shipment-detail.js -->
               </div>
             </div>

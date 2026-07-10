@@ -63,40 +63,43 @@ function renderTimeline(s) {
   
   let html = "";
   if (s.status === STATUS.PENDING) {
-    html = renderTimelineItem("current", "Label created", "Jul 6, 4:02 PM");
+    html = renderTimelineItem("current", "ti-tag", "Label created", "Jul 6, 4:02 PM");
   } else if (s.status === STATUS.IN_TRANSIT) {
-    html += renderTimelineItem("current", "In transit", `Jul 8, 6:15 AM · Departed ${orig} hub`);
-    html += renderTimelineItem("done", "Picked up", `Jul 7, 9:30 AM · ${orig}`);
-    html += renderTimelineItem("done", "Label created", "Jul 6, 4:02 PM");
+    html += renderTimelineItem("current", "ti-truck", "In transit", `Jul 8, 6:15 AM · Departed ${orig} hub`);
+    html += renderTimelineItem("done", "ti-package", "Picked up", `Jul 7, 9:30 AM · ${orig}`);
+    html += renderTimelineItem("done", "ti-tag", "Label created", "Jul 6, 4:02 PM");
   } else if (s.status === STATUS.DELIVERED) {
-    html += renderTimelineItem("done", "Delivered", `Jul 9, 2:14 PM · Delivered to receiver`);
-    html += renderTimelineItem("done", "Out for delivery", `Jul 9, 8:02 AM · ${dest}`);
-    html += renderTimelineItem("done", "Arrived at local facility", `Jul 8, 11:40 PM · ${dest} distribution center`);
-    html += renderTimelineItem("done", "In transit", `Jul 8, 6:15 AM · Departed ${orig} hub`);
-    html += renderTimelineItem("done", "Picked up", `Jul 7, 9:30 AM · ${orig}`);
-    html += renderTimelineItem("done", "Label created", "Jul 6, 4:02 PM");
+    html += renderTimelineItem("done", "ti-circle-check", "Delivered", `Jul 9, 2:14 PM · Delivered to receiver`);
+    html += renderTimelineItem("done", "ti-truck-delivery", "Out for delivery", `Jul 9, 8:02 AM · ${dest}`);
+    html += renderTimelineItem("done", "ti-building-warehouse", "Arrived at local facility", `Jul 8, 11:40 PM · ${dest} distribution center`);
+    html += renderTimelineItem("done", "ti-truck", "In transit", `Jul 8, 6:15 AM · Departed ${orig} hub`);
+    html += renderTimelineItem("done", "ti-package", "Picked up", `Jul 7, 9:30 AM · ${orig}`);
+    html += renderTimelineItem("done", "ti-tag", "Label created", "Jul 6, 4:02 PM");
   } else if (s.status === STATUS.DELAYED) {
-    html += renderTimelineItem("exception", s.title || "Weather delay", `Jul 9, 2:14 PM · ${s.detail || "Regional weather slowing transit."}`);
-    html += renderTimelineItem("current", "In transit", `Jul 8, 6:15 AM · Departed ${orig} hub`);
-    html += renderTimelineItem("done", "Picked up", `Jul 7, 9:30 AM · ${orig}`);
-    html += renderTimelineItem("done", "Label created", "Jul 6, 4:02 PM");
+    html += renderTimelineItem("exception", "ti-alert-triangle", s.title || "Weather delay", `Jul 9, 2:14 PM · ${s.detail || "Regional weather slowing transit."}`);
+    html += renderTimelineItem("current", "ti-truck", "In transit", `Jul 8, 6:15 AM · Departed ${orig} hub`);
+    html += renderTimelineItem("done", "ti-package", "Picked up", `Jul 7, 9:30 AM · ${orig}`);
+    html += renderTimelineItem("done", "ti-tag", "Label created", "Jul 6, 4:02 PM");
   } else if (s.status === STATUS.EXCEPTION) {
-    html += renderTimelineItem("exception", s.title || "Delivery attempt failed", `Jul 9, 2:14 PM · ${s.detail || "No one available to receive the package."}`);
-    html += renderTimelineItem("current", "Out for delivery", `Jul 9, 8:02 AM · ${dest}`);
-    html += renderTimelineItem("done", "Arrived at local facility", `Jul 8, 11:40 PM · ${dest} distribution center`);
-    html += renderTimelineItem("done", "In transit", `Jul 8, 6:15 AM · Departed ${orig} hub`);
-    html += renderTimelineItem("done", "Picked up", `Jul 7, 9:30 AM · ${orig}`);
-    html += renderTimelineItem("done", "Label created", "Jul 6, 4:02 PM");
+    html += renderTimelineItem("exception", "ti-alert-triangle", s.title || "Delivery attempt failed", `Jul 9, 2:14 PM · ${s.detail || "No one available to receive the package."}`);
+    html += renderTimelineItem("current", "ti-truck-delivery", "Out for delivery", `Jul 9, 8:02 AM · ${dest}`);
+    html += renderTimelineItem("done", "ti-building-warehouse", "Arrived at local facility", `Jul 8, 11:40 PM · ${dest} distribution center`);
+    html += renderTimelineItem("done", "ti-truck", "In transit", `Jul 8, 6:15 AM · Departed ${orig} hub`);
+    html += renderTimelineItem("done", "ti-package", "Picked up", `Jul 7, 9:30 AM · ${orig}`);
+    html += renderTimelineItem("done", "ti-tag", "Label created", "Jul 6, 4:02 PM");
   }
-  
+
   container.innerHTML = html;
 }
 
-function renderTimelineItem(type, title, meta) {
+function renderTimelineItem(type, icon, title, meta) {
   return `
-    <div class="timeline-item ${type}">
-      <div class="t-title">${escapeHtml(title)}</div>
-      <div class="t-meta">${escapeHtml(meta)}</div>
+    <div class="stl-item ${type}">
+      <div class="stl-marker"><i class="ti ${icon}" aria-hidden="true"></i></div>
+      <div class="stl-body">
+        <div class="stl-title">${escapeHtml(title)}${type === "current" ? '<span class="stl-now">Now</span>' : ""}</div>
+        <div class="stl-meta">${escapeHtml(meta)}</div>
+      </div>
     </div>`;
 }
 

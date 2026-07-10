@@ -199,10 +199,6 @@ function openQuickView(id) {
 document.getElementById("table-search").addEventListener("input", debounce((e) => {
   state.search = e.target.value; state.page = 1; renderTable();
 }, 200));
-document.getElementById("global-search").addEventListener("input", debounce((e) => {
-  document.getElementById("table-search").value = e.target.value;
-  state.search = e.target.value; state.page = 1; renderTable();
-}, 200));
 // Multi-select dropdown filters helper
 function setupFilterDropdown(btnId, menuId, updateFn) {
   const btn = document.getElementById(btnId);
@@ -277,12 +273,37 @@ function updateClearButtonState() {
   }
 }
 
+/** Shows the "Jul N, 2026" chip in the filter toolbar when arriving from the calendar. */
+function showDateFilterChip(day) {
+  const chip = document.getElementById("date-filter-chip");
+  const label = document.getElementById("date-filter-label");
+  if (!chip || !label) return;
+  label.textContent = `Jul ${day}, 2026`;
+  chip.style.display = "inline-flex";
+}
+
+function hideDateFilterChip() {
+  const chip = document.getElementById("date-filter-chip");
+  if (chip) chip.style.display = "none";
+}
+
+function clearDateFilter() {
+  state.dateDay = null;
+  hideDateFilterChip();
+  history.replaceState(null, "", location.pathname);
+  updateClearButtonState();
+  state.page = 1;
+  renderTable();
+}
+window.clearDateFilter = clearDateFilter;
+
 // Arriving from the calendar: filter to the requested date. Cleared via the
-// toolbar's "Clear" button (btn-clear-filters) like any other active filter.
+// chip itself, or the toolbar's "Clear" button, like any other active filter.
 (function initDateFilterFromUrl() {
   const day = parseInt(new URLSearchParams(location.search).get("date"), 10);
   if (!isNaN(day)) {
     state.dateDay = day;
+    showDateFilterChip(day);
     updateClearButtonState();
   }
 })();
@@ -354,9 +375,9 @@ document.getElementById("btn-clear-filters").addEventListener("click", () => {
   state.serviceLevels.clear();
   state.severities.clear();
   state.dateDay = null;
+  hideDateFilterChip();
   state.page = 1;
   document.getElementById("table-search").value = "";
-  document.getElementById("global-search").value = "";
   history.replaceState(null, "", location.pathname);
 
   // Uncheck all checkboxes in all filter menus
@@ -431,6 +452,7 @@ function applySavedView(e, view) {
   state.serviceLevels.clear();
   state.severities.clear();
   state.dateDay = null;
+  hideDateFilterChip();
   history.replaceState(null, "", location.pathname);
 
   // Reset labels

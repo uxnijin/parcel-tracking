@@ -119,7 +119,7 @@ function connectGmailFromInbox(e) {
 
   setTimeout(() => {
     btn.disabled = false;
-    btn.innerHTML = `<img src="assets/gmail-icon.svg" alt="" aria-hidden="true" style="width:14px;height:auto;margin-right:6px" />Connect Gmail`;
+    btn.innerHTML = `<img src="assets/gmail.png" alt="" aria-hidden="true" style="width:14px;height:auto;margin-right:6px" />Connect Gmail`;
     if (typeof setGmailConnected !== "undefined") {
       setGmailConnected(true);
     }

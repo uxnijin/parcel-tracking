@@ -15,6 +15,11 @@
   <div class="app-shell">
     <aside class="sidebar">
       <div class="sidebar-brand">ShipFlow</div>
+      <button class="sidebar-search" onclick="openCommandPalette()" aria-label="Search shipments, customers, or pages">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <span>Search…</span>
+        <kbd>&#8984;K</kbd>
+      </button>
       <nav class="nav-group">
         <span class="nav-label">Workspace</span>
         <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package"
@@ -54,14 +59,20 @@
 
     <div class="main">
       <header class="topbar">
-        <div class="topbar-search">
-          <i class="ti ti-search" aria-hidden="true"></i>
-          <input type="text" id="global-search" placeholder="Search tracking number, customer, order id"
-            aria-label="Search shipments" />
+        <div class="topbar-lead">
+          <h1>Shipments</h1>
         </div>
         <div class="topbar-actions">
-          <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i
-              class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+          <button id="btn-refresh"><i class="ti ti-refresh" aria-hidden="true"></i>Refresh</button>
+          <button><i class="ti ti-download" aria-hidden="true"></i>Export</button>
+          <button class="btn-primary" onclick="openDrawer('new-shipment-drawer')"><i class="ti ti-plus"
+              aria-hidden="true"></i>New shipment</button>
+          <div class="topbar-divider"></div>
+          <div class="topbar-track">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <input type="text" id="tracking-search" placeholder="Track a shipment…"
+              autocomplete="off" aria-label="Search shipments by tracking, customer, or destination" />
+          </div>
           <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i
               class="ti ti-bell" aria-hidden="true"></i><span class="dot"></span></button>
           <button class="icon-btn" aria-label="Settings" onclick="location.href='settings.html'"><i
@@ -71,18 +82,6 @@
       </header>
 
       <main class="content">
-        <div class="page-header">
-          <div class="page-title">
-            <h1>Shipments</h1>
-          </div>
-          <div class="flex gap-2">
-            <button id="btn-refresh"><i class="ti ti-refresh" aria-hidden="true"></i>Refresh</button>
-            <button><i class="ti ti-download" aria-hidden="true"></i>Export</button>
-            <button class="btn-primary" onclick="openDrawer('new-shipment-drawer')"><i class="ti ti-plus"
-                aria-hidden="true"></i>New shipment</button>
-          </div>
-        </div>
-
         <div class="metric-grid">
           <div class="metric-card">
             <div class="label">In transit</div>
@@ -239,6 +238,14 @@
                   </div>
                 </div>
               </div>
+              <span class="badge badge-neutral" id="date-filter-chip" role="button" tabindex="0"
+                style="display:none; align-items:center; height:32px; padding:0 10px; border-radius:var(--radius); cursor:pointer; font-size:13px; gap:6px;"
+                title="Clear date filter" onclick="clearDateFilter()"
+                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();clearDateFilter();}">
+                <i class="ti ti-calendar" aria-hidden="true"></i>
+                <span id="date-filter-label"></span>
+                <i class="ti ti-x" aria-hidden="true" style="font-size:12px;"></i>
+              </span>
               <button class="btn-ghost" id="btn-clear-filters" style="display: none;"><i class="ti ti-x"
                   aria-hidden="true"></i>Clear</button>
             </div>
@@ -345,7 +352,7 @@
           <div class="flex items-center gap-3" style="flex: 1;">
             <div
               style="background: var(--surface-1); border: 0.5px solid var(--border); width: 36px; height: 36px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-              <img src="assets/gmail-icon.svg" alt="" aria-hidden="true" style="width: 18px; height: auto;" />
+              <img src="assets/gmail.png" alt="" aria-hidden="true" style="width: 18px; height: auto;" />
             </div>
             <div>
               <div style="font-weight: 600; font-size: var(--fs-footnote);">Connect Gmail</div>

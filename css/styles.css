@@ -62,6 +62,28 @@ button { font-family: inherit; }
   font-weight: 500;
 }
 
+.sidebar-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 32px;
+  padding: 0 10px;
+  border-radius: var(--radius);
+  border: 0.5px solid var(--border-strong);
+  background: var(--surface-1);
+  color: var(--text-muted);
+  font-size: var(--fs-footnote);
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+  transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
+}
+.sidebar-search:hover { background: var(--surface-2); border-color: var(--border-stronger); color: var(--text-secondary); }
+.sidebar-search i { font-size: 15px; flex-shrink: 0; }
+.sidebar-search span { flex: 1; }
+.sidebar-search kbd { flex-shrink: 0; }
+
 .nav-group { display: flex; flex-direction: column; gap: 1px; }
 .nav-label {
   font-size: 11px;
@@ -125,17 +147,72 @@ button { font-family: inherit; }
   gap: var(--sp-4);
   flex-shrink: 0;
 }
-.topbar-search {
-  position: relative;
-  flex: 1;
-  max-width: 480px;
+.topbar-lead {
+  display: flex; align-items: center; gap: var(--sp-2);
+  flex-shrink: 0; min-width: 0;
 }
-.topbar-search i {
+.topbar-lead h1 {
+  font-size: var(--fs-title);
+  white-space: nowrap;
+}
+.topbar-divider {
+  width: 0.5px; height: 22px; background: var(--border);
+  margin: 0 var(--sp-1);
+  flex-shrink: 0;
+}
+.topbar-track {
+  position: relative;
+  flex: 0 1 240px;
+  min-width: 150px;
+}
+.topbar-track i {
   position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
   font-size: 15px; color: var(--text-muted);
 }
-.topbar-search input { padding-left: 32px !important; width: 100%; }
-.topbar-actions { display: flex; align-items: center; gap: var(--sp-2); }
+.topbar-track input { padding-left: 32px !important; width: 100%; height: 32px; }
+@media (max-width: 640px) {
+  .topbar-track { display: none; }
+}
+
+/* Tracking search — live suggestions dropdown */
+.track-suggest {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  width: 360px;
+  max-width: 78vw;
+  max-height: 60vh;
+  overflow-y: auto;
+  background: var(--surface-1);
+  border: 0.5px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float);
+  padding: 6px;
+  z-index: var(--z-dropdown);
+  display: none;
+  animation: menu-in var(--dur-fast) var(--ease-out);
+}
+.track-suggest.open { display: block; }
+.track-suggest-hint {
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+  color: var(--text-muted); padding: 6px 8px 4px;
+}
+.track-suggest-item {
+  padding: 7px 8px; border-radius: var(--radius-sm); cursor: pointer;
+}
+.track-suggest-item.active, .track-suggest-item:hover { background: var(--surface-2); }
+.tsi-main { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.tsi-tracking { font-size: 12px; font-weight: 500; }
+.tsi-sub {
+  font-size: 12px; color: var(--text-muted); margin-top: 2px;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.track-suggest mark { background: transparent; color: var(--text-primary); font-weight: 600; }
+.track-suggest-empty {
+  padding: 14px 8px; font-size: var(--fs-footnote);
+  color: var(--text-secondary); text-align: center;
+}
+.topbar-actions { display: flex; align-items: center; gap: var(--sp-2); flex: 0 1 auto; min-width: 0; }
 .icon-btn {
   width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center;
@@ -158,13 +235,6 @@ button { font-family: inherit; }
   padding: var(--sp-6) var(--sp-6) var(--sp-10);
   overflow-y: auto;
 }
-.page-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: var(--sp-5);
-  gap: var(--sp-4);
-}
-.page-title { display: flex; align-items: center; gap: var(--sp-2); }
-.page-title h1 { font-size: var(--fs-title); }
 .back-btn {
   display: inline-flex; align-items: center; justify-content: center;
   width: 30px; height: 30px;
@@ -187,6 +257,7 @@ button, .btn {
   color: var(--text-primary);
   font-size: var(--fs-footnote);
   cursor: pointer;
+  white-space: nowrap;
   display: inline-flex; align-items: center; gap: 6px;
   transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
