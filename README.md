@@ -7,12 +7,15 @@ folder with any static file server.
 ## Run it
 
 ```
-python3 -m http.server 8000
+python3 serve.py 9000
 ```
-Then open `http://localhost:8000`. Opening `index.html` directly by
-double-clicking also works, since nothing here requires a build step —
-a local server just gives slightly more realistic relative paths and avoids
-`file://` restrictions some browsers apply.
+Then open `http://localhost:9000`. `serve.py` is a tiny static server that
+sends `Cache-Control: no-store`, so edits to HTML/CSS/JS always show up on
+reload (the stock `python3 -m http.server` lets browsers heuristically cache
+assets, which makes changes appear not to take effect). Any static file server
+works too — opening `index.html` directly by double-clicking also works, since
+nothing here requires a build step; a local server just gives slightly more
+realistic relative paths and avoids `file://` restrictions some browsers apply.
 
 ## Pages
 
@@ -88,4 +91,4 @@ actual sync/retry queue instead of the placeholder timing.
 - New components: add to `css/styles.css` under the relevant section, then add
   a specimen to `style-guide.html` so the state coverage stays documented next
   to the code.
-# parcel-tracking
+# parcel-track
