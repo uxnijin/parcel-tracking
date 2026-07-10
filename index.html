@@ -84,29 +84,44 @@
       <main class="content">
         <div class="metric-grid">
           <div class="metric-card">
-            <div class="label">In transit</div>
+            <div class="mc-top">
+              <div class="label">In transit</div>
+              <span class="mc-icon"><i class="ti ti-truck-delivery" aria-hidden="true"></i></span>
+            </div>
             <div class="value" id="metric-in-transit">0</div>
-            <div class="delta">+3.1% vs yesterday</div>
+            <div class="delta"><span class="trend up"><i class="ti ti-arrow-up-right" aria-hidden="true"></i>3.1%</span>vs yesterday</div>
           </div>
           <div class="metric-card">
-            <div class="label">Delivered today</div>
+            <div class="mc-top">
+              <div class="label">Delivered today</div>
+              <span class="mc-icon"><i class="ti ti-circle-check" aria-hidden="true"></i></span>
+            </div>
             <div class="value" id="metric-delivered">0</div>
-            <div class="delta">on pace with target</div>
+            <div class="delta"><span class="trend up"><i class="ti ti-arrow-up-right" aria-hidden="true"></i>8.2%</span>vs yesterday</div>
           </div>
           <div class="metric-card accent-warning">
-            <div class="label">Delayed</div>
+            <div class="mc-top">
+              <div class="label">Delayed</div>
+              <span class="mc-icon"><i class="ti ti-clock-exclamation" aria-hidden="true"></i></span>
+            </div>
             <div class="value" id="metric-delayed">0</div>
-            <div class="delta">+18 since 9am</div>
+            <div class="delta"><i class="ti ti-arrow-up-right" aria-hidden="true"></i>+18 since 9am</div>
           </div>
           <div class="metric-card accent-danger">
-            <div class="label">Exceptions</div>
+            <div class="mc-top">
+              <div class="label">Exceptions</div>
+              <span class="mc-icon"><i class="ti ti-alert-triangle" aria-hidden="true"></i></span>
+            </div>
             <div class="value" id="metric-exceptions">0</div>
-            <div class="delta">12 unassigned</div>
+            <div class="delta"><i class="ti ti-user-exclamation" aria-hidden="true"></i>12 unassigned</div>
           </div>
           <div class="metric-card">
-            <div class="label">Pending pickup</div>
+            <div class="mc-top">
+              <div class="label">Pending pickup</div>
+              <span class="mc-icon"><i class="ti ti-package" aria-hidden="true"></i></span>
+            </div>
             <div class="value" id="metric-pending">0</div>
-            <div class="delta">scheduled today</div>
+            <div class="delta"><i class="ti ti-calendar-time" aria-hidden="true"></i>scheduled today</div>
           </div>
         </div>
 

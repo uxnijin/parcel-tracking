@@ -67,16 +67,28 @@
 
       <div class="metric-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
         <div class="metric-card accent-danger">
-          <div class="label">High severity</div>
+          <div class="mc-top">
+            <div class="label">High severity</div>
+            <span class="mc-icon"><i class="ti ti-alert-triangle" aria-hidden="true"></i></span>
+          </div>
           <div class="value" id="count-high">—</div>
+          <div class="delta"><i class="ti ti-clock-hour-4" aria-hidden="true"></i>Action needed today</div>
         </div>
         <div class="metric-card accent-warning">
-          <div class="label">Medium severity</div>
+          <div class="mc-top">
+            <div class="label">Medium severity</div>
+            <span class="mc-icon"><i class="ti ti-alert-circle" aria-hidden="true"></i></span>
+          </div>
           <div class="value" id="count-medium">—</div>
+          <div class="delta"><i class="ti ti-clock" aria-hidden="true"></i>Review within 48h</div>
         </div>
         <div class="metric-card">
-          <div class="label">Unassigned</div>
+          <div class="mc-top">
+            <div class="label">Unassigned</div>
+            <span class="mc-icon"><i class="ti ti-user-exclamation" aria-hidden="true"></i></span>
+          </div>
           <div class="value" id="count-unassigned">—</div>
+          <div class="delta"><i class="ti ti-user-plus" aria-hidden="true"></i>Awaiting owner</div>
         </div>
       </div>
 

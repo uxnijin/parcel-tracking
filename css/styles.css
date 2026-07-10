@@ -397,17 +397,48 @@ tbody tr.selected { background: var(--surface-3); }
   background: var(--surface-1);
   border: 0.5px solid var(--border);
   border-radius: var(--radius-lg);
-  padding: var(--sp-3) var(--sp-4);
+  padding: var(--sp-4);
 }
 .metric-card.accent-warning { background: var(--bg-warning); border-color: var(--border-warning); }
 .metric-card.accent-danger { background: var(--bg-danger); border-color: var(--border-danger); }
-.metric-card .label { font-size: var(--fs-caption); color: var(--text-secondary); margin-bottom: 4px; }
-.metric-card.accent-warning .label { color: var(--text-warning); }
-.metric-card.accent-danger .label { color: var(--text-danger); }
-.metric-card .value { font-size: 22px; font-weight: 500; }
+
+.metric-card .mc-top {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  margin-bottom: var(--sp-3);
+}
+.metric-card .label { font-size: var(--fs-caption); color: var(--text-secondary); font-weight: 500; margin: 0; }
+.metric-card .mc-icon {
+  width: 26px; height: 26px; border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+  background: var(--surface-2); color: var(--text-secondary);
+  font-size: 15px; flex-shrink: 0;
+}
+.metric-card .value { font-size: 26px; font-weight: 600; line-height: 1; letter-spacing: -0.01em; }
+.metric-card .delta {
+  font-size: 11px; color: var(--text-muted); margin-top: var(--sp-2);
+  display: flex; align-items: center; gap: 5px; white-space: nowrap;
+}
+.metric-card .delta .trend { margin-top: 0; }
+.metric-card .trend {
+  font-size: 11px; font-weight: 600; margin-top: var(--sp-2);
+  display: flex; align-items: center; gap: 3px;
+}
+
+/* Accent (status) metric cards */
+.metric-card.accent-warning .label,
 .metric-card.accent-warning .value { color: var(--text-warning); }
+.metric-card.accent-danger .label,
 .metric-card.accent-danger .value { color: var(--text-danger); }
-.metric-card .delta { font-size: 11px; color: var(--text-muted); margin-top: 2px; }
+.metric-card.accent-warning .mc-icon,
+.metric-card.accent-danger .mc-icon { background: transparent; border: 0.5px solid currentColor; }
+.metric-card.accent-warning .mc-icon { color: var(--text-warning); }
+.metric-card.accent-danger .mc-icon { color: var(--text-danger); }
+.metric-card.accent-warning .delta,
+.metric-card.accent-danger .delta,
+.metric-card.accent-warning .delta .trend,
+.metric-card.accent-danger .delta .trend { color: inherit; }
+.metric-card.accent-warning .delta { color: var(--text-warning); }
+.metric-card.accent-danger .delta { color: var(--text-danger); }
 
 .card {
   background: var(--surface-1);

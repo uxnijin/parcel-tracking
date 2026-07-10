@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="css/tokens.css" />
 <link rel="stylesheet" href="css/styles.css" />
 <style>
-  .settings-grid { display: grid; grid-template-columns: 200px 1fr; gap: var(--sp-6); max-width: 860px; }
+  .settings-grid { display: grid; grid-template-columns: 200px 1fr; gap: var(--sp-6); max-width: none; }
   @media (max-width: 760px) { .settings-grid { grid-template-columns: 1fr; } }
   .settings-nav { display: flex; flex-direction: column; gap: 1px; }
   .settings-nav .item { padding: 8px 10px; border-radius: var(--radius-sm); font-size: 13px; color: var(--text-secondary); cursor: pointer; }
@@ -85,7 +85,7 @@
           <div class="item" data-panel="integrations">Integrations</div>
         </nav>
 
-        <div>
+        <div class="settings-content">
           <div class="settings-panel active" id="panel-profile">
             <div class="card">
               <div class="card-title">Profile</div>
@@ -166,9 +166,6 @@
                   <div class="email" style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
                     Scan messages in inbox and folders for shipping updates.
                   </div>
-                  <div class="text-muted" style="font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
-                    <i class="ti ti-shield-lock" aria-hidden="true" style="font-size:12px"></i>OAuth 2.0 secured connection
-                  </div>
                 </div>
                 <div>
                   <button class="btn-primary btn-sm" id="btn-connect-gmail" onclick="toggleGmailConnection(event)">Connect</button>
@@ -206,9 +203,6 @@
                   <div class="email integration-status" data-default="Scan Outlook inbox and shared mailboxes for shipping confirmations." style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
                     Scan Outlook inbox and shared mailboxes for shipping confirmations.
                   </div>
-                  <div class="text-muted" style="font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
-                    <i class="ti ti-shield-lock" aria-hidden="true" style="font-size:12px"></i>OAuth 2.0 secured connection
-                  </div>
                 </div>
                 <div>
                   <button class="btn-primary btn-sm" data-integration="outlook" data-label="Microsoft Outlook" onclick="toggleIntegrationConnection(event)">Connect</button>
@@ -230,9 +224,6 @@
                   <div class="name" style="font-weight: 500;">Slack</div>
                   <div class="email integration-status" data-default="Post exception alerts and delivery updates to a channel." style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
                     Post exception alerts and delivery updates to a channel.
-                  </div>
-                  <div class="text-muted" style="font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
-                    <i class="ti ti-shield-lock" aria-hidden="true" style="font-size:12px"></i>OAuth 2.0 secured connection
                   </div>
                 </div>
                 <div>
@@ -266,9 +257,6 @@
                   <div class="name" style="font-weight: 500;">Shopify</div>
                   <div class="email integration-status" data-default="Auto-create a shipment for every order marked as fulfilled." style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
                     Auto-create a shipment for every order marked as fulfilled.
-                  </div>
-                  <div class="text-muted" style="font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
-                    <i class="ti ti-shield-lock" aria-hidden="true" style="font-size:12px"></i>OAuth 2.0 secured connection
                   </div>
                 </div>
                 <div>

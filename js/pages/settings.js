@@ -56,7 +56,7 @@ function toggleGmailConnection(e) {
       btn.textContent = "Disconnect";
       btn.className = "btn-secondary btn-sm";
       config.style.display = "block";
-      statusContainer.innerHTML = `<span style="color:var(--text-success); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;"><i class="ti ti-circle-check" style="font-size:14px"></i>Connected</span> · last scanned 2m ago`;
+      statusContainer.innerHTML = `<span style="color:var(--text-success); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;"><i class="ti ti-circle-check" style="font-size:14px"></i>Connected</span>`;
       if (typeof setGmailConnected !== "undefined") {
         setGmailConnected(true);
       }
@@ -84,7 +84,7 @@ function initSettingsGmail() {
     btn.textContent = "Disconnect";
     btn.className = "btn-secondary btn-sm";
     config.style.display = "block";
-    statusContainer.innerHTML = `<span style="color:var(--text-success); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;"><i class="ti ti-circle-check" style="font-size:14px"></i>Connected</span> · last scanned 2m ago`;
+    statusContainer.innerHTML = `<span style="color:var(--text-success); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;"><i class="ti ti-circle-check" style="font-size:14px"></i>Connected</span>`;
   } else {
     btn.textContent = "Connect";
     btn.className = "btn-primary btn-sm";

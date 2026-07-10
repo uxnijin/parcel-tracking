@@ -8,7 +8,7 @@
 <link rel="stylesheet" href="css/tokens.css" />
 <link rel="stylesheet" href="css/styles.css" />
 <style>
-  .notif-list { max-width: 640px; }
+  .notif-list { max-width: none; }
   .notif-row {
     display: flex; gap: var(--sp-3);
     padding: var(--sp-3);
@@ -86,13 +86,13 @@
 
     <main class="content">
 
-      <div class="tabs" role="tablist" style="max-width:640px">
+      <div class="tabs" role="tablist">
         <div class="tab active" data-filter="all" role="tab">All</div>
         <div class="tab" data-filter="unread" role="tab">Unread</div>
       </div>
 
       <div class="notif-list card" style="padding:0" id="notif-list"></div>
-      <div class="empty-state" id="notif-empty" style="display:none;max-width:640px">
+      <div class="empty-state" id="notif-empty" style="display:none">
         <i class="ti ti-bell-off" aria-hidden="true"></i>
         <h3>You're all caught up</h3>
         <p>No unread notifications right now.</p>

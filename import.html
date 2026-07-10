@@ -8,9 +8,14 @@
 <link rel="stylesheet" href="css/tokens.css" />
 <link rel="stylesheet" href="css/styles.css" />
 <style>
-  .import-wrap { max-width: 720px; }
+  .import-wrap { max-width: none; }
   .import-step { display: none; }
   .import-step.active { display: block; }
+  /* Roomy drop area so the full-width card stays well-proportioned */
+  #step-upload .dropzone {
+    min-height: 280px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
   .file-row { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3); border: 0.5px solid var(--border); border-radius: var(--radius); margin-bottom: var(--sp-3); }
   .file-row i { font-size: 22px; color: var(--text-secondary); }
   .file-row .info { flex: 1; }
