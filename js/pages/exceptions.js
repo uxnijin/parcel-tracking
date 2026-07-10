@@ -23,7 +23,6 @@ function renderExceptions() {
 
   const rows = getFilteredExceptions();
   delay(rows, 220).then((list) => {
-    document.getElementById("result-count").textContent = `${list.length} results`;
     document.getElementById("count-high").textContent = ALL_EXCEPTIONS.filter(e => e.severity === "high").length;
     document.getElementById("count-medium").textContent = ALL_EXCEPTIONS.filter(e => e.severity === "medium").length;
     document.getElementById("count-unassigned").textContent = ALL_EXCEPTIONS.filter(e => !e.assignedTo || e.assignedTo === "Unassigned").length;

@@ -93,6 +93,64 @@ function initSettingsGmail() {
   }
 }
 
+/** Generic connect/disconnect toggle for the Outlook, Slack, and Shopify rows —
+    same simulated-connect UX as Gmail, driven by data-integration/data-label/data-config
+    attributes so each integration doesn't need its own handler. */
+function toggleIntegrationConnection(e) {
+  e.preventDefault();
+  const btn = e.currentTarget;
+  const key = btn.dataset.integration;
+  const label = btn.dataset.label;
+  const row = btn.closest(".team-row");
+  const statusEl = row ? row.querySelector(".integration-status") : null;
+  const config = btn.dataset.config ? document.getElementById(btn.dataset.config) : null;
+
+  if (btn.textContent.trim() === "Connect") {
+    btn.disabled = true;
+    btn.innerHTML = `<i class="ti ti-loader-2 sf-spin" aria-hidden="true" style="margin-right:4px"></i>Connecting…`;
+
+    setTimeout(() => {
+      btn.disabled = false;
+      btn.textContent = "Disconnect";
+      btn.className = "btn-secondary btn-sm";
+      if (config) config.style.display = "block";
+      if (statusEl) {
+        statusEl.innerHTML = `<span style="color:var(--text-success); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;"><i class="ti ti-circle-check" style="font-size:14px"></i>Connected</span>`;
+      }
+      localStorage.setItem(`sf_integration_${key}`, "true");
+      toast(`Connected to ${label}`);
+    }, 1000);
+  } else {
+    btn.textContent = "Connect";
+    btn.className = "btn-primary btn-sm";
+    if (config) config.style.display = "none";
+    if (statusEl) statusEl.textContent = statusEl.dataset.default || "";
+    localStorage.setItem(`sf_integration_${key}`, "false");
+    toast(`${label} disconnected`);
+  }
+}
+
+function initIntegrationStates() {
+  document.querySelectorAll("[data-integration]").forEach((btn) => {
+    const key = btn.dataset.integration;
+    const label = btn.dataset.label;
+    const row = btn.closest(".team-row");
+    const statusEl = row ? row.querySelector(".integration-status") : null;
+    const config = btn.dataset.config ? document.getElementById(btn.dataset.config) : null;
+
+    if (localStorage.getItem(`sf_integration_${key}`) === "true") {
+      btn.textContent = "Disconnect";
+      btn.className = "btn-secondary btn-sm";
+      if (config) config.style.display = "block";
+      if (statusEl) {
+        statusEl.innerHTML = `<span style="color:var(--text-success); font-weight: 500; display: inline-flex; align-items: center; gap: 4px;"><i class="ti ti-circle-check" style="font-size:14px"></i>Connected</span>`;
+      }
+    }
+  });
+}
+
 // Run on load
 document.addEventListener("DOMContentLoaded", initSettingsGmail);
+document.addEventListener("DOMContentLoaded", initIntegrationStates);
 window.toggleGmailConnection = toggleGmailConnection;
+window.toggleIntegrationConnection = toggleIntegrationConnection;

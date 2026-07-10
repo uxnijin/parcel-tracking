@@ -17,18 +17,10 @@ document.querySelectorAll(".tab").forEach((tab) => {
 function loadShipmentDetails(s) {
   if (!s) return;
   
-  // Set Breadcrumb & Title
-  document.getElementById("det-crumb-id").textContent = s.id;
+  // Set title
   document.getElementById("det-title").textContent = s.id;
   document.title = `${s.id} — ShipFlow`;
-  
-  // Set Status Badge
-  const statusBadge = document.getElementById("det-status-badge");
-  if (statusBadge) {
-    statusBadge.className = `badge ${statusBadgeClass(s.status)}`;
-    statusBadge.innerHTML = `<span class="sw"></span>${s.status}`;
-  }
-  
+
   // Toggle Resolve Button visibility
   const resolveBtn = document.getElementById("btn-det-resolve");
   if (resolveBtn) {

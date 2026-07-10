@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "shipflow",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["serve.py", "9000"],
+      "port": 9000
+    }
+  ]
+}

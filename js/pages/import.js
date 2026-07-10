@@ -125,7 +125,6 @@ function addImportedShipments() {
 }
 
 function resolveImportRow(rowNum, tracking, issue) {
-  toast(`Fixed row ${rowNum}: added missing details.`);
   // Find and remove issue row from UI
   const rows = Array.from(document.querySelectorAll("#issue-rows tr"));
   rows.forEach(r => {

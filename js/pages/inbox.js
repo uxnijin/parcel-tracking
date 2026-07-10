@@ -63,7 +63,7 @@ function renderInbox() {
   const connected = typeof isGmailConnected !== "undefined" && isGmailConnected();
 
   if (!connected) {
-    discSection.style.display = "flex";
+    discSection.style.display = "";
     connSection.style.display = "none";
   } else {
     discSection.style.display = "none";
@@ -119,7 +119,7 @@ function connectGmailFromInbox(e) {
 
   setTimeout(() => {
     btn.disabled = false;
-    btn.innerHTML = `<i class="ti ti-brand-gmail" aria-hidden="true" style="margin-right:6px"></i>Connect Gmail`;
+    btn.innerHTML = `<img src="assets/gmail-icon.svg" alt="" aria-hidden="true" style="width:14px;height:auto;margin-right:6px" />Connect Gmail`;
     if (typeof setGmailConnected !== "undefined") {
       setGmailConnected(true);
     }
@@ -134,52 +134,63 @@ function importFromInbox(emailId) {
   if (index === -1) return;
 
   const email = emails[index];
+  if (typeof ALL_SHIPMENTS === "undefined" || typeof addShipment === "undefined") return;
 
-  // Import to shipments database
-  if (typeof ALL_SHIPMENTS !== "undefined") {
-    // Generate a random customer details since it's imported
-    const newShipment = {
-      id: Math.floor(100000 + Math.random() * 900000), // Random 6 digit ID
-      trackingNo: email.trackingNo,
-      customer: email.customer,
-      carrier: email.carrier,
-      status: email.status,
-      destination: email.destination,
-      eta: email.eta,
-      updated: "Just now",
-      email: email.email
-    };
-    
-    ALL_SHIPMENTS.unshift(newShipment);
-    localStorage.setItem("sf_shipments", JSON.stringify(ALL_SHIPMENTS));
-    
-    // Create notification
-    if (typeof ALL_NOTIFICATIONS !== "undefined") {
-      const newNotification = {
-        id: Math.floor(100000 + Math.random() * 900000),
-        shipmentId: newShipment.id,
-        trackingNo: email.trackingNo,
-        customer: email.customer,
-        carrier: email.carrier,
-        type: "import",
-        message: `Imported tracking ${email.trackingNo} from connected Gmail account.`,
-        time: "Just now",
-        unread: true
-      };
-      ALL_NOTIFICATIONS.unshift(newNotification);
-      localStorage.setItem("sf_notifications", JSON.stringify(ALL_NOTIFICATIONS));
-    }
-    
-    // Remove from email scanner list
-    emails.splice(index, 1);
-    saveScannedEmails(emails);
-    
-    // Broadcast updates
-    window.dispatchEvent(new CustomEvent("sf-data-updated", { detail: { type: "shipments", id: newShipment.id } }));
-    
-    toast(`Imported tracking ${email.trackingNo} successfully!`);
-    renderInbox();
+  // Build a shipment that matches the real data model (see data.js buildShipments),
+  // so it works with search, the detail page, and the exceptions queue.
+  const nextNum = ALL_SHIPMENTS.length + 10000;
+  const newShipment = {
+    id: `SHP-${nextNum}`,
+    tracking: email.trackingNo,
+    customer: email.customer,
+    email: email.email,
+    phone: `+1 (512) 555-${String(1000 + nextNum).slice(-4)}`,
+    carrier: email.carrier,
+    status: email.status,
+    destination: email.destination,
+    origin: "Imported via Gmail",
+    serviceLevel: "Standard Ground",
+    eta: email.eta,
+    weight: "—",
+    value: "—",
+    updated: "Just now",
+    orderId: `#${48000 + nextNum}`,
+    notes: [],
+  };
+
+  // If the email flags an exception/delay, populate the exception metadata the
+  // exceptions queue and detail timeline rely on (otherwise those pages crash on
+  // undefined severity/title).
+  if (email.status === STATUS.EXCEPTION || email.status === STATUS.DELAYED) {
+    newShipment.exceptionId = `EXC-${5000 + ALL_EXCEPTIONS.length}`;
+    newShipment.title = email.status === STATUS.EXCEPTION ? "Delivery attempt failed" : "Weather delay";
+    newShipment.detail = email.status === STATUS.EXCEPTION
+      ? "No one available to receive the package."
+      : "Regional weather is delaying carrier routes.";
+    newShipment.severity = email.status === STATUS.EXCEPTION ? "high" : "low";
+    newShipment.age = "0d";
+    newShipment.assignedTo = "Unassigned";
   }
+
+  addShipment(newShipment);
+
+  if (typeof addNotification !== "undefined") {
+    addNotification({
+      icon: "ti-mail",
+      kind: "neutral",
+      title: "Imported from Gmail",
+      body: `${newShipment.id} (${email.trackingNo}) was imported for ${email.customer}.`,
+      time: "Just now",
+      read: false,
+    });
+  }
+
+  // Remove from the scanned-email list and re-render.
+  emails.splice(index, 1);
+  saveScannedEmails(emails);
+
+  toast(`Imported ${email.trackingNo} → ${newShipment.id}`);
+  renderInbox();
 }
 
 // Listen to updates

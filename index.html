@@ -14,19 +14,19 @@
 
   <div class="app-shell">
     <aside class="sidebar">
-      <div class="sidebar-brand"><span class="mark">SF</span>ShipFlow</div>
+      <div class="sidebar-brand">ShipFlow</div>
       <nav class="nav-group">
         <span class="nav-label">Workspace</span>
         <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package"
-            aria-hidden="true"></i>Shipments<span class="count">12,482</span></a>
+            aria-hidden="true"></i>Shipments<span class="count">—</span></a>
         <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle"
-            aria-hidden="true"></i>Exceptions<span class="count">47</span></a>
+            aria-hidden="true"></i>Exceptions<span class="count">—</span></a>
         <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox
           Scan<span class="count" style="display:none"></span></a>
         <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar"
             aria-hidden="true"></i>Calendar</a>
         <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell"
-            aria-hidden="true"></i>Notifications<span class="count">9</span></a>
+            aria-hidden="true"></i>Notifications<span class="count">—</span></a>
         <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload"
             aria-hidden="true"></i>Import</a>
         <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar"
@@ -60,7 +60,6 @@
             aria-label="Search shipments" />
         </div>
         <div class="topbar-actions">
-          <span class="sync-pill"><span class="dot"></span>Synced</span>
           <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i
               class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
           <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i
@@ -75,7 +74,6 @@
         <div class="page-header">
           <div class="page-title">
             <h1>Shipments</h1>
-            <span class="sub" id="result-count">248 results</span>
           </div>
           <div class="flex gap-2">
             <button id="btn-refresh"><i class="ti ti-refresh" aria-hidden="true"></i>Refresh</button>
@@ -303,7 +301,7 @@
             <button class="btn-sm btn-danger"><i class="ti ti-archive" aria-hidden="true"></i>Archive</button>
           </div>
 
-          <table id="shipments-table" aria-describedby="result-count">
+          <table id="shipments-table">
             <thead>
               <tr>
                 <th class="col-check"><input type="checkbox" id="select-all" aria-label="Select all shipments" /></th>
@@ -346,8 +344,8 @@
           style="margin-top: var(--sp-4); padding: var(--sp-3) var(--sp-4); gap: var(--sp-3); display: none;">
           <div class="flex items-center gap-3" style="flex: 1;">
             <div
-              style="background: #FEEBEA; color: #EA4335; width: 36px; height: 36px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
-              <i class="ti ti-brand-gmail" aria-hidden="true"></i>
+              style="background: var(--surface-1); border: 0.5px solid var(--border); width: 36px; height: 36px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+              <img src="assets/gmail-icon.svg" alt="" aria-hidden="true" style="width: 18px; height: auto;" />
             </div>
             <div>
               <div style="font-weight: 600; font-size: var(--fs-footnote);">Connect Gmail</div>

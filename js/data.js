@@ -131,21 +131,27 @@ function broadcastUpdate(type, data) {
 }
 
 function saveShipments(shipments) {
-  localStorage.setItem("sf_shipments", JSON.stringify(shipments));
+  // Copy first: callers may pass the live ALL_SHIPMENTS array, and clearing it
+  // before spreading would wipe the source.
+  const next = [...shipments];
+  localStorage.setItem("sf_shipments", JSON.stringify(next));
   ALL_SHIPMENTS.length = 0;
-  ALL_SHIPMENTS.push(...shipments);
-  
+  ALL_SHIPMENTS.push(...next);
+
   ALL_EXCEPTIONS.length = 0;
   ALL_EXCEPTIONS.push(...buildExceptionsList());
-  
+
   broadcastUpdate("shipments", ALL_SHIPMENTS);
 }
 
 function saveNotifications(notifications) {
-  localStorage.setItem("sf_notifications", JSON.stringify(notifications));
+  // Copy first: notifications.js passes the live ALL_NOTIFICATIONS array here, so
+  // clearing before spreading (without a copy) would empty it and lose every row.
+  const next = [...notifications];
+  localStorage.setItem("sf_notifications", JSON.stringify(next));
   ALL_NOTIFICATIONS.length = 0;
-  ALL_NOTIFICATIONS.push(...notifications);
-  
+  ALL_NOTIFICATIONS.push(...next);
+
   broadcastUpdate("notifications", ALL_NOTIFICATIONS);
 }
 

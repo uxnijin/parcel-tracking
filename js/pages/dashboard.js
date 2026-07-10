@@ -13,7 +13,14 @@ const state = {
   serviceLevels: new Set(),
   severities: new Set(),
   selected: new Set(),
+  dateDay: null,
 };
+
+/** Extracts the July day number from an eta string like "Jul 9". */
+function shipmentEtaDay(eta) {
+  const match = eta && eta.match(/Jul\s+(\d+)/i);
+  return match ? parseInt(match[1], 10) : null;
+}
 
 /** Archived ids live outside ALL_SHIPMENTS so the undo action can restore them instantly. */
 const ARCHIVED = new Set();
@@ -39,6 +46,7 @@ function getFiltered() {
     if (state.statuses.size > 0 && !state.statuses.has(s.status)) return false;
     if (state.serviceLevels.size > 0 && !state.serviceLevels.has(s.serviceLevel)) return false;
     if (state.severities.size > 0 && !state.severities.has(s.severity)) return false;
+    if (state.dateDay !== null && shipmentEtaDay(s.eta) !== state.dateDay) return false;
     if (q && !(s.tracking.toLowerCase().includes(q) || s.customer.toLowerCase().includes(q) || s.destination.toLowerCase().includes(q))) return false;
     return true;
   });
@@ -75,7 +83,6 @@ function renderTable(highlightId = null) {
 
   const filtered = getFiltered();
   delay(filtered, 260).then((rows) => {
-    document.getElementById("result-count").textContent = `${rows.length} results`;
     renderMetrics();
     updateSortHeaders();
 
@@ -263,12 +270,22 @@ function updateStatusFilter() {
 }
 
 function updateClearButtonState() {
-  const totalFilters = state.carriers.size + state.statuses.size + state.serviceLevels.size + state.severities.size;
+  const totalFilters = state.carriers.size + state.statuses.size + state.serviceLevels.size + state.severities.size + (state.dateDay !== null ? 1 : 0);
   const btnClear = document.getElementById("btn-clear-filters");
   if (btnClear) {
     btnClear.style.display = totalFilters > 0 ? "inline-flex" : "none";
   }
 }
+
+// Arriving from the calendar: filter to the requested date. Cleared via the
+// toolbar's "Clear" button (btn-clear-filters) like any other active filter.
+(function initDateFilterFromUrl() {
+  const day = parseInt(new URLSearchParams(location.search).get("date"), 10);
+  if (!isNaN(day)) {
+    state.dateDay = day;
+    updateClearButtonState();
+  }
+})();
 
 // Setup basic filters
 setupFilterDropdown("btn-filter-carrier", "menu-filter-carrier", updateCarrierFilter);
@@ -336,9 +353,11 @@ document.getElementById("btn-clear-filters").addEventListener("click", () => {
   state.statuses.clear();
   state.serviceLevels.clear();
   state.severities.clear();
+  state.dateDay = null;
   state.page = 1;
   document.getElementById("table-search").value = "";
   document.getElementById("global-search").value = "";
+  history.replaceState(null, "", location.pathname);
 
   // Uncheck all checkboxes in all filter menus
   document.querySelectorAll("#menu-filter-carrier input[type='checkbox'], #menu-filter-status input[type='checkbox'], #menu-filters input[type='checkbox']").forEach((cb) => {
@@ -411,6 +430,8 @@ function applySavedView(e, view) {
   state.statuses.add(statusVal);
   state.serviceLevels.clear();
   state.severities.clear();
+  state.dateDay = null;
+  history.replaceState(null, "", location.pathname);
 
   // Reset labels
   const btnCarrier = document.getElementById("btn-filter-carrier");

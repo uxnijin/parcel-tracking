@@ -28,14 +28,14 @@
 
 <div class="app-shell">
   <aside class="sidebar">
-    <div class="sidebar-brand"><span class="mark">SF</span>ShipFlow</div>
+    <div class="sidebar-brand">ShipFlow</div>
     <nav class="nav-group">
       <span class="nav-label">Workspace</span>
-      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">12,482</span></a>
-      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">47</span></a>
+      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">—</span></a>
+      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">—</span></a>
       <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox Scan<span class="count" style="display:none"></span></a>
       <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i>Calendar</a>
-      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">9</span></a>
+      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">—</span></a>
       <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload" aria-hidden="true"></i>Import</a>
       <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar" aria-hidden="true"></i>Reports</a>
       <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i>Settings</a>
@@ -55,7 +55,6 @@
         <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
       </div>
       <div class="topbar-actions">
-        <span class="sync-pill"><span class="dot"></span>Synced</span>
         <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
         <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i></button>
         <div class="avatar">JD</div>
@@ -64,7 +63,10 @@
 
     <main class="content">
       <div class="page-header">
-        <div class="page-title"><h1>Import shipments</h1></div>
+        <div class="page-title">
+          <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
+          <h1>Import shipments</h1>
+        </div>
       </div>
 
       <div class="import-wrap">

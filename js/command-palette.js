@@ -5,9 +5,10 @@
 
 (function () {
   const PAGES = [
-    { label: "Dashboard", href: "index.html", icon: "ti-layout-dashboard" },
     { label: "Shipments", href: "index.html", icon: "ti-package" },
     { label: "Exceptions", href: "exceptions.html", icon: "ti-alert-triangle" },
+    { label: "Inbox Scan", href: "inbox.html", icon: "ti-mail" },
+    { label: "Calendar", href: "calendar.html", icon: "ti-calendar" },
     { label: "Notifications", href: "notifications.html", icon: "ti-bell" },
     { label: "Import shipments", href: "import.html", icon: "ti-upload" },
     { label: "Reports", href: "reports.html", icon: "ti-chart-bar" },

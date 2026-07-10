@@ -4,8 +4,6 @@
 
 let notifFilter = "all";
 
-function unreadCount() { return ALL_NOTIFICATIONS.filter((n) => !n.read).length; }
-
 function renderNotifications() {
   const list = document.getElementById("notif-list");
   const empty = document.getElementById("notif-empty");
@@ -16,8 +14,7 @@ function renderNotifications() {
 
   const rows = notifFilter === "unread" ? ALL_NOTIFICATIONS.filter((n) => !n.read) : ALL_NOTIFICATIONS;
   delay(rows, 220).then((items) => {
-    document.getElementById("result-count").textContent = `${unreadCount()} unread`;
-    document.getElementById("nav-unread").textContent = unreadCount();
+    // Sidebar unread count is kept in sync by app.js updateSidebarCounts().
 
     if (items.length === 0) {
       list.innerHTML = "";

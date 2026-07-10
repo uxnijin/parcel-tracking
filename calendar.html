@@ -9,6 +9,47 @@
 <link rel="stylesheet" href="css/styles.css" />
 <style>
 /* Calendar specific styles */
+.metric-grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-5);
+}
+@media (max-width: 860px) {
+  .metric-grid-4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+
+.calendar-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-3);
+  margin-bottom: var(--sp-3);
+}
+.calendar-toolbar h2 {
+  font-size: var(--fs-heading);
+  font-weight: 600;
+}
+.calendar-legend {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+}
+.calendar-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: var(--fs-caption);
+  color: var(--text-secondary);
+}
+.calendar-legend-item .sw { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.calendar-legend-item .sw.success { background: var(--border-success); }
+.calendar-legend-item .sw.info { background: var(--border-info); }
+.calendar-legend-item .sw.warning { background: var(--border-warning); }
+.calendar-legend-item .sw.danger { background: var(--border-danger); }
+
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -17,19 +58,22 @@
   border: 1px solid var(--border);
   border-radius: var(--radius);
   overflow: hidden;
-  margin-top: var(--sp-4);
 }
 .calendar-header-cell {
-  background: var(--surface-1);
-  padding: var(--sp-3) var(--sp-2);
+  background: var(--surface-2);
+  padding: var(--sp-2);
   text-align: center;
-  font-weight: 500;
-  font-size: var(--fs-footnote);
-  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--text-muted);
 }
+.calendar-header-cell.weekend { color: var(--text-disabled); }
+
 .calendar-cell {
-  background: var(--surface-0);
-  min-height: 110px;
+  background: var(--surface-1);
+  min-height: 130px;
   padding: var(--sp-2);
   display: flex;
   flex-direction: column;
@@ -37,23 +81,40 @@
   position: relative;
   transition: background var(--dur-fast) var(--ease-out);
 }
-.calendar-cell:hover {
-  background: var(--surface-1);
-}
+.calendar-cell.weekend { background: var(--surface-0); }
+.calendar-cell:hover { background: var(--surface-2); }
+.calendar-cell.other-month { background: var(--surface-2); opacity: 0.45; }
+.calendar-cell.clickable { cursor: pointer; }
+.calendar-cell.clickable:focus-visible { outline: none; box-shadow: inset 0 0 0 2px var(--fill-primary); }
+
 .calendar-cell .day-num {
-  font-size: var(--fs-footnote);
+  font-size: var(--fs-caption);
   font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: var(--sp-1);
+  color: var(--text-secondary);
+  width: 20px;
+  height: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  margin-bottom: 2px;
+  transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
 }
-.calendar-cell.other-month {
-  background: var(--surface-2);
-  opacity: 0.5;
+.calendar-cell.today { box-shadow: inset 0 0 0 1.5px var(--fill-primary); }
+.calendar-cell.today .day-num { background: var(--fill-primary); color: var(--on-primary); }
+
+.calendar-events {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  overflow: hidden;
 }
 .calendar-event {
-  font-size: 10px;
-  padding: 2px 6px;
-  border-radius: 4px;
+  font-size: 11px;
+  padding: 3px 7px;
+  border-radius: var(--radius-sm);
+  border-left: 2.5px solid transparent;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -62,35 +123,30 @@
   align-items: center;
   gap: 4px;
   font-weight: 500;
+  transition: filter var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
 }
-.event-delivered { background: #E8F5E9; color: #2E7D32; border-left: 3px solid #4CAF50; }
-.event-transit { background: #E3F2FD; color: #1565C0; border-left: 3px solid #2196F3; }
-.event-delayed { background: #FFF8E1; color: #F57F17; border-left: 3px solid #FFC107; }
-.event-exception { background: #FFEBEE; color: #C62828; border-left: 3px solid #F44336; }
-.event-pending { background: #ECEFF1; color: #37474F; border-left: 3px solid #90A4AE; }
+.calendar-event:hover { filter: brightness(0.96); transform: translateX(1px); }
+.calendar-event .carrier { font-weight: 700; }
 
-.event-popover {
-  position: absolute;
-  top: 100%; left: 0; right: 0;
-  background: var(--surface-0);
-  border: 1.5px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-lg);
-  padding: var(--sp-3);
-  z-index: 100;
-  display: none;
-  flex-direction: column;
-  gap: var(--sp-2);
+.event-delivered { background: var(--bg-success); color: var(--text-success); border-left-color: var(--border-success); }
+.event-transit   { background: var(--bg-info);    color: var(--text-info);    border-left-color: var(--border-info); }
+.event-delayed   { background: var(--bg-warning); color: var(--text-warning); border-left-color: var(--border-warning); }
+.event-exception { background: var(--bg-danger);  color: var(--text-danger);  border-left-color: var(--border-danger); }
+.event-pending   { background: var(--bg-neutral); color: var(--text-neutral); border-left-color: var(--border-neutral); }
+
+.calendar-more {
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+  padding: 2px 7px;
 }
+.calendar-cell.clickable:hover .calendar-more { color: var(--text-secondary); }
 </style>
 </head>
-<body>
+<body data-page="calendar">
 <div class="app-shell">
   <aside class="sidebar">
-    <div class="sidebar-brand">
-      <div class="mark">SF</div>
-      <span>ShipFlow</span>
-    </div>
+    <div class="sidebar-brand">ShipFlow</div>
     
     <nav class="nav-group">
       <span class="nav-label">Workspace</span>
@@ -121,7 +177,6 @@
         <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
       </div>
       <div class="topbar-actions">
-        <span class="sync-pill"><span class="dot"></span>Synced</span>
         <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
         <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i></button>
         <div class="avatar">JD</div>
@@ -131,44 +186,43 @@
     <main class="content">
       <div class="page-header">
         <div class="page-title">
-          <div class="crumb"><a href="index.html">Shipments</a> / <span>Calendar</span></div>
+          <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
           <h1>Calendar</h1>
-          <div class="sub">Every package mapped to the day it is expected to arrive.</div>
         </div>
       </div>
 
       <!-- Metrics Cards -->
-      <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-6);">
-        <div class="card" style="padding: 16px;">
-          <div class="title" style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">Expected this month</div>
-          <div style="font-size: 24px; font-weight: 600;" id="metric-month-count">0</div>
-          <div class="sub" style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">July 2026</div>
+      <div class="metric-grid-4">
+        <div class="metric-card">
+          <div class="label">Expected this month</div>
+          <div class="value" id="metric-month-count">0</div>
+          <div class="delta">July 2026</div>
         </div>
-        <div class="card" style="padding: 16px;">
-          <div class="title" style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">Out for delivery</div>
-          <div style="font-size: 24px; font-weight: 600;" id="metric-today-count">0</div>
-          <div class="sub" style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Arriving today</div>
+        <div class="metric-card">
+          <div class="label">Out for delivery</div>
+          <div class="value" id="metric-today-count">0</div>
+          <div class="delta">Arriving today</div>
         </div>
-        <div class="card" style="padding: 16px;">
-          <div class="title" style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">Delivered</div>
-          <div style="font-size: 24px; font-weight: 600;" id="metric-delivered-count">0</div>
-          <div class="sub" style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">This month</div>
+        <div class="metric-card">
+          <div class="label">Delivered</div>
+          <div class="value" id="metric-delivered-count">0</div>
+          <div class="delta">This month</div>
         </div>
-        <div class="card" style="padding: 16px;">
-          <div class="title" style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">Needs attention</div>
-          <div style="font-size: 24px; font-weight: 600;" id="metric-attention-count">0</div>
-          <div class="sub" style="font-size: 11px; color: var(--text-danger); margin-top: 4px;">Exceptions & Delayed</div>
+        <div class="metric-card accent-danger">
+          <div class="label">Needs attention</div>
+          <div class="value" id="metric-attention-count">0</div>
+          <div class="delta">Exceptions & delayed</div>
         </div>
       </div>
 
-      <div class="card" style="padding: var(--sp-4);">
-        <div class="flex justify-between items-center" style="margin-bottom: var(--sp-2);">
-          <h2 style="font-size: 16px; font-weight: 600;">July 2026</h2>
-          <div class="flex gap-2">
-            <span style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #4CAF50;"></span>Delivered</span>
-            <span style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #2196F3;"></span>In transit</span>
-            <span style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #FFC107;"></span>Delayed</span>
-            <span style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #F44336;"></span>Exception</span>
+      <div class="card">
+        <div class="calendar-toolbar">
+          <h2>July 2026</h2>
+          <div class="calendar-legend">
+            <span class="calendar-legend-item"><span class="sw success"></span>Delivered</span>
+            <span class="calendar-legend-item"><span class="sw info"></span>In transit</span>
+            <span class="calendar-legend-item"><span class="sw warning"></span>Delayed</span>
+            <span class="calendar-legend-item"><span class="sw danger"></span>Exception</span>
           </div>
         </div>
 

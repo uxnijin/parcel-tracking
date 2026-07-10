@@ -34,14 +34,14 @@
 
 <div class="app-shell">
   <aside class="sidebar">
-    <div class="sidebar-brand"><span class="mark">SF</span>ShipFlow</div>
+    <div class="sidebar-brand">ShipFlow</div>
     <nav class="nav-group">
       <span class="nav-label">Workspace</span>
-      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">12,482</span></a>
-      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">47</span></a>
+      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">—</span></a>
+      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">—</span></a>
       <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox Scan<span class="count" style="display:none"></span></a>
       <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i>Calendar</a>
-      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">9</span></a>
+      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">—</span></a>
       <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload" aria-hidden="true"></i>Import</a>
       <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar" aria-hidden="true"></i>Reports</a>
       <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i>Settings</a>
@@ -61,7 +61,6 @@
         <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
       </div>
       <div class="topbar-actions">
-        <span class="sync-pill"><span class="dot"></span>Synced</span>
         <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
         <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i></button>
         <div class="avatar">JD</div>
@@ -70,7 +69,10 @@
 
     <main class="content">
       <div class="page-header">
-        <div class="page-title"><h1>Settings</h1></div>
+        <div class="page-title">
+          <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
+          <h1>Settings</h1>
+        </div>
       </div>
 
       <div class="settings-grid">
@@ -78,7 +80,6 @@
           <div class="item active" data-panel="profile">Profile</div>
           <div class="item" data-panel="notifications">Notifications</div>
           <div class="item" data-panel="team">Team</div>
-          <div class="item" data-panel="carriers">Carriers</div>
           <div class="item" data-panel="integrations">Integrations</div>
         </nav>
 
@@ -145,32 +146,6 @@
             </div>
           </div>
 
-          <div class="settings-panel" id="panel-carriers">
-            <div class="card">
-              <div class="card-title">Connected carriers</div>
-              <div class="team-row">
-                <i class="ti ti-truck" aria-hidden="true" style="font-size:20px;color:var(--text-secondary)"></i>
-                <div class="who"><div class="name">UPS</div><div class="email">Connected · syncing every 15 min</div></div>
-                <span class="badge badge-success"><span class="sw"></span>Active</span>
-              </div>
-              <div class="team-row">
-                <i class="ti ti-truck" aria-hidden="true" style="font-size:20px;color:var(--text-secondary)"></i>
-                <div class="who"><div class="name">FedEx</div><div class="email">Connected · syncing every 15 min</div></div>
-                <span class="badge badge-success"><span class="sw"></span>Active</span>
-              </div>
-              <div class="team-row">
-                <i class="ti ti-truck" aria-hidden="true" style="font-size:20px;color:var(--text-secondary)"></i>
-                <div class="who"><div class="name">DHL</div><div class="email">Token expired — reconnect required</div></div>
-                <span class="badge badge-danger"><span class="sw"></span>Needs attention</span>
-              </div>
-              <div class="team-row">
-                <i class="ti ti-truck" aria-hidden="true" style="font-size:20px;color:var(--text-muted)"></i>
-                <div class="who"><div class="name">USPS</div><div class="email">Not connected</div></div>
-                <button class="btn-sm">Connect</button>
-              </div>
-            </div>
-          </div>
-
           <div class="settings-panel" id="panel-integrations">
             <div class="card">
               <div class="card-title">Email Integrations</div>
@@ -179,10 +154,10 @@
                 Our AI parser automatically extracts carrier tracking numbers, transit statuses, and customer details,
                 and syncs them directly into your dashboard.
               </p>
-              
+
               <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
-                <div style="background: #FEEBEA; color: #EA4335; width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;">
-                  <i class="ti ti-brand-gmail" aria-hidden="true"></i>
+                <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <img src="assets/gmail-icon.svg" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
                 </div>
                 <div class="who" style="flex: 1;">
                   <div class="name" style="font-weight: 500;">Google Gmail</div>
@@ -197,7 +172,7 @@
                   <button class="btn-primary btn-sm" id="btn-connect-gmail" onclick="toggleGmailConnection(event)">Connect</button>
                 </div>
               </div>
-              
+
               <div id="gmail-config" style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
                 <div class="field" style="margin-bottom: var(--sp-4)">
                   <label for="gmail-scope" style="font-weight:500">Sync scope</label>
@@ -217,6 +192,92 @@
                       <input type="checkbox" checked style="margin: 0;" /> Send dynamic alerts to customer email
                     </label>
                   </div>
+                </div>
+              </div>
+
+              <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
+                <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i class="ti ti-mail" aria-hidden="true" style="font-size: 20px; color: #0078D4;"></i>
+                </div>
+                <div class="who" style="flex: 1;">
+                  <div class="name" style="font-weight: 500;">Microsoft Outlook</div>
+                  <div class="email integration-status" data-default="Scan Outlook inbox and shared mailboxes for shipping confirmations." style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
+                    Scan Outlook inbox and shared mailboxes for shipping confirmations.
+                  </div>
+                  <div class="text-muted" style="font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
+                    <i class="ti ti-shield-lock" aria-hidden="true" style="font-size:12px"></i>OAuth 2.0 secured connection
+                  </div>
+                </div>
+                <div>
+                  <button class="btn-primary btn-sm" data-integration="outlook" data-label="Microsoft Outlook" onclick="toggleIntegrationConnection(event)">Connect</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: var(--sp-4);">
+              <div class="card-title">Notifications</div>
+              <p class="text-secondary mb-4" style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
+                Push real-time shipment activity to a chat channel so your team doesn't have to watch the dashboard.
+              </p>
+
+              <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
+                <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i class="ti ti-brand-slack" aria-hidden="true" style="font-size: 20px; color: #4A154B;"></i>
+                </div>
+                <div class="who" style="flex: 1;">
+                  <div class="name" style="font-weight: 500;">Slack</div>
+                  <div class="email integration-status" data-default="Post exception alerts and delivery updates to a channel." style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
+                    Post exception alerts and delivery updates to a channel.
+                  </div>
+                  <div class="text-muted" style="font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
+                    <i class="ti ti-shield-lock" aria-hidden="true" style="font-size:12px"></i>OAuth 2.0 secured connection
+                  </div>
+                </div>
+                <div>
+                  <button class="btn-primary btn-sm" data-integration="slack" data-label="Slack" data-config="slack-config" onclick="toggleIntegrationConnection(event)">Connect</button>
+                </div>
+              </div>
+
+              <div id="slack-config" style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
+                <div class="field" style="margin-bottom: 0">
+                  <label for="slack-channel" style="font-weight:500">Post to channel</label>
+                  <select id="slack-channel" style="width: 100%">
+                    <option value="ops-shipping">#ops-shipping</option>
+                    <option value="logistics-alerts">#logistics-alerts</option>
+                    <option value="general">#general</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top: var(--sp-4);">
+              <div class="card-title">Order Sources</div>
+              <p class="text-secondary mb-4" style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
+                Connect the storefront your orders come from so a shipment is created automatically the moment an order ships.
+              </p>
+
+              <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
+                <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                  <i class="ti ti-brand-shopify" aria-hidden="true" style="font-size: 20px; color: #95BF47;"></i>
+                </div>
+                <div class="who" style="flex: 1;">
+                  <div class="name" style="font-weight: 500;">Shopify</div>
+                  <div class="email integration-status" data-default="Auto-create a shipment for every order marked as fulfilled." style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
+                    Auto-create a shipment for every order marked as fulfilled.
+                  </div>
+                  <div class="text-muted" style="font-size: 11px; margin-top: 6px; display: flex; align-items: center; gap: 4px;">
+                    <i class="ti ti-shield-lock" aria-hidden="true" style="font-size:12px"></i>OAuth 2.0 secured connection
+                  </div>
+                </div>
+                <div>
+                  <button class="btn-primary btn-sm" data-integration="shopify" data-label="Shopify" data-config="shopify-config" onclick="toggleIntegrationConnection(event)">Connect</button>
+                </div>
+              </div>
+
+              <div id="shopify-config" style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
+                <div class="field" style="margin-bottom: 0">
+                  <label for="shopify-domain" style="font-weight:500">Store domain</label>
+                  <input type="text" id="shopify-domain" placeholder="yourstore.myshopify.com" style="width: 100%" />
                 </div>
               </div>
             </div>

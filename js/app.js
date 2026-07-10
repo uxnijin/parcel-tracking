@@ -64,9 +64,7 @@ function debounce(fn, wait = 200) {
   };
 }
 
-/* ---------- Connectivity: offline banner + sync pill ----------
-   Real usage: replace the simulateFlakyConnection() call with your actual
-   sync-queue signal (e.g. a websocket status or failed-request counter). */
+/* ---------- Connectivity: offline banner ---------- */
 function initConnectivity() {
   const banner = document.createElement("div");
   banner.className = "status-banner";
@@ -90,12 +88,6 @@ function initConnectivity() {
   window.addEventListener("offline", setOffline);
   window.addEventListener("online", () => { setReconnecting(); setTimeout(setOnline, 900); });
   if (!navigator.onLine) setOffline();
-}
-
-/** Renders a small sync-status pill for the topbar. state: "synced" | "syncing" | "offline" */
-function renderSyncPill(state = "synced") {
-  const labels = { synced: "Synced", syncing: "Syncing…", offline: "Offline" };
-  return `<span class="sync-pill ${state === "offline" ? "offline" : state === "syncing" ? "syncing" : ""}"><span class="dot"></span>${labels[state]}</span>`;
 }
 
 /** Generic Up/Down/Enter navigation for a set of focusable table rows. */
@@ -206,18 +198,7 @@ function runSimulationTick() {
   }
 
   if (newStatus !== prevStatus) {
-    const syncPill = document.querySelector(".sync-pill");
-    if (syncPill) {
-      syncPill.className = "sync-pill syncing";
-      syncPill.innerHTML = '<span class="dot"></span>Syncing…';
-    }
-
     setTimeout(() => {
-      if (syncPill) {
-        syncPill.className = "sync-pill";
-        syncPill.innerHTML = '<span class="dot"></span>Synced';
-      }
-
       const updates = { status: newStatus, updated: "Just now" };
       if (newStatus === STATUS.DELIVERED) {
         updates.eta = "Delivered";

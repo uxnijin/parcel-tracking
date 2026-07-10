@@ -128,10 +128,13 @@ function renderCharts(days) {
     if (typeof ALL_SHIPMENTS !== "undefined") {
       const delCount = ALL_SHIPMENTS.filter(s => s.status === STATUS.DELIVERED && s.eta === dateStr).length;
       const excCount = ALL_SHIPMENTS.filter(s => (s.status === STATUS.EXCEPTION || s.status === STATUS.DELAYED) && (s.eta === dateStr || s.updated.includes("h ago"))).length;
-      
-      // Seed base value + dynamic multiplier
-      delivered.push(18 + delCount * 3 + Math.floor(Math.random() * 5));
-      exceptions.push(2 + excCount * 2 + Math.floor(Math.random() * 2));
+
+      // Deterministic per-day jitter (stable across resizes/re-renders) instead of
+      // Math.random(), which made the chart values jump on every redraw.
+      const jitterA = (dayNum * 37) % 6;
+      const jitterB = (dayNum * 13) % 3;
+      delivered.push(18 + delCount * 3 + jitterA);
+      exceptions.push(2 + excCount * 2 + jitterB);
     } else {
       delivered.push(20);
       exceptions.push(2);

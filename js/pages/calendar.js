@@ -30,12 +30,12 @@ function renderCalendar() {
         }
 
         // Delivered this month
-        if (s.status === "Delivered") {
+        if (s.status === STATUS.DELIVERED) {
           totalDelivered++;
         }
 
         // Needs attention
-        if (s.status === "Exception" || s.status === "Delayed") {
+        if (s.status === STATUS.EXCEPTION || s.status === STATUS.DELAYED) {
           totalAttention++;
         }
       }
@@ -49,30 +49,29 @@ function renderCalendar() {
   document.getElementById("metric-attention-count").textContent = totalAttention;
 
   // 2. Generate Grid HTML
-  let html = "";
-
-  // Headers: Sun - Sat
+  // Headers: Sun - Sat (index 0 and 6 are weekend columns)
   const headers = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  html += headers.map(h => `<div class="calendar-header-cell">${h}</div>`).join("");
+  let html = headers.map((h, i) => `<div class="calendar-header-cell${(i === 0 || i === 6) ? " weekend" : ""}">${h}</div>`).join("");
 
-  // July 1, 2026 is Wednesday, so we need 3 leading cells from June (28, 29, 30)
-  const leadingDays = [
-    { day: 28, label: "Jun 28" },
-    { day: 29, label: "Jun 29" },
-    { day: 30, label: "Jun 30" }
-  ];
+  function eventClassFor(status) {
+    if (status === STATUS.DELIVERED) return "event-delivered";
+    if (status === STATUS.DELAYED) return "event-delayed";
+    if (status === STATUS.EXCEPTION) return "event-exception";
+    if (status === STATUS.PENDING) return "event-pending";
+    return "event-transit";
+  }
 
-  leadingDays.forEach(d => {
-    html += `
-      <div class="calendar-cell other-month">
-        <div class="day-num">${d.day}</div>
-      </div>
-    `;
-  });
+  let cellIndex = 0;
+  function renderCell(dayLabel, opts = {}) {
+    const isWeekend = cellIndex % 7 === 0 || cellIndex % 7 === 6;
+    cellIndex++;
 
-  // July days (1 to 31)
-  for (let day = 1; day <= 31; day++) {
-    const shipments = shipmentsByDay[day] || [];
+    const classes = ["calendar-cell"];
+    if (opts.otherMonth) classes.push("other-month");
+    if (isWeekend) classes.push("weekend");
+    if (opts.today) classes.push("today");
+
+    const shipments = opts.shipments || [];
     let eventsHtml = "";
 
     // Show up to 3 events, group the rest
@@ -81,46 +80,44 @@ function renderCalendar() {
     const extraCount = shipments.length - displayCount;
 
     toShow.forEach(s => {
-      let eventClass = "event-transit";
-      if (s.status === "Delivered") eventClass = "event-delivered";
-      else if (s.status === "Delayed") eventClass = "event-delayed";
-      else if (s.status === "Exception") eventClass = "event-exception";
-      else if (s.status === "Pending") eventClass = "event-pending";
-
       eventsHtml += `
-        <div class="calendar-event ${eventClass}" onclick="location.href='shipment-detail.html?id=${s.id}'" title="${escapeHTML(s.customer)} - ${s.trackingNo}">
-          <span style="font-weight:600;">${s.carrier}</span> ${escapeHTML(s.customer.split(" ")[0])}
+        <div class="calendar-event ${eventClassFor(s.status)}" onclick="event.stopPropagation(); location.href='shipment-detail.html?id=${s.id}'" title="${escapeHTML(s.customer)} - ${escapeHTML(s.tracking)}">
+          <span class="carrier">${s.carrier}</span> ${escapeHTML(s.customer.split(" ")[0])}
         </div>
       `;
     });
 
     if (extraCount > 0) {
-      eventsHtml += `
-        <div class="text-secondary" style="font-size: 10px; font-weight: 500; padding: 2px 6px;">
-          + ${extraCount} more
-        </div>
-      `;
+      eventsHtml += `<div class="calendar-more">+ ${extraCount} more</div>`;
     }
 
-    // Highlight today (Jul 9)
-    const isToday = (day === 9) ? "border: 2px solid var(--fill-primary); background: rgba(var(--primary-rgb), 0.03);" : "";
+    // Days that belong to this month open the shipments list filtered to that date.
+    let attrs = "";
+    if (!opts.otherMonth) {
+      classes.push("clickable");
+      attrs = ` role="button" tabindex="0" aria-label="View shipments arriving Jul ${dayLabel}"
+        onclick="location.href='index.html?date=${dayLabel}'"
+        onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();location.href='index.html?date=${dayLabel}';}"`;
+    }
 
-    html += `
-      <div class="calendar-cell" style="${isToday}">
-        <div class="day-num" style="${day === 9 ? 'color:var(--fill-primary)' : ''}">${day}</div>
-        <div style="display:flex; flex-direction:column; gap:4px; flex:1; overflow:hidden;">
-          ${eventsHtml}
-        </div>
+    return `
+      <div class="${classes.join(" ")}"${attrs}>
+        <div class="day-num">${dayLabel}</div>
+        <div class="calendar-events">${eventsHtml}</div>
       </div>
     `;
   }
 
+  // July 1, 2026 is Wednesday, so we need 3 leading cells from June (28, 29, 30)
+  [28, 29, 30].forEach(d => { html += renderCell(d, { otherMonth: true }); });
+
+  // July days (1 to 31)
+  for (let day = 1; day <= 31; day++) {
+    html += renderCell(day, { shipments: shipmentsByDay[day] || [], today: day === 9 });
+  }
+
   // Aug 1 (Saturday) to fill the 5th week row
-  html += `
-    <div class="calendar-cell other-month">
-      <div class="day-num">1</div>
-    </div>
-  `;
+  html += renderCell(1, { otherMonth: true });
 
   container.innerHTML = html;
 }
