@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shipments — ShipFlow</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+
+<body data-page="shipments">
+
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand"><span class="mark">SF</span>ShipFlow</div>
+      <nav class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package"
+            aria-hidden="true"></i>Shipments<span class="count">12,482</span></a>
+        <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle"
+            aria-hidden="true"></i>Exceptions<span class="count">47</span></a>
+        <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox
+          Scan<span class="count" style="display:none"></span></a>
+        <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar"
+            aria-hidden="true"></i>Calendar</a>
+        <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell"
+            aria-hidden="true"></i>Notifications<span class="count">9</span></a>
+        <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload"
+            aria-hidden="true"></i>Import</a>
+        <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar"
+            aria-hidden="true"></i>Reports</a>
+        <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings"
+            aria-hidden="true"></i>Settings</a>
+      </nav>
+      <nav class="nav-group">
+        <span class="nav-label">Saved views</span>
+        <a class="nav-item" href="#" onclick="applySavedView(event,'delayed')"><i class="ti ti-star"
+            aria-hidden="true"></i>Delayed today</a>
+        <a class="nav-item" href="#" onclick="applySavedView(event,'exceptions')"><i class="ti ti-star"
+            aria-hidden="true"></i>Open exceptions</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="avatar">JD</div>
+          <div>
+            <div class="who">Jordan Diaz</div>
+            <div class="role">Operations</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-search">
+          <i class="ti ti-search" aria-hidden="true"></i>
+          <input type="text" id="global-search" placeholder="Search tracking number, customer, order id"
+            aria-label="Search shipments" />
+        </div>
+        <div class="topbar-actions">
+          <span class="sync-pill"><span class="dot"></span>Synced</span>
+          <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i
+              class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+          <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i
+              class="ti ti-bell" aria-hidden="true"></i><span class="dot"></span></button>
+          <button class="icon-btn" aria-label="Settings" onclick="location.href='settings.html'"><i
+              class="ti ti-settings" aria-hidden="true"></i></button>
+          <div class="avatar">JD</div>
+        </div>
+      </header>
+
+      <main class="content">
+        <div class="page-header">
+          <div class="page-title">
+            <h1>Shipments</h1>
+            <span class="sub" id="result-count">248 results</span>
+          </div>
+          <div class="flex gap-2">
+            <button id="btn-refresh"><i class="ti ti-refresh" aria-hidden="true"></i>Refresh</button>
+            <button><i class="ti ti-download" aria-hidden="true"></i>Export</button>
+            <button class="btn-primary" onclick="openDrawer('new-shipment-drawer')"><i class="ti ti-plus"
+                aria-hidden="true"></i>New shipment</button>
+          </div>
+        </div>
+
+        <div class="metric-grid">
+          <div class="metric-card">
+            <div class="label">In transit</div>
+            <div class="value" id="metric-in-transit">0</div>
+            <div class="delta">+3.1% vs yesterday</div>
+          </div>
+          <div class="metric-card">
+            <div class="label">Delivered today</div>
+            <div class="value" id="metric-delivered">0</div>
+            <div class="delta">on pace with target</div>
+          </div>
+          <div class="metric-card accent-warning">
+            <div class="label">Delayed</div>
+            <div class="value" id="metric-delayed">0</div>
+            <div class="delta">+18 since 9am</div>
+          </div>
+          <div class="metric-card accent-danger">
+            <div class="label">Exceptions</div>
+            <div class="value" id="metric-exceptions">0</div>
+            <div class="delta">12 unassigned</div>
+          </div>
+          <div class="metric-card">
+            <div class="label">Pending pickup</div>
+            <div class="value" id="metric-pending">0</div>
+            <div class="delta">scheduled today</div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <div class="table-toolbar">
+            <div class="filter-row">
+              <input type="text" id="table-search" placeholder="Filter by tracking, customer, destination" />
+              <!-- Multi-select Carrier -->
+              <div style="position: relative;">
+                <button class="select-btn" id="btn-filter-carrier" type="button" aria-haspopup="true"
+                  aria-expanded="false">
+                  All carriers
+                </button>
+                <div class="menu" id="menu-filter-carrier"
+                  style="left: 0; top: 100%; margin-top: 4px; min-width: 150px; padding: var(--sp-2);">
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" value="UPS" /> UPS
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" value="FedEx" /> FedEx
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" value="DHL" /> DHL
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" value="USPS" /> USPS
+                  </label>
+                </div>
+              </div>
+
+              <!-- Multi-select Status -->
+              <div style="position: relative;">
+                <button class="select-btn" id="btn-filter-status" type="button" aria-haspopup="true"
+                  aria-expanded="false">
+                  All statuses
+                </button>
+                <div class="menu" id="menu-filter-status"
+                  style="left: 0; top: 100%; margin-top: 4px; min-width: 160px; padding: var(--sp-2);">
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" value="In transit" /> In transit
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" value="Delayed" /> Delayed
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" value="Exception" /> Exception
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" value="Delivered" /> Delivered
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" value="Pending pickup" /> Pending pickup
+                  </label>
+                </div>
+              </div>
+
+              <!-- More Filters Popover -->
+              <div style="position: relative;">
+                <button class="select-btn" id="btn-filters" type="button" aria-haspopup="true" aria-expanded="false"
+                  style="padding-right: 12px !important; background-image: none; display: inline-flex; align-items: center; gap: 6px;">
+                  <i class="ti ti-adjustments" aria-hidden="true"></i> More <span id="filter-badge"
+                    class="badge badge-neutral"
+                    style="display: none; padding: 2px 6px; font-size: 10px; margin-left: 6px; background: var(--surface-3); color: var(--text-primary);">0</span>
+                </button>
+                <div class="menu" id="menu-filters"
+                  style="left: 0; top: 100%; margin-top: 4px; min-width: 320px; padding: var(--sp-4); display: none; flex-direction: column; gap: var(--sp-4);">
+                  <!-- Row 1: Service Level & Severity -->
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4);">
+                    <div>
+                      <div
+                        style="font-weight: 600; font-size: 11px; color: var(--text-muted); margin-bottom: var(--sp-2);">
+                        Service Levels</div>
+                      <div class="flex flex-col gap-1">
+                        <label
+                          style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal; font-size: 12px;">
+                          <input type="checkbox" name="serviceLevel" value="Priority Overnight" /> Priority Overnight
+                        </label>
+                        <label
+                          style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal; font-size: 12px;">
+                          <input type="checkbox" name="serviceLevel" value="Expedited Air" /> Expedited Air
+                        </label>
+                        <label
+                          style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal; font-size: 12px;">
+                          <input type="checkbox" name="serviceLevel" value="Standard Ground" /> Standard Ground
+                        </label>
+                        <label
+                          style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal; font-size: 12px;">
+                          <input type="checkbox" name="serviceLevel" value="Ground Saver" /> Ground Saver
+                        </label>
+                      </div>
+                    </div>
+                    <div>
+                      <div
+                        style="font-weight: 600; font-size: 11px; color: var(--text-muted); margin-bottom: var(--sp-2);">
+                        Severities</div>
+                      <div class="flex flex-col gap-1">
+                        <label
+                          style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal; font-size: 12px;">
+                          <input type="checkbox" name="severity" value="high" /> High
+                        </label>
+                        <label
+                          style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal; font-size: 12px;">
+                          <input type="checkbox" name="severity" value="medium" /> Medium
+                        </label>
+                        <label
+                          style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal; font-size: 12px;">
+                          <input type="checkbox" name="severity" value="low" /> Low
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Footer actions -->
+                  <div
+                    style="display: flex; justify-content: space-between; border-top: 0.5px solid var(--border); padding-top: var(--sp-3); margin-top: var(--sp-1);">
+                    <button class="btn-ghost btn-sm" id="btn-reset-filters" type="button"
+                      style="padding: 4px var(--sp-2);">Reset</button>
+                    <button class="btn-primary btn-sm" id="btn-apply-filters" type="button"
+                      style="padding: 4px var(--sp-3);">Apply</button>
+                  </div>
+                </div>
+              </div>
+              <button class="btn-ghost" id="btn-clear-filters" style="display: none;"><i class="ti ti-x"
+                  aria-hidden="true"></i>Clear</button>
+            </div>
+            <div class="flex items-center gap-3">
+              <div class="flex items-center gap-2 text-secondary" style="font-size: var(--fs-caption);">
+                <span id="page-label-top">Showing 1–20 of 248</span>
+                <div class="flex gap-1">
+                  <button class="btn-sm" id="btn-prev-top" aria-label="Previous page"><i class="ti ti-chevron-left"
+                      aria-hidden="true"></i>Prev</button>
+                  <button class="btn-sm" id="btn-next-top" aria-label="Next page">Next<i class="ti ti-chevron-right"
+                      aria-hidden="true"></i></button>
+                </div>
+              </div>
+              <div style="position: relative;">
+                <button class="btn-ghost" id="btn-columns"><i class="ti ti-adjustments-horizontal"
+                    aria-hidden="true"></i>Columns</button>
+                <div class="menu" id="columns-menu"
+                  style="right: 0; top: 100%; margin-top: 4px; min-width: 160px; padding: var(--sp-2);">
+                  <div
+                    style="font-weight: 600; font-size: 11px; color: var(--text-muted); padding: 4px 8px 8px 8px; border-bottom: 0.5px solid var(--border); margin-bottom: var(--sp-1);">
+                    Toggle Columns</div>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" checked data-column="tracking" /> Tracking no.
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" checked data-column="customer" /> Customer
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" checked data-column="carrier" /> Carrier
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" checked data-column="status" /> Status
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" checked data-column="destination" /> Destination
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" checked data-column="eta" /> ETA
+                  </label>
+                  <label class="menu-item"
+                    style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                    <input type="checkbox" checked data-column="updated" /> Updated
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bulk-bar" id="bulk-bar">
+            <span id="bulk-count">0 selected</span>
+            <div class="spacer"></div>
+            <button class="btn-sm"><i class="ti ti-tag" aria-hidden="true"></i>Add tag</button>
+            <button class="btn-sm"><i class="ti ti-mail" aria-hidden="true"></i>Notify customer</button>
+            <button class="btn-sm btn-danger"><i class="ti ti-archive" aria-hidden="true"></i>Archive</button>
+          </div>
+
+          <table id="shipments-table" aria-describedby="result-count">
+            <thead>
+              <tr>
+                <th class="col-check"><input type="checkbox" id="select-all" aria-label="Select all shipments" /></th>
+                <th class="sortable col-tracking" data-sort="tracking">Tracking no. <i class="ti ti-arrows-sort"
+                    aria-hidden="true"></i></th>
+                <th class="sortable col-customer" data-sort="customer">Customer <i class="ti ti-arrows-sort"
+                    aria-hidden="true"></i></th>
+                <th class="col-carrier">Carrier</th>
+                <th class="col-status">Status</th>
+                <th class="col-destination">Destination</th>
+                <th class="sortable col-eta" data-sort="eta">ETA <i class="ti ti-arrows-sort" aria-hidden="true"></i>
+                </th>
+                <th class="col-updated">Updated</th>
+                <th class="col-action"></th>
+              </tr>
+            </thead>
+            <tbody id="table-body">
+              <!-- populated by js/pages/dashboard.js -->
+            </tbody>
+          </table>
+
+          <div class="empty-state" id="empty-state" style="display:none">
+            <i class="ti ti-package-off" aria-hidden="true"></i>
+            <h3>No shipments match these filters</h3>
+            <p>Try a different carrier, status, or search term. You can also clear all filters to see everything.</p>
+            <button class="btn-sm" onclick="document.getElementById('btn-clear-filters').click()">Clear filters</button>
+          </div>
+
+          <div class="pagination">
+            <span id="page-label">Showing 1–20 of 248</span>
+            <div class="controls">
+              <button class="btn-sm" id="btn-prev"><i class="ti ti-chevron-left" aria-hidden="true"></i>Prev</button>
+              <button class="btn-sm" id="btn-next">Next<i class="ti ti-chevron-right" aria-hidden="true"></i></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Connect Gmail banner card -->
+        <div class="card flex items-center justify-between" id="dashboard-gmail-card"
+          style="margin-top: var(--sp-4); padding: var(--sp-3) var(--sp-4); gap: var(--sp-3); display: none;">
+          <div class="flex items-center gap-3" style="flex: 1;">
+            <div
+              style="background: #FEEBEA; color: #EA4335; width: 36px; height: 36px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0;">
+              <i class="ti ti-brand-gmail" aria-hidden="true"></i>
+            </div>
+            <div>
+              <div style="font-weight: 600; font-size: var(--fs-footnote);">Connect Gmail</div>
+              <div class="text-secondary" style="font-size: 11px; margin-top: 2px;">Auto-import tracking numbers from
+                your inbox — no copy-paste required.</div>
+            </div>
+          </div>
+          <div>
+            <button class="btn-primary btn-sm" onclick="connectGmailFromBanner(event)"
+              id="btn-banner-connect-gmail">Connect Gmail</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <div class="drawer-scrim" id="row-drawer">
+    <aside class="drawer" role="dialog" aria-label="Shipment quick view">
+      <div class="flex justify-between items-center mb-4">
+        <h2 style="font-size:16px" id="qv-title">SHP-10000</h2>
+        <button class="icon-btn" aria-label="Close" onclick="closeDrawer('row-drawer')"><i class="ti ti-x"
+            aria-hidden="true"></i></button>
+      </div>
+      <div id="qv-body"></div>
+      <div class="flex gap-2 mt-4">
+        <button class="btn-primary" style="flex:1" id="btn-qv-full-detail">Open full detail</button>
+        <button onclick="toast('Note added')"><i class="ti ti-note" aria-hidden="true"></i></button>
+      </div>
+    </aside>
+  </div>
+
+  <div class="drawer-scrim" id="new-shipment-drawer">
+    <aside class="drawer" role="dialog" aria-label="Create new shipment" style="width: 400px; max-width: 90vw;">
+      <div class="flex justify-between items-center mb-4">
+        <h2 style="font-size:16px">New Shipment</h2>
+        <button class="icon-btn" aria-label="Close" onclick="closeDrawer('new-shipment-drawer')"><i class="ti ti-x"
+            aria-hidden="true"></i></button>
+      </div>
+      <form id="new-shipment-form" onsubmit="event.preventDefault(); createNewShipment();">
+        <div class="field mt-3">
+          <label for="ns-customer">Customer Name</label>
+          <input type="text" id="ns-customer" required placeholder="e.g. Sarah Jenkins" />
+        </div>
+        <div class="field mt-3">
+          <label for="ns-carrier">Carrier</label>
+          <select id="ns-carrier" required>
+            <option>UPS</option>
+            <option>FedEx</option>
+            <option>DHL</option>
+            <option>USPS</option>
+          </select>
+        </div>
+        <div class="field mt-3">
+          <label for="ns-destination">Destination City/State</label>
+          <input type="text" id="ns-destination" required placeholder="e.g. Miami, FL" />
+        </div>
+        <div class="field mt-3">
+          <label for="ns-weight">Weight (kg)</label>
+          <input type="number" step="0.1" id="ns-weight" required placeholder="e.g. 4.5" />
+        </div>
+        <div class="field mt-3">
+          <label for="ns-value">Declared Value ($)</label>
+          <input type="number" id="ns-value" required placeholder="e.g. 150" />
+        </div>
+        <div class="field mt-3">
+          <label for="ns-status">Initial Status</label>
+          <select id="ns-status" required>
+            <option>Pending pickup</option>
+            <option>In transit</option>
+            <option>Delayed</option>
+            <option>Exception</option>
+          </select>
+        </div>
+        <button class="btn-primary mt-4 w-full" type="submit" style="width:100%">Create Shipment</button>
+      </form>
+    </aside>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/command-palette.js"></script>
+  <script src="js/pages/dashboard.js"></script>
+</body>
+
+</html>

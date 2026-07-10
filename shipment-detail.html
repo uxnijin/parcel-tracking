@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SHP-10032 — ShipFlow</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .detail-grid { display: grid; grid-template-columns: 1fr 320px; gap: var(--sp-5); align-items: start; }
+  @media (max-width: 980px) { .detail-grid { grid-template-columns: 1fr; } }
+  .side-stack { display: flex; flex-direction: column; gap: var(--sp-4); }
+  .note { border-bottom: 0.5px solid var(--border); padding: var(--sp-3) 0; }
+  .note:last-child { border-bottom: none; }
+  .note .meta { font-size: var(--fs-caption); color: var(--text-muted); margin-top: 4px; }
+  .attach-row { display: flex; align-items: center; gap: var(--sp-2); padding: var(--sp-2) 0; border-bottom: 0.5px solid var(--border); font-size: var(--fs-footnote); }
+  .attach-row:last-child { border-bottom: none; }
+  .attach-row i { font-size: 17px; color: var(--text-secondary); }
+  .attach-row .size { margin-left: auto; color: var(--text-muted); font-size: var(--fs-caption); }
+</style>
+</head>
+<body data-page="shipments">
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="mark">SF</span>ShipFlow</div>
+    <nav class="nav-group">
+      <span class="nav-label">Workspace</span>
+      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">12,482</span></a>
+      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">47</span></a>
+      <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox Scan<span class="count" style="display:none"></span></a>
+      <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i>Calendar</a>
+      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">9</span></a>
+      <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload" aria-hidden="true"></i>Import</a>
+      <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar" aria-hidden="true"></i>Reports</a>
+      <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i>Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar">JD</div>
+        <div><div class="who">Jordan Diaz</div><div class="role">Operations</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-search">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
+      </div>
+      <div class="topbar-actions">
+        <span class="sync-pill"><span class="dot"></span>Synced</span>
+        <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+        <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i><span class="dot"></span></button>
+        <button class="icon-btn" aria-label="Settings" onclick="location.href='settings.html'"><i class="ti ti-settings" aria-hidden="true"></i></button>
+        <div class="avatar">JD</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="crumb"><a href="index.html">Shipments</a><i class="ti ti-chevron-right" aria-hidden="true" style="font-size:13px"></i><span id="det-crumb-id">SHP-10032</span></div>
+
+      <div class="page-header">
+        <div class="page-title">
+          <h1 id="det-title">SHP-10032</h1>
+          <span class="badge" id="det-status-badge"><span class="sw"></span>Exception</span>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="toast('Customer notified')"><i class="ti ti-mail" aria-hidden="true"></i>Notify customer</button>
+          <button onclick="toast('Editing not supported in mockup')"><i class="ti ti-edit" aria-hidden="true"></i>Edit</button>
+          <button class="btn-primary" id="btn-det-resolve" onclick="resolveShipmentDetail()"><i class="ti ti-check" aria-hidden="true"></i>Resolve</button>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div>
+          <div class="tabs" role="tablist">
+            <div class="tab active" data-tab="timeline" role="tab">Timeline</div>
+            <div class="tab" data-tab="notes" role="tab" id="det-tab-notes">Notes<span class="text-muted"> · 0</span></div>
+            <div class="tab" data-tab="attachments" role="tab">Attachments<span class="text-muted"> · 2</span></div>
+            <div class="tab" data-tab="activity" role="tab">Activity</div>
+          </div>
+
+          <div class="tab-panel active" id="panel-timeline">
+            <div class="card">
+              <div class="timeline" id="det-timeline">
+                <!-- populated by js/pages/shipment-detail.js -->
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="panel-notes">
+            <div class="card">
+              <div class="field" style="margin-bottom:0">
+                <textarea id="note-input" rows="2" placeholder="Add a note for the team"></textarea>
+                <div class="flex justify-between items-center mt-2">
+                  <span class="text-muted" style="font-size:12px">Visible to your team only</span>
+                  <button class="btn-sm btn-primary" onclick="addNote()">Add note</button>
+                </div>
+              </div>
+              <div id="note-list" class="mt-4">
+                <!-- populated by js/pages/shipment-detail.js -->
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="panel-attachments">
+            <div class="card">
+              <div class="attach-row"><i class="ti ti-file-type-pdf" aria-hidden="true"></i><span>proof-of-address.pdf</span><span class="size">214 KB</span></div>
+              <div class="attach-row"><i class="ti ti-photo" aria-hidden="true"></i><span>delivery-attempt-photo.jpg</span><span class="size">1.2 MB</span></div>
+              <button class="btn-sm mt-3"><i class="ti ti-upload" aria-hidden="true"></i>Upload file</button>
+            </div>
+          </div>
+
+          <div class="tab-panel" id="panel-activity">
+            <div class="card">
+              <div class="timeline">
+                <div class="timeline-item done"><div class="t-title">Jordan Diaz reassigned this shipment to the exceptions queue</div><div class="t-meta">Jul 9, 2:20 PM</div></div>
+                <div class="timeline-item done"><div class="t-title">Status changed to Exception</div><div class="t-meta">Jul 9, 2:14 PM</div></div>
+                <div class="timeline-item done"><div class="t-title">Carrier webhook synced tracking events</div><div class="t-meta">Jul 9, 8:05 AM</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="side-stack">
+          <div class="card">
+            <div class="card-title">Shipment details</div>
+            <div class="kv-row"><span class="k">Tracking no.</span><span class="v mono" id="det-tracking">—</span></div>
+            <div class="kv-row"><span class="k">Order id</span><span class="v" id="det-order-id">—</span></div>
+            <div class="kv-row"><span class="k">Weight</span><span class="v" id="det-weight">—</span></div>
+            <div class="kv-row"><span class="k">Declared value</span><span class="v" id="det-value">—</span></div>
+            <div class="kv-row"><span class="k">Service</span><span class="v" id="det-service-level">—</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Carrier</div>
+            <div class="kv-row"><span class="k">Carrier</span><span class="v" id="det-carrier">—</span></div>
+            <div class="kv-row"><span class="k">Service level</span><span class="v" id="det-carrier-service">—</span></div>
+            <div class="kv-row"><span class="k">Origin</span><span class="v" id="det-origin">—</span></div>
+            <div class="kv-row"><span class="k">Destination</span><span class="v" id="det-destination">—</span></div>
+          </div>
+
+          <div class="card">
+            <div class="card-title">Customer</div>
+            <div class="flex items-center gap-2 mb-3">
+              <div class="avatar" id="det-cust-avatar">JD</div>
+              <div>
+                <div style="font-weight:500;font-size:13px" id="det-cust-name">—</div>
+                <div class="text-muted" style="font-size:12px">Customer since 2022</div>
+              </div>
+            </div>
+            <div class="kv-row"><span class="k">Email</span><span class="v" id="det-cust-email">—</span></div>
+            <div class="kv-row"><span class="k">Phone</span><span class="v" id="det-cust-phone">—</span></div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/command-palette.js"></script>
+<script src="js/pages/shipment-detail.js"></script>
+</body>
+</html>

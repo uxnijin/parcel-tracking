@@ -1,0 +1,116 @@
+/* ==========================================================================
+   Design tokens — ShipFlow
+   Neutral gray/black system. Color is reserved for status meaning only.
+   ========================================================================== */
+
+:root {
+  /* Surfaces */
+  --surface-0: #FAFAF9;   /* page canvas */
+  --surface-1: #FFFFFF;   /* cards, panels */
+  --surface-2: #F3F3F1;   /* subtle fill, table header, hover */
+  --surface-3: #ECECE9;   /* stronger fill, pressed */
+  --overlay: rgba(24, 24, 21, 0.45);
+
+  /* Text */
+  --text-primary: #18181B;
+  --text-secondary: #63635E;
+  --text-muted: #9A9A94;
+  --text-inverse: #FAFAF9;
+  --text-disabled: #C6C6C1;
+
+  /* Borders */
+  --border: #E4E4E0;
+  --border-strong: #D2D2CC;
+  --border-stronger: #B4B4AC;
+
+  /* Primary action (monochrome, not blue) */
+  --fill-primary: #18181B;
+  --fill-primary-hover: #2E2E2B;
+  --on-primary: #FAFAF9;
+
+  /* Status roles — used only to encode meaning */
+  --bg-success: #EAF3DE;   --text-success: #27500A;  --border-success: #97C459;
+  --bg-warning: #FAEEDA;   --text-warning: #854F0B;  --border-warning: #EF9F27;
+  --bg-danger:  #FCEBEB;   --text-danger:  #A32D2D;  --border-danger:  #E24B4A;
+  --bg-neutral: #F1EFE8;   --text-neutral: #444441;  --border-neutral: #B4B2A9;
+  --bg-info:    #ECECE9;   --text-info:    #444441;  --border-info:    #B4B2A9;
+
+  /* Focus */
+  --focus-ring: 0 0 0 2px var(--surface-1), 0 0 0 4px #18181B;
+
+  /* Type */
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --fs-caption: 12px;
+  --fs-footnote: 13px;
+  --fs-body: 14px;
+  --fs-heading: 16px;
+  --fs-title: 20px;
+  --fs-display: 26px;
+
+  /* Space scale (4px base) */
+  --sp-1: 4px;  --sp-2: 8px;  --sp-3: 12px; --sp-4: 16px;
+  --sp-5: 20px; --sp-6: 24px; --sp-8: 32px; --sp-10: 40px;
+
+  /* Radius */
+  --radius-sm: 4px;
+  --radius: 6px;
+  --radius-lg: 10px;
+
+  /* Motion — 150–250ms, ease-out only. Never used for decoration. */
+  --dur-fast: 150ms;   /* hover, focus, pressed */
+  --dur-base: 200ms;   /* tabs, toggles, inline reveals */
+  --dur-slow: 250ms;   /* drawers, dialogs, page-level transitions */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Elevation — one subtle level for floating surfaces only (popover, palette, toast) */
+  --shadow-float: 0 1px 2px rgba(24,24,21,0.06), 0 4px 12px rgba(24,24,21,0.08);
+
+  /* Layout */
+  --sidebar-w: 220px;
+  --topbar-h: 56px;
+
+  /* Stacking */
+  --z-dropdown: 40;
+  --z-drawer: 50;
+  --z-palette: 70;
+  --z-toast: 80;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface-0: #171715;
+    --surface-1: #1E1E1B;
+    --surface-2: #292925;
+    --surface-3: #333330;
+    --overlay: rgba(0, 0, 0, 0.6);
+
+    --text-primary: #F2F2EF;
+    --text-secondary: #A9A9A2;
+    --text-muted: #75756E;
+    --text-inverse: #171715;
+    --text-disabled: #4A4A45;
+
+    --border: #303030;
+    --border-strong: #3E3E3A;
+    --border-stronger: #55554E;
+
+    --fill-primary: #F2F2EF;
+    --fill-primary-hover: #D8D8D3;
+    --on-primary: #171715;
+
+    --bg-success: #173404;  --text-success: #97C459;  --border-success: #3B6D11;
+    --bg-warning: #412402;  --text-warning: #FAC775;  --border-warning: #854F0B;
+    --bg-danger:  #501313;  --text-danger:  #F09595;  --border-danger:  #A32D2D;
+    --bg-neutral: #2C2C2A;  --text-neutral: #B4B2A9;  --border-neutral: #5F5E5A;
+    --bg-info:    #292925;  --text-info:    #B4B2A9;  --border-info:    #5F5E5A;
+
+    --focus-ring: 0 0 0 2px var(--surface-1), 0 0 0 4px #F2F2EF;
+    --shadow-float: 0 1px 2px rgba(0,0,0,0.24), 0 4px 16px rgba(0,0,0,0.32);
+  }
+}
+
+[data-theme="dark"] {
+  color-scheme: dark;
+}

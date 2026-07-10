@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Import shipments — ShipFlow</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .import-wrap { max-width: 720px; }
+  .import-step { display: none; }
+  .import-step.active { display: block; }
+  .file-row { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-3); border: 0.5px solid var(--border); border-radius: var(--radius); margin-bottom: var(--sp-3); }
+  .file-row i { font-size: 22px; color: var(--text-secondary); }
+  .file-row .info { flex: 1; }
+  .file-row .name { font-size: 13px; font-weight: 500; }
+  .file-row .meta { font-size: 12px; color: var(--text-muted); margin-top: 2px; }
+  .result-row .icon-ok { color: var(--text-success); }
+  .result-row .icon-warn { color: var(--text-warning); }
+  .result-row .icon-err { color: var(--text-danger); }
+  .summary-strip { display: flex; gap: var(--sp-4); margin: var(--sp-4) 0; }
+  .summary-strip .s { font-size: 13px; }
+  .summary-strip .s b { font-size: 18px; display: block; }
+</style>
+</head>
+<body data-page="import">
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="mark">SF</span>ShipFlow</div>
+    <nav class="nav-group">
+      <span class="nav-label">Workspace</span>
+      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">12,482</span></a>
+      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">47</span></a>
+      <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox Scan<span class="count" style="display:none"></span></a>
+      <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i>Calendar</a>
+      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">9</span></a>
+      <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload" aria-hidden="true"></i>Import</a>
+      <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar" aria-hidden="true"></i>Reports</a>
+      <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i>Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar">JD</div>
+        <div><div class="who">Jordan Diaz</div><div class="role">Operations</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-search">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
+      </div>
+      <div class="topbar-actions">
+        <span class="sync-pill"><span class="dot"></span>Synced</span>
+        <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+        <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i></button>
+        <div class="avatar">JD</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-header">
+        <div class="page-title"><h1>Import shipments</h1></div>
+      </div>
+
+      <div class="import-wrap">
+
+        <div class="import-step active" id="step-upload">
+          <div class="dropzone" id="dropzone">
+            <i class="ti ti-file-upload" aria-hidden="true"></i>
+            <p style="font-size:14px;color:var(--text-primary);margin-bottom:4px">Drag a CSV file here</p>
+            <p style="font-size:13px">or <span class="browse" id="browse-link">browse your computer</span></p>
+            <p style="font-size:12px;margin-top:var(--sp-3)">CSV up to 10 MB · <a href="#" style="text-decoration:underline">Download template</a></p>
+            <input type="file" id="file-input" accept=".csv" style="display:none" />
+          </div>
+        </div>
+
+        <div class="import-step" id="step-uploading">
+          <div class="card">
+            <div class="file-row">
+              <i class="ti ti-file-spreadsheet" aria-hidden="true"></i>
+              <div class="info">
+                <div class="name" id="upload-filename">shipments-july.csv</div>
+                <div class="meta" id="upload-status">Uploading…</div>
+              </div>
+            </div>
+            <div class="progress-track"><div class="progress-fill" id="upload-progress" style="width:0%"></div></div>
+          </div>
+        </div>
+
+        <div class="import-step" id="step-results">
+          <div class="card">
+            <div class="flex items-center gap-2 mb-2">
+              <i class="ti ti-circle-check" style="color:var(--text-success);font-size:20px" aria-hidden="true"></i>
+              <span style="font-weight:500;font-size:14px">Import finished</span>
+            </div>
+            <p class="text-secondary" style="font-size:13px">412 of 420 rows were imported. 8 rows need attention before they can be added.</p>
+            <div class="summary-strip">
+              <div class="s"><b style="color:var(--text-success)">412</b><span class="text-muted">Imported</span></div>
+              <div class="s"><b style="color:var(--text-warning)">5</b><span class="text-muted">Duplicate tracking no.</span></div>
+              <div class="s"><b style="color:var(--text-danger)">3</b><span class="text-muted">Missing required field</span></div>
+            </div>
+            <div class="table-wrap" style="margin-top:var(--sp-3)">
+              <table>
+                <thead><tr><th style="width:8%">Row</th><th style="width:30%">Tracking no.</th><th style="width:20%">Issue</th><th>Action</th></tr></thead>
+                <tbody id="issue-rows"></tbody>
+              </table>
+            </div>
+            <div class="flex gap-2 mt-4">
+              <button class="btn-primary" onclick="location.href='index.html'">Go to shipments</button>
+              <button onclick="resetImport()">Import another file</button>
+              <button class="btn-ghost"><i class="ti ti-download" aria-hidden="true"></i>Download error report</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/command-palette.js"></script>
+<script src="js/pages/import.js"></script>
+</body>
+</html>

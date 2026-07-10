@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Style guide — ShipFlow</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  body { padding: var(--sp-8) var(--sp-6) var(--sp-10); max-width: 980px; margin: 0 auto; }
+  section { margin-bottom: var(--sp-10); }
+  section h2 { font-size: 15px; margin-bottom: 4px; }
+  section .desc { font-size: 13px; color: var(--text-secondary); margin-bottom: var(--sp-4); max-width: 640px; }
+  .row { display: flex; gap: var(--sp-3); flex-wrap: wrap; align-items: center; margin-bottom: var(--sp-3); }
+  .specimen { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; }
+  .specimen .label { font-size: 11px; color: var(--text-muted); }
+  .swatch-row { display: flex; gap: var(--sp-3); flex-wrap: wrap; }
+  .swatch { width: 96px; }
+  .swatch .chip { height: 48px; border-radius: var(--radius); border: 0.5px solid var(--border); margin-bottom: 6px; }
+  .swatch .name { font-size: 11px; color: var(--text-secondary); }
+  .swatch .hex { font-size: 10px; color: var(--text-muted); font-family: var(--font-mono); }
+  .type-row { display: flex; align-items: baseline; gap: var(--sp-4); padding: 10px 0; border-bottom: 0.5px solid var(--border); }
+  .type-row .tag { font-size: 11px; color: var(--text-muted); width: 130px; font-family: var(--font-mono); flex-shrink: 0; }
+  .motion-row { display: flex; gap: var(--sp-4); align-items: center; padding: 10px 0; border-bottom: 0.5px solid var(--border); font-size: 13px; }
+  .motion-row .tag { width: 140px; color: var(--text-secondary); flex-shrink: 0; }
+  .demo-box { width: 40px; height: 20px; background: var(--fill-primary); border-radius: var(--radius-sm); transition: transform var(--dur-base) var(--ease-out); }
+  .motion-row:hover .demo-box { transform: translateX(6px); }
+  .shortcut-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 6px var(--sp-6); }
+  .shortcut-row { display: flex; justify-content: space-between; font-size: 13px; padding: 6px 0; border-bottom: 0.5px solid var(--border); }
+  .table-demo tr.is-hover { background: var(--surface-2); }
+  .table-demo tr.is-selected { background: var(--surface-3); }
+  .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--text-secondary); margin-bottom: var(--sp-6); }
+</style>
+</head>
+<body>
+
+<a class="back-link" href="index.html"><i class="ti ti-arrow-left" aria-hidden="true"></i>Back to app</a>
+<h1 style="font-size:22px;margin-bottom:4px">ShipFlow style guide</h1>
+<p style="font-size:13px;color:var(--text-secondary);margin-bottom:var(--sp-8)">A living reference for the components in this build — states, motion, and shortcuts, kept next to the code that implements them.</p>
+
+<section>
+  <h2>Color</h2>
+  <p class="desc">Gray and black carry structure. Color is reserved for status meaning — it never decorates.</p>
+  <div class="swatch-row">
+    <div class="swatch"><div class="chip" style="background:var(--text-primary)"></div><div class="name">Text primary</div><div class="hex">#18181B</div></div>
+    <div class="swatch"><div class="chip" style="background:var(--surface-2)"></div><div class="name">Surface 2</div><div class="hex">#F3F3F1</div></div>
+    <div class="swatch"><div class="chip" style="background:var(--bg-success);border-color:var(--border-success)"></div><div class="name">Success</div><div class="hex">completed</div></div>
+    <div class="swatch"><div class="chip" style="background:var(--bg-warning);border-color:var(--border-warning)"></div><div class="name">Warning</div><div class="hex">delayed</div></div>
+    <div class="swatch"><div class="chip" style="background:var(--bg-danger);border-color:var(--border-danger)"></div><div class="name">Danger</div><div class="hex">exception</div></div>
+    <div class="swatch"><div class="chip" style="background:var(--bg-neutral);border-color:var(--border-neutral)"></div><div class="name">Neutral</div><div class="hex">inactive/info</div></div>
+  </div>
+</section>
+
+<section>
+  <h2>Typography</h2>
+  <p class="desc">Hierarchy comes from weight, size and spacing — not color or containers.</p>
+  <div class="type-row"><span class="tag">display / 26</span><span style="font-size:26px">Shipment SHP-10032</span></div>
+  <div class="type-row"><span class="tag">title / 20</span><span style="font-size:20px">Shipments</span></div>
+  <div class="type-row"><span class="tag">heading / 16</span><span style="font-size:16px;font-weight:500">Carrier details</span></div>
+  <div class="type-row"><span class="tag">body / 14</span><span style="font-size:14px">Default reading size for table cells and body copy.</span></div>
+  <div class="type-row"><span class="tag">footnote / 13</span><span style="font-size:13px;color:var(--text-secondary)">Form labels, secondary metadata.</span></div>
+  <div class="type-row"><span class="tag">caption / 12</span><span style="font-size:12px;color:var(--text-muted)">Timestamps, table headers, helper text.</span></div>
+</section>
+
+<section>
+  <h2>Buttons</h2>
+  <p class="desc">Every state is a real, reachable CSS state — not a mockup screenshot. Tab to a button below to see focus.</p>
+  <div class="row">
+    <div class="specimen"><button class="btn-primary">Default</button><span class="label">Default</span></div>
+    <div class="specimen"><button class="btn-primary" style="background:var(--fill-primary-hover);border-color:var(--fill-primary-hover)">Hover</button><span class="label">Hover</span></div>
+    <div class="specimen"><button class="btn-primary" disabled>Disabled</button><span class="label">Disabled</span></div>
+    <div class="specimen"><button class="btn-primary"><i class="ti ti-loader-2" aria-hidden="true"></i>Saving…</button><span class="label">Loading</span></div>
+  </div>
+  <div class="row">
+    <div class="specimen"><button>Secondary</button><span class="label">Default</span></div>
+    <div class="specimen"><button class="btn-danger">Destructive</button><span class="label">Danger</span></div>
+    <div class="specimen"><button class="btn-ghost">Ghost</button><span class="label">Ghost</span></div>
+    <div class="specimen"><button class="btn-sm">Small</button><span class="label">Small</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Inputs</h2>
+  <div class="row">
+    <div class="specimen"><input type="text" placeholder="Default" /><span class="label">Default</span></div>
+    <div class="specimen"><input type="text" value="Focused text" style="border-color:var(--border-stronger);box-shadow:var(--focus-ring)" /><span class="label">Focus</span></div>
+    <div class="specimen"><input type="text" value="Invalid value" style="border-color:var(--border-danger)" /><span class="label">Error</span></div>
+    <div class="specimen"><input type="text" value="Locked" disabled /><span class="label">Disabled</span></div>
+  </div>
+</section>
+
+<section>
+  <h2>Badges</h2>
+  <div class="row">
+    <span class="badge badge-success"><span class="sw"></span>Delivered</span>
+    <span class="badge badge-warning"><span class="sw"></span>Delayed</span>
+    <span class="badge badge-danger"><span class="sw"></span>Exception</span>
+    <span class="badge badge-neutral"><span class="sw"></span>Pending</span>
+  </div>
+</section>
+
+<section>
+  <h2>Table row states</h2>
+  <div class="table-wrap table-demo">
+    <table>
+      <tbody>
+        <tr><td style="padding:10px 12px">Default row</td><td style="padding:10px 12px" class="text-muted">SHP-10001</td></tr>
+        <tr class="is-hover"><td style="padding:10px 12px">Hover</td><td style="padding:10px 12px" class="text-muted">SHP-10002</td></tr>
+        <tr class="is-selected"><td style="padding:10px 12px">Selected</td><td style="padding:10px 12px" class="text-muted">SHP-10003</td></tr>
+        <tr tabindex="0"><td style="padding:10px 12px">Keyboard focus — press Tab to reach this row</td><td style="padding:10px 12px" class="text-muted">SHP-10004</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2>Loading, empty, and error states</h2>
+  <div class="row" style="align-items:stretch">
+    <div class="card" style="width:260px"><div class="skeleton" style="height:12px;width:60%;margin-bottom:8px"></div><div class="skeleton" style="height:12px;width:85%;margin-bottom:8px"></div><div class="skeleton" style="height:12px;width:40%"></div></div>
+    <div class="card" style="width:260px" id="empty-demo">
+      <div class="empty-state" style="padding:var(--sp-4)">
+        <i class="ti ti-inbox" aria-hidden="true"></i>
+        <h3 style="font-size:14px">No results</h3>
+        <p style="font-size:12px">Try a different filter.</p>
+      </div>
+    </div>
+    <div class="card" style="width:260px">
+      <div class="form-error visible" style="position:static;background:var(--bg-danger);color:var(--text-danger);padding:8px 10px;border-radius:var(--radius);font-size:13px;display:flex;gap:8px;align-items:center"><i class="ti ti-alert-circle" aria-hidden="true"></i>Couldn't save changes</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <h2>Motion</h2>
+  <p class="desc">Motion explains state changes only — 150–250ms, ease-out, translations under a few pixels, no bounce. Hover a row to see the token in action.</p>
+  <div class="motion-row"><span class="tag">--dur-fast / 150ms</span><span>Hover, focus, pressed</span><div class="demo-box"></div></div>
+  <div class="motion-row"><span class="tag">--dur-base / 200ms</span><span>Tabs, toggles, inline reveals</span><div class="demo-box"></div></div>
+  <div class="motion-row"><span class="tag">--dur-slow / 250ms</span><span>Drawers, dialogs, page transitions</span><div class="demo-box"></div></div>
+</section>
+
+<section>
+  <h2>Keyboard shortcuts</h2>
+  <div class="shortcut-grid">
+    <div class="shortcut-row"><span>Open command palette</span><span><kbd>&#8984;</kbd>+<kbd>K</kbd></span></div>
+    <div class="shortcut-row"><span>Navigate table rows</span><span><kbd>&uarr;</kbd> <kbd>&darr;</kbd></span></div>
+    <div class="shortcut-row"><span>Open focused row</span><span><kbd>&crarr;</kbd></span></div>
+    <div class="shortcut-row"><span>Close drawer / dialog</span><span><kbd>esc</kbd></span></div>
+    <div class="shortcut-row"><span>Move between fields</span><span><kbd>tab</kbd></span></div>
+    <div class="shortcut-row"><span>Toggle checkbox / button</span><span><kbd>space</kbd></span></div>
+  </div>
+</section>
+
+<script src="js/app.js"></script>
+</body>
+</html>

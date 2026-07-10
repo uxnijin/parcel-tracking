@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Reports — ShipFlow</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .reports-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-4); }
+  @media (max-width: 900px) { .reports-grid { grid-template-columns: 1fr; } }
+  .chart-title { font-size: 13px; font-weight: 500; margin-bottom: 2px; }
+  .chart-sub { font-size: 12px; color: var(--text-muted); margin-bottom: var(--sp-3); }
+</style>
+</head>
+<body data-page="reports">
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="mark">SF</span>ShipFlow</div>
+    <nav class="nav-group">
+      <span class="nav-label">Workspace</span>
+      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">12,482</span></a>
+      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">47</span></a>
+      <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox Scan<span class="count" style="display:none"></span></a>
+      <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i>Calendar</a>
+      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">9</span></a>
+      <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload" aria-hidden="true"></i>Import</a>
+      <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar" aria-hidden="true"></i>Reports</a>
+      <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i>Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar">JD</div>
+        <div><div class="who">Jordan Diaz</div><div class="role">Operations</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-search">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
+      </div>
+      <div class="topbar-actions">
+        <span class="sync-pill"><span class="dot"></span>Synced</span>
+        <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+        <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i></button>
+        <div class="avatar">JD</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-header">
+        <div class="page-title"><h1>Reports</h1></div>
+        <div class="flex gap-2 items-center">
+          <div class="segmented" id="range-toggle">
+            <button class="active" data-range="7">7d</button>
+            <button data-range="14">14d</button>
+            <button data-range="30">30d</button>
+          </div>
+          <button><i class="ti ti-download" aria-hidden="true"></i>Export</button>
+        </div>
+      </div>
+
+      <div class="metric-grid" style="grid-template-columns:repeat(4,minmax(0,1fr))">
+        <div class="metric-card">
+          <div class="label">On-time delivery</div>
+          <div class="value">94.2%</div>
+          <div class="trend up"><i class="ti ti-arrow-up-right" aria-hidden="true"></i>1.4pt vs prior period</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Avg. transit time</div>
+          <div class="value">2.8 days</div>
+          <div class="trend down"><i class="ti ti-arrow-down-right" aria-hidden="true"></i>0.3 days faster</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Exception rate</div>
+          <div class="value">1.9%</div>
+          <div class="trend up" style="color:var(--text-danger)"><i class="ti ti-arrow-up-right" aria-hidden="true"></i>0.2pt vs prior period</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Cost per shipment</div>
+          <div class="value">$7.42</div>
+          <div class="trend down"><i class="ti ti-arrow-down-right" aria-hidden="true"></i>$0.18 vs prior period</div>
+        </div>
+      </div>
+
+      <div class="reports-grid">
+        <div class="card chart-card">
+          <div class="chart-title">Shipment volume</div>
+          <div class="chart-sub">Delivered vs. exceptions, by day</div>
+          <canvas id="chart-volume" height="200" role="img" aria-label="Line chart of daily shipment volume"></canvas>
+          <div class="chart-legend">
+            <span><span class="sw" style="background:var(--text-primary)"></span>Delivered</span>
+            <span><span class="sw" style="background:var(--border-danger)"></span>Exceptions</span>
+          </div>
+        </div>
+
+        <div class="card chart-card">
+          <div class="chart-title">On-time performance by carrier</div>
+          <div class="chart-sub">Share of shipments delivered on or before ETA</div>
+          <canvas id="chart-carriers" height="200" role="img" aria-label="Bar chart of on-time performance by carrier"></canvas>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/command-palette.js"></script>
+<script src="js/pages/reports.js"></script>
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Exceptions — ShipFlow</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+  .sev { display:inline-flex; align-items:center; gap:5px; font-size:12px; font-weight:500; }
+  .sev::before { content:""; width:6px; height:6px; border-radius:50%; }
+  .sev-high { color: var(--text-danger); } .sev-high::before { background: var(--border-danger); }
+  .sev-medium { color: var(--text-warning); } .sev-medium::before { background: var(--border-warning); }
+  .sev-low { color: var(--text-secondary); } .sev-low::before { background: var(--border-neutral); }
+</style>
+</head>
+<body data-page="exceptions">
+
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><span class="mark">SF</span>ShipFlow</div>
+    <nav class="nav-group">
+      <span class="nav-label">Workspace</span>
+      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">12,482</span></a>
+      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">47</span></a>
+      <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox Scan<span class="count" style="display:none"></span></a>
+      <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i>Calendar</a>
+      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">9</span></a>
+      <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload" aria-hidden="true"></i>Import</a>
+      <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar" aria-hidden="true"></i>Reports</a>
+      <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i>Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar">JD</div>
+        <div><div class="who">Jordan Diaz</div><div class="role">Operations</div></div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-search">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
+      </div>
+      <div class="topbar-actions">
+        <span class="sync-pill"><span class="dot"></span>Synced</span>
+        <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+        <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i><span class="dot"></span></button>
+        <button class="icon-btn" aria-label="Settings" onclick="location.href='settings.html'"><i class="ti ti-settings" aria-hidden="true"></i></button>
+        <div class="avatar">JD</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-header">
+        <div class="page-title">
+          <h1>Exceptions</h1>
+          <span class="sub" id="result-count">— results</span>
+        </div>
+        <button><i class="ti ti-download" aria-hidden="true"></i>Export</button>
+      </div>
+
+      <div class="metric-grid" style="grid-template-columns:repeat(3,minmax(0,1fr))">
+        <div class="metric-card accent-danger">
+          <div class="label">High severity</div>
+          <div class="value" id="count-high">—</div>
+        </div>
+        <div class="metric-card accent-warning">
+          <div class="label">Medium severity</div>
+          <div class="value" id="count-medium">—</div>
+        </div>
+        <div class="metric-card">
+          <div class="label">Unassigned</div>
+          <div class="value" id="count-unassigned">—</div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-toolbar">
+          <div class="filter-row">
+            <input type="text" id="exc-search" placeholder="Filter by tracking, customer, reason" />
+            <select id="exc-severity">
+              <option value="">All severities</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+        <table>
+          <thead>
+            <tr>
+              <th style="width:14%">Tracking no.</th>
+              <th style="width:16%">Customer</th>
+              <th style="width:22%">Reason</th>
+              <th style="width:10%">Severity</th>
+              <th style="width:10%">Carrier</th>
+              <th style="width:8%">Age</th>
+              <th style="width:32px"></th>
+            </tr>
+          </thead>
+          <tbody id="exc-body"></tbody>
+        </table>
+        <div class="empty-state" id="exc-empty" style="display:none">
+          <i class="ti ti-circle-check" aria-hidden="true"></i>
+          <h3>No exceptions match these filters</h3>
+          <p>Nothing needs attention here right now — try clearing the severity filter.</p>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<div class="drawer-scrim" id="exc-drawer">
+  <aside class="drawer" role="dialog" aria-label="Exception detail">
+    <div class="flex justify-between items-center mb-4">
+      <h2 style="font-size:16px" id="exc-title">EXC-5000</h2>
+      <button class="icon-btn" aria-label="Close" onclick="closeDrawer('exc-drawer')"><i class="ti ti-x" aria-hidden="true"></i></button>
+    </div>
+    <div id="exc-detail"></div>
+    <div class="field mt-4">
+      <label for="exc-assign">Assign to</label>
+      <select id="exc-assign">
+        <option>Unassigned</option>
+        <option>Jordan Diaz</option>
+        <option>Priya Nair</option>
+        <option>Owen Clarke</option>
+      </select>
+    </div>
+    <div class="flex gap-2 mt-3">
+      <button class="btn-primary" style="flex:1" onclick="resolveException()"><i class="ti ti-check" aria-hidden="true"></i>Mark resolved</button>
+      <button id="btn-exc-open-shipment">Open shipment</button>
+    </div>
+  </aside>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/command-palette.js"></script>
+<script src="js/pages/exceptions.js"></script>
+</body>
+</html>

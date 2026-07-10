@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calendar — ShipFlow</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+<link rel="stylesheet" href="css/tokens.css" />
+<link rel="stylesheet" href="css/styles.css" />
+<style>
+/* Calendar specific styles */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  overflow: hidden;
+  margin-top: var(--sp-4);
+}
+.calendar-header-cell {
+  background: var(--surface-1);
+  padding: var(--sp-3) var(--sp-2);
+  text-align: center;
+  font-weight: 500;
+  font-size: var(--fs-footnote);
+  color: var(--text-secondary);
+}
+.calendar-cell {
+  background: var(--surface-0);
+  min-height: 110px;
+  padding: var(--sp-2);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  position: relative;
+  transition: background var(--dur-fast) var(--ease-out);
+}
+.calendar-cell:hover {
+  background: var(--surface-1);
+}
+.calendar-cell .day-num {
+  font-size: var(--fs-footnote);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-1);
+}
+.calendar-cell.other-month {
+  background: var(--surface-2);
+  opacity: 0.5;
+}
+.calendar-event {
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+}
+.event-delivered { background: #E8F5E9; color: #2E7D32; border-left: 3px solid #4CAF50; }
+.event-transit { background: #E3F2FD; color: #1565C0; border-left: 3px solid #2196F3; }
+.event-delayed { background: #FFF8E1; color: #F57F17; border-left: 3px solid #FFC107; }
+.event-exception { background: #FFEBEE; color: #C62828; border-left: 3px solid #F44336; }
+.event-pending { background: #ECEFF1; color: #37474F; border-left: 3px solid #90A4AE; }
+
+.event-popover {
+  position: absolute;
+  top: 100%; left: 0; right: 0;
+  background: var(--surface-0);
+  border: 1.5px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  padding: var(--sp-3);
+  z-index: 100;
+  display: none;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+</style>
+</head>
+<body>
+<div class="app-shell">
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <div class="mark">SF</div>
+      <span>ShipFlow</span>
+    </div>
+    
+    <nav class="nav-group">
+      <span class="nav-label">Workspace</span>
+      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count" id="nav-shipments">—</span></a>
+      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count" id="nav-exceptions">—</span></a>
+      <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox Scan</a>
+      <a class="nav-item active" data-page="calendar" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i>Calendar</a>
+      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count" id="nav-notifications">—</span></a>
+      <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload" aria-hidden="true"></i>Import</a>
+      <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar" aria-hidden="true"></i>Reports</a>
+      <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i>Settings</a>
+    </nav>
+    <div class="sidebar-footer">
+      <div class="user-chip">
+        <div class="avatar">JD</div>
+        <div>
+          <div class="who">Jordan Diaz</div>
+          <div class="role">Operations</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-search">
+        <i class="ti ti-search" aria-hidden="true"></i>
+        <input type="text" placeholder="Search tracking number, customer, order id" aria-label="Search shipments" />
+      </div>
+      <div class="topbar-actions">
+        <span class="sync-pill"><span class="dot"></span>Synced</span>
+        <button class="btn-sm" onclick="openCommandPalette()" aria-label="Open command palette"><i class="ti ti-command" aria-hidden="true"></i>Search<kbd style="margin-left:6px">&#8984;K</kbd></button>
+        <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i></button>
+        <div class="avatar">JD</div>
+      </div>
+    </header>
+
+    <main class="content">
+      <div class="page-header">
+        <div class="page-title">
+          <div class="crumb"><a href="index.html">Shipments</a> / <span>Calendar</span></div>
+          <h1>Calendar</h1>
+          <div class="sub">Every package mapped to the day it is expected to arrive.</div>
+        </div>
+      </div>
+
+      <!-- Metrics Cards -->
+      <div class="metrics-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-4); margin-bottom: var(--sp-6);">
+        <div class="card" style="padding: 16px;">
+          <div class="title" style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">Expected this month</div>
+          <div style="font-size: 24px; font-weight: 600;" id="metric-month-count">0</div>
+          <div class="sub" style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">July 2026</div>
+        </div>
+        <div class="card" style="padding: 16px;">
+          <div class="title" style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">Out for delivery</div>
+          <div style="font-size: 24px; font-weight: 600;" id="metric-today-count">0</div>
+          <div class="sub" style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">Arriving today</div>
+        </div>
+        <div class="card" style="padding: 16px;">
+          <div class="title" style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">Delivered</div>
+          <div style="font-size: 24px; font-weight: 600;" id="metric-delivered-count">0</div>
+          <div class="sub" style="font-size: 11px; color: var(--text-secondary); margin-top: 4px;">This month</div>
+        </div>
+        <div class="card" style="padding: 16px;">
+          <div class="title" style="font-size: 11px; text-transform: uppercase; color: var(--text-muted); margin-bottom: 4px; font-weight: 500;">Needs attention</div>
+          <div style="font-size: 24px; font-weight: 600;" id="metric-attention-count">0</div>
+          <div class="sub" style="font-size: 11px; color: var(--text-danger); margin-top: 4px;">Exceptions & Delayed</div>
+        </div>
+      </div>
+
+      <div class="card" style="padding: var(--sp-4);">
+        <div class="flex justify-between items-center" style="margin-bottom: var(--sp-2);">
+          <h2 style="font-size: 16px; font-weight: 600;">July 2026</h2>
+          <div class="flex gap-2">
+            <span style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #4CAF50;"></span>Delivered</span>
+            <span style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #2196F3;"></span>In transit</span>
+            <span style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #FFC107;"></span>Delayed</span>
+            <span style="font-size: 12px; display: inline-flex; align-items: center; gap: 4px; color: var(--text-secondary);"><span style="width: 8px; height: 8px; border-radius: 50%; background: #F44336;"></span>Exception</span>
+          </div>
+        </div>
+
+        <div class="calendar-grid" id="calendar-days">
+          <!-- Rendered dynamically -->
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+
+<script src="js/data.js"></script>
+<script src="js/app.js"></script>
+<script src="js/command-palette.js"></script>
+<script src="js/pages/calendar.js"></script>
+</body>
+</html>
