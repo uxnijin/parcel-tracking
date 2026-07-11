@@ -698,19 +698,52 @@ function initUserChip() {
       ${currentContent}
     </div>
     <div class="user-chip-details">
-      <div class="user-chip-info">
-        <div class="info-row"><i class="ti ti-mail"></i> jordan.diaz@shipflow.com</div>
-        <div class="info-row"><i class="ti ti-building"></i> Miami Hub</div>
+      <div class="user-chip-menu">
+        <a href="settings.html" class="user-chip-menu-item settings-link">
+          <i class="ti ti-settings"></i> Settings
+        </a>
+        <button class="user-chip-menu-item theme-toggle-btn">
+          <i class="ti ti-moon"></i> <span>Dark Mode</span>
+        </button>
+        <a href="login.html" class="user-chip-menu-item logout-link">
+          <i class="ti ti-logout"></i> Log Out
+        </a>
       </div>
-      <a href="login.html" class="login-btn">
-        <i class="ti ti-logout"></i> Log Out
-      </a>
     </div>
   `;
 
+  const themeBtn = userChip.querySelector(".theme-toggle-btn");
+  function updateThemeButton() {
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    if (isDark) {
+      themeBtn.innerHTML = `<i class="ti ti-sun"></i> <span>Light Mode</span>`;
+    } else {
+      themeBtn.innerHTML = `<i class="ti ti-moon"></i> <span>Dark Mode</span>`;
+    }
+  }
+  updateThemeButton();
+
+  // Listen to theme changes in case changed elsewhere
+  window.addEventListener("sf-theme-changed", updateThemeButton);
+
   userChip.addEventListener("click", (e) => {
-    // If click is on the login button/link, let it navigate
-    if (e.target.closest('.login-btn')) return;
+    const menuItem = e.target.closest('.user-chip-menu-item');
+    if (menuItem) {
+      e.stopPropagation();
+      if (menuItem.classList.contains("theme-toggle-btn")) {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const nextTheme = isDark ? "light" : "dark";
+        localStorage.setItem("sf_theme", nextTheme);
+        if (typeof window.applyTheme === "function") {
+          window.applyTheme(nextTheme);
+        } else {
+          document.documentElement.setAttribute("data-theme", nextTheme);
+        }
+        updateThemeButton();
+        window.dispatchEvent(new Event("sf-theme-changed"));
+      }
+      return;
+    }
     
     userChip.classList.toggle("expanded");
     e.stopPropagation();
