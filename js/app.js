@@ -641,8 +641,8 @@ function renderPopoverNotifications(popover) {
   const notifications = (typeof ALL_NOTIFICATIONS !== 'undefined') ? ALL_NOTIFICATIONS : [];
   const unreadCount = notifications.filter(n => !n.read).length;
   
-  // Show top 3 notifications
-  const recent = notifications.slice(0, 3);
+  // Show top 5 notifications
+  const recent = notifications.slice(0, 5);
 
   let itemsHtml = '';
   if (recent.length === 0) {
@@ -655,6 +655,7 @@ function renderPopoverNotifications(popover) {
           <i class="ti ${iconClass}" aria-hidden="true"></i>
           <div class="notification-popover-item-content">
             <span class="notification-popover-item-title">${escapeHtml(n.title)}</span>
+            <span class="notification-popover-item-body">${escapeHtml(n.body)}</span>
             <span class="notification-popover-item-time">${escapeHtml(n.time)}</span>
           </div>
         </div>
