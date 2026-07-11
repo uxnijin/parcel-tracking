@@ -170,7 +170,7 @@ button { font-family: inherit; }
 .user-chip-menu-item {
   display: flex;
   align-items: center;
-  gap: var(--sp-2-5);
+  gap: 10px;
   padding: 8px 10px;
   border-radius: var(--radius);
   font-size: 13px;
