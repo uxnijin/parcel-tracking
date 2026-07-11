@@ -586,3 +586,110 @@ function initTrackingSearch() {
 }
 
 document.addEventListener("DOMContentLoaded", initTrackingSearch);
+
+/* ---------- Notification Popover ---------- */
+function initNotificationPopover() {
+  const notifBtns = document.querySelectorAll('button[aria-label="Notifications"]');
+  notifBtns.forEach(btn => {
+    btn.removeAttribute('onclick');
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      toggleNotificationPopover(btn);
+    });
+  });
+}
+
+function toggleNotificationPopover(btn) {
+  let popover = document.getElementById('global-notification-popover');
+  if (popover) {
+    const isVisible = popover.style.display !== 'none';
+    popover.style.display = isVisible ? 'none' : 'flex';
+    if (!isVisible) {
+      renderPopoverNotifications(popover);
+      positionPopover(popover, btn);
+    }
+    return;
+  }
+
+  popover = document.createElement('div');
+  popover.className = 'notification-popover';
+  popover.id = 'global-notification-popover';
+  popover.style.display = 'flex';
+  document.body.appendChild(popover);
+
+  renderPopoverNotifications(popover);
+  positionPopover(popover, btn);
+
+  // Close on click outside
+  document.addEventListener('click', (e) => {
+    if (!popover.contains(e.target) && !btn.contains(e.target)) {
+      popover.style.display = 'none';
+    }
+  });
+}
+
+function positionPopover(popover, btn) {
+  const rect = btn.getBoundingClientRect();
+  const top = rect.bottom + window.scrollY + 8;
+  const right = window.innerWidth - (rect.right + window.scrollX);
+  popover.style.top = `${top}px`;
+  popover.style.right = `${right}px`;
+}
+
+function renderPopoverNotifications(popover) {
+  const notifications = (typeof ALL_NOTIFICATIONS !== 'undefined') ? ALL_NOTIFICATIONS : [];
+  const unreadCount = notifications.filter(n => !n.read).length;
+  
+  // Show top 4 notifications
+  const recent = notifications.slice(0, 4);
+
+  let itemsHtml = '';
+  if (recent.length === 0) {
+    itemsHtml = '<div style="padding: var(--sp-4); text-align: center; color: var(--text-muted); font-size: 13px;">No notifications</div>';
+  } else {
+    itemsHtml = recent.map(n => {
+      const isUnread = !n.read;
+      let itemClass = '';
+      if (isUnread) {
+        if (n.kind === 'danger') itemClass = 'unread-danger';
+        else if (n.kind === 'warning') itemClass = 'unread-warning';
+        else if (n.kind === 'success') itemClass = 'unread-success';
+        else itemClass = 'unread-neutral';
+      }
+      const iconClass = n.icon || 'ti-bell';
+      return `
+        <div class="notification-popover-item ${itemClass}" onclick="event.stopPropagation(); window.location.href='notifications.html';">
+          <i class="ti ${iconClass}" aria-hidden="true"></i>
+          <div class="notification-popover-item-content">
+            <span class="notification-popover-item-title">${escapeHtml(n.title)}</span>
+            <span class="notification-popover-item-body">${escapeHtml(n.body)}</span>
+            <span class="notification-popover-item-time">${escapeHtml(n.time)}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  popover.innerHTML = `
+    <div class="notification-popover-header">
+      <span>Notifications</span>
+      ${unreadCount > 0 ? `<span class="badge" style="background: var(--text-danger); color: white; padding: 2px 6px; font-size: 10px; border-radius: 10px;">${unreadCount} new</span>` : ''}
+    </div>
+    <div class="notification-popover-list">
+      ${itemsHtml}
+    </div>
+    <div class="notification-popover-footer">
+      <a href="notifications.html">View all notifications</a>
+    </div>
+  `;
+}
+
+document.addEventListener("DOMContentLoaded", initNotificationPopover);
+window.addEventListener("sf-data-updated", () => {
+  const popover = document.getElementById('global-notification-popover');
+  if (popover && popover.style.display !== 'none') {
+    renderPopoverNotifications(popover);
+  }
+});
+
