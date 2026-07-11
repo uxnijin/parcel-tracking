@@ -120,12 +120,86 @@ button { font-family: inherit; }
   border-top: 0.5px solid var(--border);
 }
 .user-chip {
-  display: flex; align-items: center; gap: var(--sp-2);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
   padding: var(--sp-2);
   border-radius: var(--radius);
   cursor: pointer;
+  background: transparent;
+  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid transparent;
+  overflow: hidden;
 }
-.user-chip:hover { background: var(--surface-2); }
+.user-chip:hover {
+  background: var(--surface-2);
+}
+.user-chip.expanded {
+  background: var(--surface-1);
+  border-color: var(--border);
+  cursor: default;
+}
+.user-chip-header {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  width: 100%;
+  cursor: pointer;
+}
+.user-chip-details {
+  width: 100%;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, margin-top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.user-chip.expanded .user-chip-details {
+  max-height: 120px;
+  opacity: 1;
+  margin-top: var(--sp-3);
+}
+.user-chip-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1-5);
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-bottom: var(--sp-3);
+  padding-top: var(--sp-2);
+  border-top: 0.5px solid var(--border);
+}
+.user-chip-info .info-row {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+.user-chip-info .info-row i {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+.user-chip-details .login-btn {
+  width: 100%;
+  justify-content: center;
+  font-weight: 500;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  height: 28px;
+  padding: 0 var(--sp-2);
+  font-size: var(--fs-caption);
+  border-radius: var(--radius);
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-primary);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.user-chip-details .login-btn:hover {
+  background: var(--surface-2);
+  border-color: var(--border-stronger);
+}
 .avatar {
   width: 26px; height: 26px; border-radius: 50%;
   background: var(--surface-3);

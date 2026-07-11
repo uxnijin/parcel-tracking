@@ -687,3 +687,41 @@ window.addEventListener("sf-data-updated", () => {
   }
 });
 
+// Expandable User Chip Behavior
+function initUserChip() {
+  const userChip = document.querySelector(".user-chip");
+  if (!userChip) return;
+
+  const currentContent = userChip.innerHTML;
+  userChip.innerHTML = `
+    <div class="user-chip-header">
+      ${currentContent}
+    </div>
+    <div class="user-chip-details">
+      <div class="user-chip-info">
+        <div class="info-row"><i class="ti ti-mail"></i> jordan.diaz@shipflow.com</div>
+        <div class="info-row"><i class="ti ti-building"></i> Miami Hub</div>
+      </div>
+      <a href="login.html" class="login-btn">
+        <i class="ti ti-logout"></i> Log Out
+      </a>
+    </div>
+  `;
+
+  userChip.addEventListener("click", (e) => {
+    // If click is on the login button/link, let it navigate
+    if (e.target.closest('.login-btn')) return;
+    
+    userChip.classList.toggle("expanded");
+    e.stopPropagation();
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!userChip.contains(e.target)) {
+      userChip.classList.remove("expanded");
+    }
+  });
+}
+
+document.addEventListener("DOMContentLoaded", initUserChip);
+
