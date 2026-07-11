@@ -2,6 +2,25 @@
    Shared app behaviors used across every page.
    ========================================================================== */
 
+// Theme Management
+(function() {
+  const savedTheme = localStorage.getItem("sf_theme") || "system";
+  applyTheme(savedTheme);
+})();
+
+function applyTheme(theme) {
+  const root = document.documentElement;
+  if (theme === "dark") {
+    root.setAttribute("data-theme", "dark");
+  } else if (theme === "light") {
+    root.setAttribute("data-theme", "light");
+  } else {
+    root.removeAttribute("data-theme");
+  }
+}
+window.applyTheme = applyTheme;
+
+
 /** Shows a transient toast. Pass opts.action = { label, onClick } for undo-style actions. */
 function toast(message, opts = {}) {
   let region = document.querySelector(".toast-region");
@@ -34,8 +53,59 @@ function toast(message, opts = {}) {
 }
 
 /** Opens a drawer/scrim by id, closes on scrim click or Escape. */
+/** Opens a drawer/scrim by id, closes on scrim click or Escape. */
 function openDrawer(id) {
-  const scrim = document.getElementById(id);
+  let scrim = document.getElementById(id);
+  if (!scrim && id === 'new-shipment-drawer') {
+    scrim = document.createElement('div');
+    scrim.className = 'drawer-scrim';
+    scrim.id = 'new-shipment-drawer';
+    scrim.innerHTML = `
+      <aside class="drawer" role="dialog" aria-label="Create new shipment" style="width: 400px; max-width: 90vw;">
+        <div class="flex justify-between items-center mb-4">
+          <h2 style="font-size:16px">New Shipment</h2>
+          <button class="icon-btn" aria-label="Close" onclick="closeDrawer('new-shipment-drawer')"><i class="ti ti-x" aria-hidden="true"></i></button>
+        </div>
+        <form id="new-shipment-form" onsubmit="event.preventDefault(); createNewShipment();">
+          <div class="field mt-3">
+            <label for="ns-customer">Customer Name</label>
+            <input type="text" id="ns-customer" required placeholder="e.g. Sarah Jenkins" />
+          </div>
+          <div class="field mt-3">
+            <label for="ns-carrier">Carrier</label>
+            <select id="ns-carrier" required>
+              <option>UPS</option>
+              <option>FedEx</option>
+              <option>DHL</option>
+              <option>USPS</option>
+            </select>
+          </div>
+          <div class="field mt-3">
+            <label for="ns-destination">Destination City/State</label>
+            <input type="text" id="ns-destination" required placeholder="e.g. Miami, FL" />
+          </div>
+          <div class="field mt-3">
+            <label for="ns-weight">Weight (kg)</label>
+            <input type="number" step="0.1" id="ns-weight" required placeholder="e.g. 4.5" />
+          </div>
+          <div class="field mt-3">
+            <label for="ns-value">Declared Value ($)</label>
+            <input type="number" id="ns-value" required placeholder="e.g. 150" />
+          </div>
+          <div class="field mt-3">
+            <label for="ns-status">Initial Status</label>
+            <select id="ns-status" required>
+              <option>Pending pickup</option>
+              <option>In transit</option>
+              <option>Delayed</option>
+              <option>Exception</option>
+            </select>
+          </div>
+          <button class="btn-primary mt-4 w-full" type="submit" style="width:100%">Create Shipment</button>
+        </form>
+      </aside>`;
+    document.body.appendChild(scrim);
+  }
   if (!scrim) return;
   scrim.classList.add("open");
   const onKey = (e) => { if (e.key === "Escape") closeDrawer(id); };
@@ -46,6 +116,73 @@ function closeDrawer(id) {
   const scrim = document.getElementById(id);
   if (scrim) scrim.classList.remove("open");
 }
+
+function createNewShipment() {
+  const customer = document.getElementById("ns-customer").value.trim();
+  const carrier = document.getElementById("ns-carrier").value;
+  const destination = document.getElementById("ns-destination").value.trim();
+  const weight = parseFloat(document.getElementById("ns-weight").value).toFixed(1) + " kg";
+  const value = "$" + parseInt(document.getElementById("ns-value").value, 10);
+  const status = document.getElementById("ns-status").value;
+
+  const prefix = { UPS: "1Z88A", FedEx: "FX229", DHL: "DHL771", USPS: "9400 1" }[carrier];
+  const nextNum = (typeof ALL_SHIPMENTS !== "undefined" ? ALL_SHIPMENTS.length : 100) + 10000;
+  const idVal = `SHP-${nextNum}`;
+  const tracking = `${prefix}${String(100000 + nextNum).slice(-6)}`;
+  const orderId = `#${48000 + nextNum}`;
+  const email = customer.toLowerCase().replace(" ", ".") + "@acme.com";
+  const phone = `+1 (512) 555-${String(1000 + nextNum).slice(-4)}`;
+
+  const newShip = {
+    id: idVal,
+    tracking,
+    customer,
+    email,
+    phone,
+    carrier,
+    status,
+    destination,
+    origin: "Origin Facility",
+    serviceLevel: "Standard Ground",
+    eta: status === (typeof STATUS !== "undefined" ? STATUS.DELIVERED : "Delivered") ? "Delivered" : `Jul ${14 + Math.floor(Math.random() * 5)}`,
+    weight,
+    value,
+    updated: "Just now",
+    orderId,
+    notes: [],
+  };
+
+  if (status === (typeof STATUS !== "undefined" ? STATUS.EXCEPTION : "Exception") || status === (typeof STATUS !== "undefined" ? STATUS.DELAYED : "Delayed")) {
+    const excLength = typeof ALL_EXCEPTIONS !== "undefined" ? ALL_EXCEPTIONS.length : 0;
+    newShip.exceptionId = `EXC-${5000 + excLength}`;
+    newShip.title = status === (typeof STATUS !== "undefined" ? STATUS.EXCEPTION : "Exception") ? "Delivery attempt failed" : "Weather delay";
+    newShip.detail = status === (typeof STATUS !== "undefined" ? STATUS.EXCEPTION : "Exception") ? "No one available to receive the package." : "Regional weather slowing down routing.";
+    newShip.severity = status === (typeof STATUS !== "undefined" ? STATUS.EXCEPTION : "Exception") ? "high" : "low";
+    newShip.age = "0d";
+    newShip.assignedTo = "Unassigned";
+  }
+
+  if (typeof addShipment !== "undefined") {
+    addShipment(newShip);
+  }
+
+  if (typeof addNotification !== "undefined") {
+    addNotification({
+      icon: "ti-plus",
+      kind: "neutral",
+      title: "New shipment created",
+      body: `${idVal} was created for customer ${customer} going to ${destination}.`,
+      time: "Just now",
+      read: false
+    });
+  }
+
+  document.getElementById("new-shipment-form").reset();
+  closeDrawer("new-shipment-drawer");
+  toast(`Shipment ${idVal} created successfully!`);
+}
+window.createNewShipment = createNewShipment;
+
 
 /** Marks the sidebar nav item matching data-page as active. */
 document.addEventListener("DOMContentLoaded", () => {

@@ -79,7 +79,7 @@
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
     --surface-0: #171715;
     --surface-1: #1E1E1B;
     --surface-2: #292925;
@@ -113,4 +113,32 @@
 
 [data-theme="dark"] {
   color-scheme: dark;
+  --surface-0: #171715;
+  --surface-1: #1E1E1B;
+  --surface-2: #292925;
+  --surface-3: #333330;
+  --overlay: rgba(0, 0, 0, 0.6);
+
+  --text-primary: #F2F2EF;
+  --text-secondary: #A9A9A2;
+  --text-muted: #75756E;
+  --text-inverse: #171715;
+  --text-disabled: #4A4A45;
+
+  --border: #303030;
+  --border-strong: #3E3E3A;
+  --border-stronger: #55554E;
+
+  --fill-primary: #F2F2EF;
+  --fill-primary-hover: #D8D8D3;
+  --on-primary: #171715;
+
+  --bg-success: #173404;  --text-success: #97C459;  --border-success: #3B6D11;
+  --bg-warning: #412402;  --text-warning: #FAC775;  --border-warning: #854F0B;
+  --bg-danger:  #501313;  --text-danger:  #F09595;  --border-danger:  #A32D2D;
+  --bg-neutral: #2C2C2A;  --text-neutral: #B4B2A9;  --border-neutral: #5F5E5A;
+  --bg-info:    #292925;  --text-info:    #B4B2A9;  --border-info:    #5F5E5A;
+
+  --focus-ring: 0 0 0 2px var(--surface-1), 0 0 0 4px #F2F2EF;
+  --shadow-float: 0 1px 2px rgba(0,0,0,0.24), 0 4px 16px rgba(0,0,0,0.32);
 }

@@ -28,6 +28,14 @@
   .team-row .email { font-size: 12px; color: var(--text-muted); }
   .save-row { display: flex; align-items: center; gap: 10px; margin-top: var(--sp-4); }
   .save-status { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
+  .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); margin-top: var(--sp-2); max-width: 360px; }
+  .theme-option { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); cursor: pointer; text-align: center; transition: all var(--dur-fast) var(--ease-out); background: var(--surface-1); display: flex; align-items: center; justify-content: center; gap: var(--sp-2); outline: none; }
+  .theme-option:hover { border-color: var(--border-stronger); background: var(--surface-2); }
+  .theme-option.active { border-color: var(--fill-primary); background: var(--surface-2); box-shadow: 0 0 0 1px var(--fill-primary); }
+  .theme-option .theme-icon { font-size: 16px; color: var(--text-secondary); }
+  .theme-option.active .theme-icon { color: var(--text-primary); }
+  .theme-option .theme-name { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
+  .theme-option.active .theme-name { color: var(--text-primary); }
 </style>
 </head>
 <body data-page="settings">
@@ -108,6 +116,27 @@
                 <span class="save-status" id="save-status-profile"></span>
               </div>
             </div>
+
+            <div class="card" style="margin-top: var(--sp-4);">
+              <div class="card-title">Appearance</div>
+              <p class="text-secondary mb-4" style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
+                Customize the visual theme of the dashboard.
+              </p>
+              <div class="theme-grid">
+                <div class="theme-option" data-theme-val="light" tabindex="0" role="button" aria-label="Light mode">
+                  <i class="ti ti-sun theme-icon" aria-hidden="true"></i>
+                  <span class="theme-name">Light</span>
+                </div>
+                <div class="theme-option" data-theme-val="dark" tabindex="0" role="button" aria-label="Dark mode">
+                  <i class="ti ti-moon theme-icon" aria-hidden="true"></i>
+                  <span class="theme-name">Dark</span>
+                </div>
+                <div class="theme-option" data-theme-val="system" tabindex="0" role="button" aria-label="System default">
+                  <i class="ti ti-device-desktop theme-icon" aria-hidden="true"></i>
+                  <span class="theme-name">System</span>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div class="settings-panel" id="panel-notifications">
@@ -128,7 +157,7 @@
             <div class="card">
               <div class="flex justify-between items-center mb-3">
                 <div class="card-title" style="margin:0">Team members</div>
-                <button class="btn-sm"><i class="ti ti-user-plus" aria-hidden="true"></i>Invite</button>
+                <button class="btn-sm" onclick="openDrawer('invite-member-drawer')"><i class="ti ti-user-plus" aria-hidden="true"></i>Invite</button>
               </div>
               <div class="team-row">
                 <div class="avatar">JD</div>
@@ -276,7 +305,31 @@
       </div>
     </main>
   </div>
-</div>
+  <div class="drawer-scrim" id="invite-member-drawer">
+    <aside class="drawer" role="dialog" aria-label="Invite team member" style="width: 400px; max-width: 90vw; padding: var(--sp-4);">
+      <div class="flex justify-between items-center mb-4">
+        <h2 style="font-size:16px; margin: 0;">Invite Team Member</h2>
+        <button class="icon-btn" aria-label="Close" onclick="closeDrawer('invite-member-drawer')"><i class="ti ti-x" aria-hidden="true"></i></button>
+      </div>
+      <form id="invite-member-form" onsubmit="event.preventDefault(); submitInvite();">
+        <div class="field mt-3">
+          <label for="inv-email">Email Address</label>
+          <input type="email" id="inv-email" required placeholder="colleague@acme.com" style="width: 100%" />
+        </div>
+        <div class="field mt-3">
+          <label for="inv-role">Role</label>
+          <select id="inv-role" required style="width: 100%">
+            <option value="Member">Member</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </div>
+        <div style="margin-top: var(--sp-6); display: flex; gap: var(--sp-2); justify-content: flex-end;">
+          <button type="button" class="btn-secondary" onclick="closeDrawer('invite-member-drawer')">Cancel</button>
+          <button type="submit" class="btn-primary">Send Invitation</button>
+        </div>
+      </form>
+    </aside>
+  </div>
 
 <script src="js/data.js"></script>
 <script src="js/app.js"></script>

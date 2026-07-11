@@ -149,8 +149,52 @@ function initIntegrationStates() {
   });
 }
 
+function initThemeSelector() {
+  const currentTheme = localStorage.getItem("sf_theme") || "system";
+  const options = document.querySelectorAll(".theme-grid .theme-option");
+  
+  options.forEach((opt) => {
+    if (opt.dataset.themeVal === currentTheme) {
+      opt.classList.add("active");
+    } else {
+      opt.classList.remove("active");
+    }
+
+    const selectTheme = () => {
+      options.forEach((o) => o.classList.remove("active"));
+      opt.classList.add("active");
+      const val = opt.dataset.themeVal;
+      localStorage.setItem("sf_theme", val);
+      if (typeof applyTheme === "function") {
+        applyTheme(val);
+      }
+      toast(`Theme set to ${opt.querySelector(".theme-name").textContent}`);
+    };
+
+    opt.addEventListener("click", selectTheme);
+    opt.addEventListener("keydown", (e) => {
+      if (e.key === " " || e.key === "Enter") {
+        e.preventDefault();
+        selectTheme();
+      }
+    });
+  });
+}
+
+function submitInvite() {
+  const email = document.getElementById("inv-email").value.trim();
+  if (!email) return;
+  toast(`Invitation sent to ${email}`);
+  if (typeof closeDrawer === "function") {
+    closeDrawer("invite-member-drawer");
+  }
+  document.getElementById("invite-member-form").reset();
+}
+
 // Run on load
 document.addEventListener("DOMContentLoaded", initSettingsGmail);
 document.addEventListener("DOMContentLoaded", initIntegrationStates);
+document.addEventListener("DOMContentLoaded", initThemeSelector);
 window.toggleGmailConnection = toggleGmailConnection;
 window.toggleIntegrationConnection = toggleIntegrationConnection;
+window.submitInvite = submitInvite;

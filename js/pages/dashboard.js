@@ -479,74 +479,7 @@ function applySavedView(e, view) {
   toast(view === "delayed" ? "Showing delayed today" : "Showing open exceptions");
 }
 
-function createNewShipment() {
-  const customer = document.getElementById("ns-customer").value.trim();
-  const carrier = document.getElementById("ns-carrier").value;
-  const destination = document.getElementById("ns-destination").value.trim();
-  const weight = parseFloat(document.getElementById("ns-weight").value).toFixed(1) + " kg";
-  const value = "$" + parseInt(document.getElementById("ns-value").value, 10);
-  const status = document.getElementById("ns-status").value;
 
-  const prefix = { UPS: "1Z88A", FedEx: "FX229", DHL: "DHL771", USPS: "9400 1" }[carrier];
-  const nextNum = ALL_SHIPMENTS.length + 10000;
-  const id = `SHP-${nextNum}`;
-  const tracking = `${prefix}${String(100000 + nextNum).slice(-6)}`;
-  const orderId = `#${48000 + nextNum}`;
-  const email = customer.toLowerCase().replace(" ", ".") + "@acme.com";
-  const phone = `+1 (512) 555-${String(1000 + nextNum).slice(-4)}`;
-
-  const newShip = {
-    id,
-    tracking,
-    customer,
-    email,
-    phone,
-    carrier,
-    status,
-    destination,
-    origin: "Origin Facility",
-    serviceLevel: "Standard Ground",
-    eta: status === STATUS.DELIVERED ? "Delivered" : `Jul ${14 + Math.floor(Math.random() * 5)}`,
-    weight,
-    value,
-    updated: "Just now",
-    orderId,
-    notes: [],
-  };
-
-  if (status === STATUS.EXCEPTION || status === STATUS.DELAYED) {
-    newShip.exceptionId = `EXC-${5000 + ALL_EXCEPTIONS.length}`;
-    newShip.title = status === STATUS.EXCEPTION ? "Delivery attempt failed" : "Weather delay";
-    newShip.detail = status === STATUS.EXCEPTION ? "No one available to receive the package." : "Regional weather slowing down routing.";
-    newShip.severity = status === STATUS.EXCEPTION ? "high" : "low";
-    newShip.age = "0d";
-    newShip.assignedTo = "Unassigned";
-  }
-
-  if (typeof addShipment !== "undefined") {
-    addShipment(newShip);
-  }
-
-  if (typeof addNotification !== "undefined") {
-    addNotification({
-      icon: "ti-plus",
-      kind: "neutral",
-      title: "New shipment created",
-      body: `${id} was created for customer ${customer} going to ${destination}.`,
-      time: "Just now",
-      read: false
-    });
-  }
-
-  document.getElementById("new-shipment-form").reset();
-  if (typeof closeDrawer !== "undefined") {
-    closeDrawer("new-shipment-drawer");
-  }
-
-  toast(`Shipment ${id} created successfully!`);
-}
-
-window.createNewShipment = createNewShipment;
 
 function updateSortHeaders() {
   document.querySelectorAll("th.sortable").forEach((th) => {
