@@ -867,6 +867,10 @@ tr.row-highlight {
 .notification-popover-list {
   max-height: 280px;
   overflow-y: auto;
+  scrollbar-width: none;
+}
+.notification-popover-list::-webkit-scrollbar {
+  display: none;
 }
 .notification-popover-item {
   padding: var(--sp-3) var(--sp-4);
@@ -879,18 +883,6 @@ tr.row-highlight {
 }
 .notification-popover-item:hover {
   background: var(--surface-2);
-}
-.notification-popover-item.unread-neutral {
-  background: var(--bg-neutral);
-}
-.notification-popover-item.unread-danger {
-  background: var(--bg-danger);
-}
-.notification-popover-item.unread-warning {
-  background: var(--bg-warning);
-}
-.notification-popover-item.unread-success {
-  background: var(--bg-success);
 }
 .notification-popover-item i {
   font-size: 16px;

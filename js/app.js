@@ -641,29 +641,20 @@ function renderPopoverNotifications(popover) {
   const notifications = (typeof ALL_NOTIFICATIONS !== 'undefined') ? ALL_NOTIFICATIONS : [];
   const unreadCount = notifications.filter(n => !n.read).length;
   
-  // Show top 4 notifications
-  const recent = notifications.slice(0, 4);
+  // Show top 3 notifications
+  const recent = notifications.slice(0, 3);
 
   let itemsHtml = '';
   if (recent.length === 0) {
     itemsHtml = '<div style="padding: var(--sp-4); text-align: center; color: var(--text-muted); font-size: 13px;">No notifications</div>';
   } else {
     itemsHtml = recent.map(n => {
-      const isUnread = !n.read;
-      let itemClass = '';
-      if (isUnread) {
-        if (n.kind === 'danger') itemClass = 'unread-danger';
-        else if (n.kind === 'warning') itemClass = 'unread-warning';
-        else if (n.kind === 'success') itemClass = 'unread-success';
-        else itemClass = 'unread-neutral';
-      }
       const iconClass = n.icon || 'ti-bell';
       return `
-        <div class="notification-popover-item ${itemClass}" onclick="event.stopPropagation(); window.location.href='notifications.html';">
+        <div class="notification-popover-item" onclick="event.stopPropagation(); window.location.href='notifications.html';">
           <i class="ti ${iconClass}" aria-hidden="true"></i>
           <div class="notification-popover-item-content">
             <span class="notification-popover-item-title">${escapeHtml(n.title)}</span>
-            <span class="notification-popover-item-body">${escapeHtml(n.body)}</span>
             <span class="notification-popover-item-time">${escapeHtml(n.time)}</span>
           </div>
         </div>
