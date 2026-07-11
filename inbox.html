@@ -164,22 +164,22 @@
       <div class="card inbox-connect" id="inbox-disconnected">
         <div class="inbox-connect__pitch">
           <div class="inbox-connect__brand"><img src="assets/gmail.png" alt="" aria-hidden="true" /></div>
-          <h2>Turn shipping emails into tracked shipments</h2>
+          <h2>Track shipments automatically from your emails</h2>
           <p class="inbox-connect__lead">
-            Connect Gmail and ShipFlow reads your shipping confirmations, pulls out every tracking number, and lines them up for one-tap import — no forwarding, no copy-paste.
+            Connect your Gmail account to let ShipFlow automatically scan your incoming shipping confirmations. We'll find carrier names and tracking numbers as they arrive, so you can import them to your dashboard in one click.
           </p>
           <div class="inbox-connect__features">
             <div class="inbox-connect__feature">
               <i class="ti ti-scan" aria-hidden="true"></i>
-              <div><span class="k">Automatic detection.</span> <span class="d">Carrier and tracking ID parsed from each email as it arrives.</span></div>
+              <div><span class="k">Auto-scan emails.</span> <span class="d">Incoming messages are scanned to instantly detect shipping confirmations.</span></div>
             </div>
             <div class="inbox-connect__feature">
               <i class="ti ti-bolt" aria-hidden="true"></i>
-              <div><span class="k">One-tap import.</span> <span class="d">Push any detected shipment straight into your dashboard.</span></div>
+              <div><span class="k">Single-click import.</span> <span class="d">Bring detected tracking numbers straight onto your shipment board.</span></div>
             </div>
             <div class="inbox-connect__feature">
               <i class="ti ti-lock" aria-hidden="true"></i>
-              <div><span class="k">Private by design.</span> <span class="d">Read-only access, scoped to shipping emails, revocable anytime.</span></div>
+              <div><span class="k">Safe & secure.</span> <span class="d">We request read-only access restricted strictly to shipping emails. You can disconnect anytime.</span></div>
             </div>
           </div>
           <div class="inbox-connect__cta">
@@ -223,12 +223,27 @@
 
       <!-- Connected State (Initially hidden) -->
       <div id="inbox-connected" style="display: none;">
+        <div class="flex justify-between items-center" style="margin-bottom: var(--sp-4); gap: var(--sp-3); flex-wrap: wrap;">
+          <div class="flex items-center" style="gap: var(--sp-2);">
+            <button class="btn-primary" id="btn-import-selected" onclick="importSelectedInbox()" disabled style="gap: 6px;">
+              <i class="ti ti-download" aria-hidden="true"></i>Import selected
+            </button>
+            <button class="btn-secondary" id="btn-import-all" onclick="importAllInbox()" style="gap: 6px;">
+              <i class="ti ti-download" aria-hidden="true"></i>Import all
+            </button>
+          </div>
+          <button class="btn-secondary" onclick="disconnectGmailFromInbox(event)" style="color: var(--text-danger); border-color: rgba(239, 68, 68, 0.2); gap: 6px;">
+            <i class="ti ti-power" aria-hidden="true"></i>Disconnect Gmail
+          </button>
+        </div>
+
         <div class="table-wrap">
           <table style="width: 100%">
             <thead>
               <tr>
-                <th style="width: 25%">Sender</th>
-                <th style="width: 40%">Email Subject</th>
+                <th style="width: 5%"><input type="checkbox" id="select-all-inbox" onclick="toggleSelectAllInbox(this)" /></th>
+                <th style="width: 22%">Sender</th>
+                <th style="width: 38%">Email Subject</th>
                 <th style="width: 12%">Carrier</th>
                 <th style="width: 13%">Tracking ID</th>
                 <th style="width: 10%" class="text-right">Action</th>

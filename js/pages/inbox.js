@@ -74,15 +74,22 @@ function renderInbox() {
     if (emails.length === 0) {
       tbody.closest(".table-wrap").style.display = "none";
       emptySection.style.display = "flex";
+      const toolbar = connSection.querySelector(".flex.justify-between.items-center");
+      if (toolbar) toolbar.style.display = "none";
     } else {
       tbody.closest(".table-wrap").style.display = "block";
       emptySection.style.display = "none";
+      const toolbar = connSection.querySelector(".flex.justify-between.items-center");
+      if (toolbar) toolbar.style.display = "flex";
 
       tbody.innerHTML = emails.map(email => `
         <tr>
           <td>
+            <input type="checkbox" class="inbox-row-checkbox" value="${email.id}" onclick="updateBulkActionsState()" />
+          </td>
+          <td>
             <div style="font-weight: 500;">${escapeHTML(email.sender.split(" ")[0])}</div>
-            <div class="text-muted" style="font-size: 11px;">${escapeHTML(email.sender.match(/\(([^)]+)\)/)[0] || email.sender)}</div>
+            <div class="text-muted" style="font-size: 11px;">${escapeHTML(email.sender.match(/\(([^)]+)\)/) ? email.sender.match(/\(([^)]+)\)/)[0] : email.sender)}</div>
           </td>
           <td>
             <div class="ellipsis" style="font-weight: 500; max-width: 320px;">${escapeHTML(email.subject)}</div>
@@ -99,6 +106,13 @@ function renderInbox() {
           </td>
         </tr>
       `).join("");
+
+      // Reset select-all checkbox
+      const selectAllCheckbox = document.getElementById("select-all-inbox");
+      if (selectAllCheckbox) {
+        selectAllCheckbox.checked = false;
+      }
+      updateBulkActionsState();
     }
   }
 }
@@ -128,7 +142,40 @@ function connectGmailFromInbox(e) {
   }, 1200);
 }
 
-function importFromInbox(emailId) {
+function disconnectGmailFromInbox(e) {
+  e.preventDefault();
+  if (confirm("Are you sure you want to disconnect Gmail?")) {
+    if (typeof setGmailConnected !== "undefined") {
+      setGmailConnected(false);
+    }
+    toast("Successfully disconnected Gmail!");
+    renderInbox();
+  }
+}
+
+function toggleSelectAllInbox(masterCheckbox) {
+  const checkboxes = document.querySelectorAll(".inbox-row-checkbox");
+  checkboxes.forEach(cb => cb.checked = masterCheckbox.checked);
+  updateBulkActionsState();
+}
+
+function updateBulkActionsState() {
+  const checkboxes = document.querySelectorAll(".inbox-row-checkbox");
+  const selectedCount = Array.from(checkboxes).filter(cb => cb.checked).length;
+  
+  const btnImportSelected = document.getElementById("btn-import-selected");
+  if (btnImportSelected) {
+    btnImportSelected.disabled = selectedCount === 0;
+    btnImportSelected.innerHTML = `<i class="ti ti-download" aria-hidden="true"></i>Import selected (${selectedCount})`;
+  }
+
+  const selectAllCheckbox = document.getElementById("select-all-inbox");
+  if (selectAllCheckbox && checkboxes.length > 0) {
+    selectAllCheckbox.checked = selectedCount === checkboxes.length;
+  }
+}
+
+function executeImport(emailId, doToastAndRender = true) {
   const emails = getScannedEmails();
   const index = emails.findIndex(e => e.id === emailId);
   if (index === -1) return;
@@ -136,8 +183,6 @@ function importFromInbox(emailId) {
   const email = emails[index];
   if (typeof ALL_SHIPMENTS === "undefined" || typeof addShipment === "undefined") return;
 
-  // Build a shipment that matches the real data model (see data.js buildShipments),
-  // so it works with search, the detail page, and the exceptions queue.
   const nextNum = ALL_SHIPMENTS.length + 10000;
   const newShipment = {
     id: `SHP-${nextNum}`,
@@ -158,9 +203,6 @@ function importFromInbox(emailId) {
     notes: [],
   };
 
-  // If the email flags an exception/delay, populate the exception metadata the
-  // exceptions queue and detail timeline rely on (otherwise those pages crash on
-  // undefined severity/title).
   if (email.status === STATUS.EXCEPTION || email.status === STATUS.DELAYED) {
     newShipment.exceptionId = `EXC-${5000 + ALL_EXCEPTIONS.length}`;
     newShipment.title = email.status === STATUS.EXCEPTION ? "Delivery attempt failed" : "Weather delay";
@@ -185,11 +227,43 @@ function importFromInbox(emailId) {
     });
   }
 
-  // Remove from the scanned-email list and re-render.
   emails.splice(index, 1);
   saveScannedEmails(emails);
 
-  toast(`Imported ${email.trackingNo} → ${newShipment.id}`);
+  if (doToastAndRender) {
+    toast(`Imported ${email.trackingNo} → ${newShipment.id}`);
+    renderInbox();
+  }
+}
+
+function importFromInbox(emailId) {
+  executeImport(emailId, true);
+}
+
+function importSelectedInbox() {
+  const checkboxes = document.querySelectorAll(".inbox-row-checkbox:checked");
+  const selectedIds = Array.from(checkboxes).map(cb => cb.value);
+  if (selectedIds.length === 0) return;
+
+  selectedIds.forEach(id => {
+    executeImport(id, false);
+  });
+
+  toast(`Successfully imported ${selectedIds.length} shipments from Gmail!`);
+  renderInbox();
+}
+
+function importAllInbox() {
+  const emails = getScannedEmails();
+  if (emails.length === 0) return;
+
+  const count = emails.length;
+  const emailIds = emails.map(e => e.id);
+  emailIds.forEach(id => {
+    executeImport(id, false);
+  });
+
+  toast(`Successfully imported all ${count} shipments from Gmail!`);
   renderInbox();
 }
 
@@ -206,4 +280,9 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 window.connectGmailFromInbox = connectGmailFromInbox;
+window.disconnectGmailFromInbox = disconnectGmailFromInbox;
 window.importFromInbox = importFromInbox;
+window.toggleSelectAllInbox = toggleSelectAllInbox;
+window.updateBulkActionsState = updateBulkActionsState;
+window.importSelectedInbox = importSelectedInbox;
+window.importAllInbox = importAllInbox;
