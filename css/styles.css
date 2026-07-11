@@ -77,6 +77,7 @@ button { font-family: inherit; }
   font-family: inherit;
   cursor: pointer;
   text-align: left;
+  margin: -10px 0;
   transition: background var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out);
 }
 .sidebar-search:hover { background: var(--surface-2); border-color: var(--border-stronger); color: var(--text-secondary); }
