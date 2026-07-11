@@ -282,7 +282,7 @@ button i { font-size: 15px; }
 .btn-ghost:hover { background: var(--surface-2); }
 
 /* ---------- Forms ---------- */
-input[type="text"], input[type="search"], input[type="email"], input[type="date"],
+input[type="text"], input[type="search"], input[type="email"], input[type="date"], input[type="number"],
 select, textarea {
   height: 32px;
   padding: 0 var(--sp-3);
@@ -308,6 +308,7 @@ input:hover, select:hover, textarea:hover { border-color: var(--border-stronger)
 input:focus, select:focus, textarea:focus { border-color: var(--border-stronger); }
 label { font-size: var(--fs-footnote); color: var(--text-secondary); display: block; margin-bottom: 6px; }
 .field { margin-bottom: var(--sp-4); }
+.field input, .field select, .field textarea { width: 100%; }
 .checkbox-row { display: flex; align-items: center; gap: 8px; }
 input[type="checkbox"] { width: 15px; height: 15px; accent-color: var(--fill-primary); }
 

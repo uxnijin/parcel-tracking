@@ -84,13 +84,15 @@ function openDrawer(id) {
             <label for="ns-destination">Destination City/State</label>
             <input type="text" id="ns-destination" required placeholder="e.g. Miami, FL" />
           </div>
-          <div class="field mt-3">
-            <label for="ns-weight">Weight (kg)</label>
-            <input type="number" step="0.1" id="ns-weight" required placeholder="e.g. 4.5" />
-          </div>
-          <div class="field mt-3">
-            <label for="ns-value">Declared Value ($)</label>
-            <input type="number" id="ns-value" required placeholder="e.g. 150" />
+          <div class="flex gap-3 mt-3">
+            <div class="field" style="flex: 1; margin-bottom: 0;">
+              <label for="ns-weight">Weight (kg)</label>
+              <input type="number" step="0.1" id="ns-weight" required placeholder="e.g. 4.5" />
+            </div>
+            <div class="field" style="flex: 1; margin-bottom: 0;">
+              <label for="ns-value">Declared Value ($)</label>
+              <input type="number" id="ns-value" required placeholder="e.g. 150" />
+            </div>
           </div>
           <div class="field mt-3">
             <label for="ns-status">Initial Status</label>
@@ -101,7 +103,7 @@ function openDrawer(id) {
               <option>Exception</option>
             </select>
           </div>
-          <button class="btn-primary mt-4 w-full" type="submit" style="width:100%">Create Shipment</button>
+          <button class="btn-primary mt-4" type="submit">Create Shipment</button>
         </form>
       </aside>`;
     document.body.appendChild(scrim);
