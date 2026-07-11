@@ -756,5 +756,110 @@ function initUserChip() {
   });
 }
 
-document.addEventListener("DOMContentLoaded", initUserChip);
+document.addEventListener("DOMContentLoaded", () => {
+  initUserChip();
+  initProfilePopover();
+});
+
+function initProfilePopover() {
+  const topbarAvatar = document.querySelector(".topbar-actions .avatar");
+  if (!topbarAvatar) return;
+
+  topbarAvatar.style.cursor = "pointer";
+  topbarAvatar.setAttribute("tabindex", "0");
+  topbarAvatar.setAttribute("role", "button");
+  topbarAvatar.setAttribute("aria-label", "User Profile Menu");
+
+  const popover = document.createElement("div");
+  popover.className = "profile-popover";
+  popover.style.display = "none";
+  document.body.appendChild(popover);
+
+  function renderProfileMenu() {
+    popover.innerHTML = `
+      <a href="settings.html" class="user-chip-menu-item settings-link">
+        <i class="ti ti-settings"></i> Settings
+      </a>
+      <button class="user-chip-menu-item theme-toggle-btn">
+        <i class="ti ti-moon"></i> <span>Dark Mode</span>
+      </button>
+      <a href="login.html" class="user-chip-menu-item logout-link">
+        <i class="ti ti-logout"></i> Log Out
+      </a>
+    `;
+
+    const themeBtn = popover.querySelector(".theme-toggle-btn");
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    if (isDark) {
+      themeBtn.innerHTML = `<i class="ti ti-sun"></i> <span>Light Mode</span>`;
+    } else {
+      themeBtn.innerHTML = `<i class="ti ti-moon"></i> <span>Dark Mode</span>`;
+    }
+  }
+
+  function togglePopover(e) {
+    e.stopPropagation();
+    const isVisible = popover.style.display === "flex";
+    
+    const notifPopover = document.getElementById("global-notification-popover");
+    if (notifPopover) notifPopover.style.display = "none";
+
+    if (isVisible) {
+      popover.style.display = "none";
+    } else {
+      renderProfileMenu();
+      popover.style.display = "flex";
+      const rect = topbarAvatar.getBoundingClientRect();
+      popover.style.top = `${rect.bottom + window.scrollY + 6}px`;
+      popover.style.left = `${rect.right - 180 + window.scrollX}px`;
+    }
+  }
+
+  topbarAvatar.addEventListener("click", togglePopover);
+  topbarAvatar.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      togglePopover(e);
+    }
+  });
+
+  popover.addEventListener("click", (e) => {
+    const menuItem = e.target.closest('.user-chip-menu-item');
+    if (menuItem) {
+      e.stopPropagation();
+      if (menuItem.classList.contains("theme-toggle-btn")) {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const nextTheme = isDark ? "light" : "dark";
+        localStorage.setItem("sf_theme", nextTheme);
+        if (typeof window.applyTheme === "function") {
+          window.applyTheme(nextTheme);
+        } else {
+          document.documentElement.setAttribute("data-theme", nextTheme);
+        }
+        window.dispatchEvent(new Event("sf-theme-changed"));
+        renderProfileMenu();
+      } else {
+        popover.style.display = "none";
+      }
+    }
+  });
+
+  window.addEventListener("sf-theme-changed", () => {
+    if (popover.style.display === "flex") {
+      renderProfileMenu();
+    }
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!topbarAvatar.contains(e.target) && !popover.contains(e.target)) {
+      popover.style.display = "none";
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      popover.style.display = "none";
+    }
+  });
+}
 

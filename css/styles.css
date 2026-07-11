@@ -992,3 +992,20 @@ tr.row-highlight {
   text-decoration: underline;
 }
 
+/* Profile Popover (top-right avatar) */
+.profile-popover {
+  position: absolute;
+  width: 180px;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-float);
+  z-index: var(--z-dropdown);
+  padding: var(--sp-1);
+  display: none;
+  flex-direction: column;
+  gap: 2px;
+  box-sizing: border-box;
+  animation: popover-in 150ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
