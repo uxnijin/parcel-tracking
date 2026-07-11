@@ -155,7 +155,7 @@ button { font-family: inherit; }
   transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.2s ease, margin-top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 .user-chip.expanded .user-chip-details {
-  max-height: 160px;
+  max-height: 190px;
   opacity: 1;
   margin-top: var(--sp-3);
 }
@@ -170,10 +170,10 @@ button { font-family: inherit; }
 .user-chip-menu-item {
   display: flex;
   align-items: center;
-  gap: var(--sp-2);
-  padding: var(--sp-1-5) var(--sp-2);
+  gap: var(--sp-2-5);
+  padding: 8px 10px;
   border-radius: var(--radius);
-  font-size: 12px;
+  font-size: 13px;
   color: var(--text-secondary);
   text-decoration: none;
   background: transparent;
@@ -190,7 +190,7 @@ button { font-family: inherit; }
   color: var(--text-primary);
 }
 .user-chip-menu-item i {
-  font-size: 14px;
+  font-size: 16px;
 }
 .avatar {
   width: 26px; height: 26px; border-radius: 50%;
