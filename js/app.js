@@ -44,9 +44,8 @@ function toast(message, opts = {}) {
   }
   region.appendChild(el);
   function dismiss() {
-    el.style.transition = "opacity 200ms ease";
-    el.style.opacity = "0";
-    setTimeout(() => el.remove(), 200);
+    el.classList.add("toast-out");
+    setTimeout(() => el.remove(), 400);
   }
   const timer = setTimeout(dismiss, duration);
   el.addEventListener("mouseenter", () => clearTimeout(timer));
