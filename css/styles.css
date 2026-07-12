@@ -1420,7 +1420,7 @@ tbody tr.selected {
 }
 
 .toast.toast-out {
-  animation: toast-out 1200ms var(--ease-out) forwards;
+  animation: toast-out 2000ms var(--ease-out) forwards;
   overflow: hidden;
 }
 
