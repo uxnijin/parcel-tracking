@@ -2674,22 +2674,7 @@ tr.row-highlight {
   border-width: 2px;
 }
 
-.pricing-card.popular::before {
-  content: "Most popular";
-  position: absolute;
-  top: 0;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: var(--fill-primary);
-  color: var(--on-primary);
-  font-size: 11px;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 100px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  white-space: nowrap;
-}
+
 
 .pricing-badge {
   display: inline-flex;
@@ -2842,9 +2827,59 @@ tr.row-highlight {
               linear-gradient(135deg, var(--color-pro-start), var(--color-pro-end)) border-box;
   border: 2px solid transparent;
 }
-.pricing-card.popular::before {
+.popular-tag {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.6);
+  opacity: 0;
+  filter: blur(12px);
   background: linear-gradient(135deg, var(--color-pro-start), var(--color-pro-end));
-  color: #FFFFFF;
+  border-radius: 100px;
+  padding: 4px 12px;
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(168, 85, 247, 0.3);
+  transition: transform 0.3s ease;
+  pointer-events: none;
+}
+
+.popular-tag span {
+  background: linear-gradient(to right, #ffffff 50%, rgba(255, 255, 255, 0.4) 50%);
+  background-size: 200% 100%;
+  background-position: 100% 0;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+#upgrade-plan-modal.open .popular-tag {
+  animation: popular-tag-entrance 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) forwards 0.3s;
+}
+
+#upgrade-plan-modal.open .popular-tag span {
+  animation: text-fill 1s cubic-bezier(0.4, 0, 0.2, 1) forwards 0.8s;
+}
+
+@keyframes popular-tag-entrance {
+  0% {
+    opacity: 0;
+    filter: blur(12px);
+    transform: translate(-50%, -50%) scale(0.6);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0);
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+@keyframes text-fill {
+  100% {
+    background-position: 0% 0;
+  }
 }
 .pricing-card.popular .pricing-features li i {
   color: var(--color-pro-start);
