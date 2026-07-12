@@ -1238,8 +1238,7 @@ tbody tr.selected {
 /* ---------- Tabs ---------- */
 .tabs {
   position: sticky;
-  top: -24px;
-  padding-top: 24px;
+  top: var(--topbar-h);
   background: var(--surface-0);
   z-index: 10;
   display: flex;
