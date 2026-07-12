@@ -2591,3 +2591,46 @@ tr.row-highlight {
   border: 1px solid var(--border);
   white-space: nowrap;
 }
+
+.badge-tag.tag-gray {
+  background: var(--bg-neutral);
+  color: var(--text-neutral);
+  border-color: var(--border-neutral);
+}
+.badge-tag.tag-blue {
+  background: rgba(0, 122, 255, 0.15);
+  color: #007aff;
+  border-color: rgba(0, 122, 255, 0.4);
+}
+.badge-tag.tag-green {
+  background: var(--bg-success);
+  color: var(--text-success);
+  border-color: var(--border-success);
+}
+.badge-tag.tag-orange {
+  background: var(--bg-warning);
+  color: var(--text-warning);
+  border-color: var(--border-warning);
+}
+.badge-tag.tag-red {
+  background: var(--bg-danger);
+  color: var(--text-danger);
+  border-color: var(--border-danger);
+}
+.badge-tag.tag-purple {
+  background: rgba(175, 82, 222, 0.15);
+  color: #af52de;
+  border-color: rgba(175, 82, 222, 0.4);
+}
+
+/* Color picker option active states */
+.color-option input[type="radio"]:checked + .color-dot {
+  border-color: var(--text-primary) !important;
+  transform: scale(1.2);
+}
+.color-dot {
+  transition: border-color 0.15s, transform 0.15s;
+}
+.color-dot:hover {
+  transform: scale(1.2);
+}

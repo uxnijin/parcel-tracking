@@ -41,7 +41,11 @@ function loadShipmentDetails(s) {
   if (tagsRow && tagsContainer) {
     if (s.tags && s.tags.length) {
       tagsRow.style.display = "flex";
-      tagsContainer.innerHTML = s.tags.map(t => `<span class="badge-tag">${escapeHtml(t)}</span>`).join("");
+      tagsContainer.innerHTML = s.tags.map(t => {
+        const text = typeof t === "string" ? t : t.text;
+        const colorClass = typeof t === "string" ? "tag-gray" : `tag-${t.color || "gray"}`;
+        return `<span class="badge-tag ${colorClass}">${escapeHtml(text)}</span>`;
+      }).join("");
     } else {
       tagsRow.style.display = "none";
       tagsContainer.innerHTML = "—";

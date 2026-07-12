@@ -510,6 +510,35 @@
           <label for="tag-input-field">Tag Name</label>
           <input type="text" id="tag-input-field" required placeholder="e.g. Urgent, Fragile, VIP" autocomplete="off" />
         </div>
+        <div class="field mt-3">
+          <label>Tag Color</label>
+          <div class="color-picker-row" style="display: flex; gap: 12px; margin-top: 8px;">
+            <label class="color-option" style="cursor: pointer;">
+              <input type="radio" name="tag-color" value="gray" checked style="display: none;" />
+              <span class="color-dot" style="display: inline-block; width: 22px; height: 22px; border-radius: 50%; background: #8e8e93; border: 2px solid transparent; box-sizing: border-box;"></span>
+            </label>
+            <label class="color-option" style="cursor: pointer;">
+              <input type="radio" name="tag-color" value="blue" style="display: none;" />
+              <span class="color-dot" style="display: inline-block; width: 22px; height: 22px; border-radius: 50%; background: #007aff; border: 2px solid transparent; box-sizing: border-box;"></span>
+            </label>
+            <label class="color-option" style="cursor: pointer;">
+              <input type="radio" name="tag-color" value="green" style="display: none;" />
+              <span class="color-dot" style="display: inline-block; width: 22px; height: 22px; border-radius: 50%; background: #34c759; border: 2px solid transparent; box-sizing: border-box;"></span>
+            </label>
+            <label class="color-option" style="cursor: pointer;">
+              <input type="radio" name="tag-color" value="orange" style="display: none;" />
+              <span class="color-dot" style="display: inline-block; width: 22px; height: 22px; border-radius: 50%; background: #ff9500; border: 2px solid transparent; box-sizing: border-box;"></span>
+            </label>
+            <label class="color-option" style="cursor: pointer;">
+              <input type="radio" name="tag-color" value="red" style="display: none;" />
+              <span class="color-dot" style="display: inline-block; width: 22px; height: 22px; border-radius: 50%; background: #ff3b30; border: 2px solid transparent; box-sizing: border-box;"></span>
+            </label>
+            <label class="color-option" style="cursor: pointer;">
+              <input type="radio" name="tag-color" value="purple" style="display: none;" />
+              <span class="color-dot" style="display: inline-block; width: 22px; height: 22px; border-radius: 50%; background: #af52de; border: 2px solid transparent; box-sizing: border-box;"></span>
+            </label>
+          </div>
+        </div>
         <div class="flex gap-2 mt-4">
           <button class="btn-primary" type="submit">Add tag</button>
           <button class="btn-ghost" type="button" onclick="closeDrawer('bulk-tag-modal')">Cancel</button>

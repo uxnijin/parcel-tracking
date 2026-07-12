@@ -107,7 +107,11 @@ function renderTable(highlightId = null) {
         <td onclick="event.stopPropagation()"><input type="checkbox" class="row-check" data-id="${s.id}" ${state.selected.has(s.id) ? "checked" : ""} aria-label="Select ${s.id}" /></td>
         <td class="mono">
           <div>${escapeHtml(s.tracking)}</div>
-          ${s.tags && s.tags.length ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">${s.tags.map(t => `<span class="badge-tag">${escapeHtml(t)}</span>`).join("")}</div>` : ""}
+          ${s.tags && s.tags.length ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">${s.tags.map(t => {
+            const text = typeof t === "string" ? t : t.text;
+            const colorClass = typeof t === "string" ? "tag-gray" : `tag-${t.color || "gray"}`;
+            return `<span class="badge-tag ${colorClass}">${escapeHtml(text)}</span>`;
+          }).join("")}</div>` : ""}
         </td>
         <td class="ellipsis">${escapeHtml(s.customer)}</td>
         <td class="text-secondary">${s.carrier}</td>
@@ -172,7 +176,11 @@ function openQuickView(id) {
     <div class="kv-row"><span class="k">ETA</span><span class="v">${s.eta}</span></div>
     <div class="kv-row"><span class="k">Weight</span><span class="v">${s.weight}</span></div>
     <div class="kv-row"><span class="k">Declared value</span><span class="v">${s.value}</span></div>
-    ${s.tags && s.tags.length ? `<div class="kv-row"><span class="k">Tags</span><span class="v" style="display:flex; gap:4px; flex-wrap:wrap;">${s.tags.map(t => `<span class="badge-tag">${escapeHtml(t)}</span>`).join("")}</span></div>` : ""}
+    ${s.tags && s.tags.length ? `<div class="kv-row"><span class="k">Tags</span><span class="v" style="display:flex; gap:4px; flex-wrap:wrap;">${s.tags.map(t => {
+      const text = typeof t === "string" ? t : t.text;
+      const colorClass = typeof t === "string" ? "tag-gray" : `tag-${t.color || "gray"}`;
+      return `<span class="badge-tag ${colorClass}">${escapeHtml(text)}</span>`;
+    }).join("")}</span></div>` : ""}
   `;
 
   const fdBtn = document.getElementById("btn-qv-full-detail");
@@ -477,6 +485,9 @@ function submitBulkTag() {
   const tag = input.value.trim();
   if (!tag) return;
 
+  const colorRadio = document.querySelector('input[name="tag-color"]:checked');
+  const color = colorRadio ? colorRadio.value : "gray";
+
   const ids = Array.from(state.selected);
   if (!ids.length) return;
 
@@ -484,8 +495,12 @@ function submitBulkTag() {
     const s = ALL_SHIPMENTS.find((x) => x.id === id);
     if (s) {
       const tags = s.tags ? [...s.tags] : [];
-      if (!tags.includes(tag)) {
-        tags.push(tag);
+      const existsIndex = tags.findIndex((t) => (typeof t === "string" ? t === tag : t.text === tag));
+      const tagObj = { text: tag, color: color };
+      if (existsIndex === -1) {
+        tags.push(tagObj);
+      } else {
+        tags[existsIndex] = tagObj;
       }
       if (typeof updateShipment !== "undefined") {
         updateShipment(id, { tags });
