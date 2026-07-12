@@ -281,7 +281,7 @@ button { font-family: inherit; }
 }
 .topbar-actions { display: flex; align-items: center; gap: var(--sp-2); flex: 0 1 auto; min-width: 0; }
 .icon-btn {
-  width: 40px; height: 40px;
+  width: 32px; height: 32px;
   display: flex; align-items: center; justify-content: center;
   border-radius: var(--radius);
   color: var(--text-secondary);
@@ -289,11 +289,11 @@ button { font-family: inherit; }
   border: 0.5px solid transparent;
   background: transparent;
   padding: 0;
-  font-size: 24px;
+  font-size: 21px;
 }
 .icon-btn:hover { background: var(--surface-2); color: var(--text-primary); }
 .icon-btn .dot {
-  position: absolute; top: 9px; right: 9px;
+  position: absolute; top: 6px; right: 6px;
   width: 6px; height: 6px; border-radius: 50%;
   background: var(--text-danger);
 }
