@@ -750,6 +750,7 @@ input[type="search"],
 input[type="email"],
 input[type="date"],
 input[type="number"],
+input[type="password"],
 select,
 textarea {
   height: 32px;
