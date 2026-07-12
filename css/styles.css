@@ -518,6 +518,17 @@ tbody tr.selected { background: var(--surface-3); }
   66% { transform: rotate(1deg) translateY(0); }
   100% { transform: rotate(0deg) translateY(0); }
 }
+.metric-card .checkmark-path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 0;
+}
+.metric-card:hover .checkmark-path {
+  animation: draw-checkmark 280ms ease-in-out forwards;
+}
+@keyframes draw-checkmark {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
+}
 .metric-card .value { font-size: 26px; font-weight: 600; line-height: 1; letter-spacing: -0.01em; }
 .metric-card .delta {
   font-size: 11px; color: var(--text-muted); margin-top: var(--sp-2);
