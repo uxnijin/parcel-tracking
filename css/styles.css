@@ -151,7 +151,7 @@ button {
   align-items: center;
   gap: var(--sp-2);
   padding: 10px var(--sp-2);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius);
   color: var(--text-secondary);
   font-size: var(--fs-footnote);
   transition: background var(--dur-fast) var(--ease-out), color var(--dur-fast) var(--ease-out);
