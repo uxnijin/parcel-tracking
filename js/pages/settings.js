@@ -314,6 +314,28 @@ function submitSupportTicket() {
   document.getElementById("support-form").reset();
 }
 
+function submitPaymentEdit() {
+  const numberInput = document.getElementById("pm-number").value.trim();
+  const expiryInput = document.getElementById("pm-expiry").value.trim();
+  
+  let last4 = "4242";
+  const cleanNumber = numberInput.replace(/\s+/g, "");
+  if (cleanNumber.length >= 4) {
+    last4 = cleanNumber.slice(-4);
+  }
+  
+  const titleEl = document.getElementById("pm-display-name");
+  const expiryEl = document.getElementById("pm-display-expiry");
+  if (titleEl) titleEl.textContent = `Visa ending in ${last4}`;
+  if (expiryEl) expiryEl.textContent = `Expires ${expiryInput}`;
+  
+  toast("Payment method updated");
+  if (typeof closeDrawer === "function") {
+    closeDrawer("edit-payment-drawer");
+  }
+}
+
 window.searchHelp = searchHelp;
 window.submitSupportTicket = submitSupportTicket;
+window.submitPaymentEdit = submitPaymentEdit;
 

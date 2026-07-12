@@ -454,10 +454,10 @@
                 <div style="display:flex; align-items: center; gap: 12px;">
                   <i class="ti ti-credit-card" style="font-size:24px; color:var(--text-secondary);"></i>
                   <div>
-                    <div style="font-size:13px; font-weight:500;">Visa ending in 4242</div>
-                    <div style="font-size:12px; color:var(--text-muted);">Expires 12/28</div>
+                    <div id="pm-display-name" style="font-size:13px; font-weight:500;">Visa ending in 4242</div>
+                    <div id="pm-display-expiry" style="font-size:12px; color:var(--text-muted);">Expires 12/28</div>
                   </div>
-                  <button class="btn-sm btn-secondary" style="margin-left:auto;">Edit</button>
+                  <button class="btn-sm btn-secondary" style="margin-left:auto;" onclick="openDrawer('edit-payment-drawer')">Edit</button>
                 </div>
               </div>
             </div>
@@ -735,6 +735,41 @@
           <div style="margin-top: var(--sp-6); display: flex; gap: var(--sp-2); justify-content: flex-end;">
             <button type="button" class="btn-secondary" onclick="closeDrawer('invite-member-drawer')">Cancel</button>
             <button type="submit" class="btn-primary">Send Invitation</button>
+          </div>
+        </form>
+      </aside>
+    </div>
+
+    <div class="drawer-scrim" id="edit-payment-drawer">
+      <aside class="drawer" role="dialog" aria-label="Edit payment method"
+        style="width: 400px; max-width: 90vw; padding: var(--sp-4);">
+        <div class="flex justify-between items-center mb-4">
+          <h2 style="font-size:16px; margin: 0;">Edit Payment Method</h2>
+          <button class="icon-btn" aria-label="Close" onclick="closeDrawer('edit-payment-drawer')"><i class="ti ti-x"
+              aria-hidden="true"></i></button>
+        </div>
+        <form id="edit-payment-form" onsubmit="event.preventDefault(); submitPaymentEdit();">
+          <div class="field mt-3">
+            <label for="pm-cardholder">Cardholder Name</label>
+            <input type="text" id="pm-cardholder" required value="Jordan Diaz" placeholder="Jordan Diaz" style="width: 100%" />
+          </div>
+          <div class="field mt-3">
+            <label for="pm-number">Card Number</label>
+            <input type="text" id="pm-number" required value="•••• •••• •••• 4242" placeholder="1234 5678 1234 5678" style="width: 100%" />
+          </div>
+          <div style="display: flex; gap: var(--sp-3); margin-top: var(--sp-3);">
+            <div class="field" style="flex: 1; margin-bottom: 0;">
+              <label for="pm-expiry">Expiry Date</label>
+              <input type="text" id="pm-expiry" required value="12/28" placeholder="MM/YY" style="width: 100%" />
+            </div>
+            <div class="field" style="flex: 1; margin-bottom: 0;">
+              <label for="pm-cvc">CVC</label>
+              <input type="password" id="pm-cvc" required value="•••" placeholder="123" style="width: 100%" />
+            </div>
+          </div>
+          <div style="margin-top: var(--sp-6); display: flex; gap: var(--sp-2); justify-content: flex-end;">
+            <button type="button" class="btn-secondary" onclick="closeDrawer('edit-payment-drawer')">Cancel</button>
+            <button type="submit" class="btn-primary">Save Changes</button>
           </div>
         </form>
       </aside>
