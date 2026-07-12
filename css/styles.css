@@ -508,15 +508,18 @@ tbody tr.selected { background: var(--surface-3); }
 }
 .metric-card .ti-truck-delivery {
   display: inline-block;
+  transition: transform 0.3s ease-out;
 }
 .metric-card:hover .ti-truck-delivery {
-  animation: truck-bounce 280ms ease-in-out;
+  animation: truck-drive 500ms ease-in-out forwards;
 }
-@keyframes truck-bounce {
-  0% { transform: rotate(0deg) translateY(0); }
-  33% { transform: rotate(-2deg) translateY(-1px); }
-  66% { transform: rotate(1deg) translateY(0); }
-  100% { transform: rotate(0deg) translateY(0); }
+@keyframes truck-drive {
+  0% { transform: translateX(0) translateY(0) rotate(0deg); }
+  30% { transform: translateX(3px) translateY(-0.5px) rotate(1deg); }
+  60% { transform: translateX(6px) translateY(0) rotate(0deg); }
+  75% { transform: translateX(6px) translateY(1px) rotate(-2deg); }
+  90% { transform: translateX(6px) translateY(-0.5px) rotate(1deg); }
+  100% { transform: translateX(6px) translateY(0) rotate(0deg); }
 }
 .metric-card .checkmark-path {
   stroke-dasharray: 100;
