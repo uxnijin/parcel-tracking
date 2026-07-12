@@ -2912,11 +2912,13 @@ tr.row-highlight {
   -webkit-text-fill-color: transparent;
 }
 .pricing-card:nth-child(3) .pricing-btn {
-  border-color: var(--color-biz-start);
-  color: var(--color-biz-start);
+  background: linear-gradient(135deg, var(--color-biz-start), var(--color-biz-end));
+  border: none;
+  color: #FFFFFF;
 }
 .pricing-card:nth-child(3) .pricing-btn:hover {
-  background: rgba(59, 130, 246, 0.05);
+  opacity: 0.9;
+  background: linear-gradient(135deg, var(--color-biz-start), var(--color-biz-end));
 }
 
 /* Billing cycle toggle */
