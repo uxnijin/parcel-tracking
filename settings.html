@@ -193,11 +193,13 @@
       grid-template-columns: 2fr 1fr;
       gap: var(--sp-6);
     }
+
     @media (max-width: 900px) {
       .help-grid {
         grid-template-columns: 1fr;
       }
     }
+
     .help-card {
       background: var(--surface-1);
       border: 1px solid var(--border);
@@ -205,12 +207,14 @@
       padding: var(--sp-5);
       margin-bottom: var(--sp-4);
     }
+
     .help-title {
       font-size: var(--fs-heading);
       font-weight: 600;
       color: var(--text-primary);
       margin-bottom: var(--sp-2);
     }
+
     .help-search-box {
       display: flex;
       gap: var(--sp-2);
@@ -218,12 +222,14 @@
       width: 100%;
       max-width: 500px;
     }
+
     .faq-list {
       display: flex;
       flex-direction: column;
       gap: var(--sp-3);
       margin-top: var(--sp-4);
     }
+
     .faq-item {
       background: var(--surface-2);
       border: 1px solid var(--border);
@@ -231,10 +237,12 @@
       padding: var(--sp-3) var(--sp-4);
       transition: all var(--dur-fast) var(--ease-out);
     }
+
     .faq-item:hover {
       border-color: var(--border-stronger);
       background: var(--surface-3);
     }
+
     .faq-question {
       font-size: 13.5px;
       font-weight: 500;
@@ -246,6 +254,7 @@
       gap: var(--sp-2);
       user-select: none;
     }
+
     .faq-answer {
       font-size: 13px;
       color: var(--text-secondary);
@@ -255,16 +264,20 @@
       border-top: 0.5px dashed var(--border);
       display: none;
     }
+
     .faq-item.active {
       border-color: var(--fill-primary);
       background: var(--surface-1);
     }
+
     .faq-item.active .faq-answer {
       display: block;
     }
+
     .faq-item.active .faq-question i {
       transform: rotate(180deg);
     }
+
     .faq-question i {
       transition: transform var(--dur-fast) var(--ease-out);
       color: var(--text-muted);
@@ -437,12 +450,12 @@
 
               <div class="card" style="margin-top: var(--sp-4);">
                 <div class="card-title">Monthly Usage</div>
-                <div class="kv-row" style="margin-bottom:8px;">
-                  <span class="k">Tracking usage</span>
-                  <span class="v">50 / 100 tracks used</span>
+                <div class="user-chip-progress-bg" style="height:8px; border-radius:4px; margin-bottom:16px;">
+                  <div class="user-chip-progress-bar" style="width: 50%; height:100%; border-radius:4px;"></div>
                 </div>
                 <p class="text-secondary" style="font-size: var(--fs-footnote); line-height: 1.5;">
-                  Your monthly limit resets on August 12, 2026. If you exceed your limit, tracking updates may be delayed.
+                  Your monthly limit resets on August 12, 2026. If you exceed your limit, tracking updates may be
+                  delayed.
                 </p>
               </div>
 
@@ -454,7 +467,8 @@
                     <div id="pm-display-name" style="font-size:13px; font-weight:500;">Visa ending in 4242</div>
                     <div id="pm-display-expiry" style="font-size:12px; color:var(--text-muted);">Expires 12/28</div>
                   </div>
-                  <button class="btn-sm btn-secondary" style="margin-left:auto;" onclick="openDrawer('edit-payment-drawer')">Edit</button>
+                  <button class="btn-sm btn-secondary" style="margin-left:auto;"
+                    onclick="openDrawer('edit-payment-drawer')">Edit</button>
                 </div>
               </div>
             </div>
@@ -665,23 +679,33 @@
                 <div>
                   <div class="help-search-box" style="max-width: none; margin-bottom: var(--sp-4);">
                     <input type="text" id="help-search" placeholder="Search Help Center articles..." style="flex:1;" />
-                    <button class="btn-primary" style="padding: 0 var(--sp-3);" onclick="searchHelp()"><i class="ti ti-search"></i></button>
+                    <button class="btn-primary" style="padding: 0 var(--sp-3);" onclick="searchHelp()"><i
+                        class="ti ti-search"></i></button>
                   </div>
 
                   <div class="help-card">
                     <div class="help-title">Frequently Asked Questions</div>
                     <div class="faq-list">
                       <div class="faq-item">
-                        <div class="faq-question">How do I connect my Gmail account? <i class="ti ti-chevron-down"></i></div>
-                        <div class="faq-answer">Navigate to Settings > Integrations, and click "Connect" next to Google Gmail. You will be prompted to authorize access. Once connected, ShipFlow automatically processes shipping confirmation emails.</div>
+                        <div class="faq-question">How do I connect my Gmail account? <i class="ti ti-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">Navigate to Settings > Integrations, and click "Connect" next to Google
+                          Gmail. You will be prompted to authorize access. Once connected, ShipFlow automatically
+                          processes shipping confirmation emails.</div>
                       </div>
                       <div class="faq-item">
-                        <div class="faq-question">What is the tracking limit on the Starter plan? <i class="ti ti-chevron-down"></i></div>
-                        <div class="faq-answer">The Starter plan includes 100 monthly tracking credits. You can check your current monthly usage directly in the sidebar account footer or by going to Settings > Usage.</div>
+                        <div class="faq-question">What is the tracking limit on the Starter plan? <i
+                            class="ti ti-chevron-down"></i></div>
+                        <div class="faq-answer">The Starter plan includes 100 monthly tracking credits. You can check
+                          your current monthly usage directly in the sidebar account footer or by going to Settings >
+                          Usage.</div>
                       </div>
                       <div class="faq-item">
-                        <div class="faq-question">How do exception statuses get updated? <i class="ti ti-chevron-down"></i></div>
-                        <div class="faq-answer">Exceptions are parsed automatically by AI when a carrier reports a delivery delay or failure. You can assign owners to exceptions, set a priority, and mark them resolved once resolved.</div>
+                        <div class="faq-question">How do exception statuses get updated? <i
+                            class="ti ti-chevron-down"></i></div>
+                        <div class="faq-answer">Exceptions are parsed automatically by AI when a carrier reports a
+                          delivery delay or failure. You can assign owners to exceptions, set a priority, and mark them
+                          resolved once resolved.</div>
                       </div>
                     </div>
                   </div>
@@ -693,11 +717,13 @@
                     <form id="support-form" onsubmit="event.preventDefault(); submitSupportTicket();">
                       <div class="field mt-3">
                         <label for="sup-subject">Subject</label>
-                        <input type="text" id="sup-subject" required placeholder="How can we help?" style="width: 100%;" />
+                        <input type="text" id="sup-subject" required placeholder="How can we help?"
+                          style="width: 100%;" />
                       </div>
                       <div class="field mt-3">
                         <label for="sup-msg">Message</label>
-                        <textarea id="sup-msg" required placeholder="Write your message here..." style="width: 100%; min-height: 100px; padding: 8px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface-1); font-family: inherit; font-size: 13px; box-sizing: border-box; resize: vertical; outline: none;"></textarea>
+                        <textarea id="sup-msg" required placeholder="Write your message here..."
+                          style="width: 100%; min-height: 100px; padding: 8px; border-radius: var(--radius); border: 1px solid var(--border); background: var(--surface-1); font-family: inherit; font-size: 13px; box-sizing: border-box; resize: vertical; outline: none;"></textarea>
                       </div>
                       <button type="submit" class="btn-primary">Send Message</button>
                     </form>
@@ -748,11 +774,13 @@
         <form id="edit-payment-form" onsubmit="event.preventDefault(); submitPaymentEdit();">
           <div class="field mt-3">
             <label for="pm-cardholder">Cardholder Name</label>
-            <input type="text" id="pm-cardholder" required value="Jordan Diaz" placeholder="Jordan Diaz" style="width: 100%" />
+            <input type="text" id="pm-cardholder" required value="Jordan Diaz" placeholder="Jordan Diaz"
+              style="width: 100%" />
           </div>
           <div class="field mt-3">
             <label for="pm-number">Card Number</label>
-            <input type="text" id="pm-number" required value="•••• •••• •••• 4242" placeholder="1234 5678 1234 5678" style="width: 100%" />
+            <input type="text" id="pm-number" required value="•••• •••• •••• 4242" placeholder="1234 5678 1234 5678"
+              style="width: 100%" />
           </div>
           <div style="display: flex; gap: var(--sp-3); margin-top: var(--sp-3);">
             <div class="field" style="flex: 1; margin-bottom: 0;">
