@@ -1237,6 +1237,11 @@ tbody tr.selected {
 
 /* ---------- Tabs ---------- */
 .tabs {
+  position: sticky;
+  top: -24px;
+  padding-top: 24px;
+  background: var(--surface-0);
+  z-index: 10;
   display: flex;
   gap: var(--sp-4);
   border-bottom: 0.5px solid var(--border);
