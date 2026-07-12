@@ -387,11 +387,6 @@ button {
   line-height: 1.3;
 }
 
-.user-chip .role {
-  font-size: 11px;
-  color: var(--text-muted);
-}
-
 /* ---------- Main column ---------- */
 .main {
   display: flex;
