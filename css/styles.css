@@ -2920,28 +2920,57 @@ tr.row-highlight {
 .billing-toggle {
   display: flex;
   background: var(--surface-2);
-  border-radius: var(--radius-lg);
-  padding: 2px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  padding: 3px;
   gap: 2px;
   align-items: center;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
 }
 
 .billing-toggle .toggle-btn {
   border: none;
   background: none;
-  font-size: 11px;
+  font-size: 10px;
   font-weight: 600;
-  padding: 6px 12px;
-  border-radius: var(--radius-sm);
+  padding: 6px 14px;
+  border-radius: 100px;
   color: var(--text-secondary);
   cursor: pointer;
-  transition: all var(--dur-fast);
+  transition: all var(--dur-fast) var(--ease-out);
   text-transform: uppercase;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.05em;
+  display: flex;
+  align-items: center;
 }
 
 .billing-toggle .toggle-btn.active {
   background: var(--surface-1);
   color: var(--text-primary);
-  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.billing-toggle .save-badge {
+  font-size: 9px;
+  font-weight: 700;
+  background: var(--bg-success);
+  color: var(--text-success);
+  padding: 2px 6px;
+  border-radius: 100px;
+  margin-left: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  line-height: 1;
+}
+
+.card-save-badge {
+  font-size: 10px;
+  font-weight: 600;
+  background: var(--bg-success);
+  color: var(--text-success);
+  padding: 1px 6px;
+  border-radius: 100px;
+  margin-left: 4px;
+  display: inline-block;
+  vertical-align: middle;
 }
