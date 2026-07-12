@@ -150,7 +150,7 @@ button {
   display: flex;
   align-items: center;
   gap: var(--sp-2);
-  padding: 7px var(--sp-2);
+  padding: 10px var(--sp-2);
   border-radius: var(--radius-sm);
   color: var(--text-secondary);
   font-size: var(--fs-footnote);
