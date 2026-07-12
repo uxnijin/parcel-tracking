@@ -71,13 +71,19 @@ function openDrawer(id) {
             <input type="text" id="ns-customer" required placeholder="e.g. Sarah Jenkins" />
           </div>
           <div class="field mt-3">
-            <label for="ns-carrier">Carrier</label>
-            <select id="ns-carrier" required>
-              <option>UPS</option>
-              <option>FedEx</option>
-              <option>DHL</option>
-              <option>USPS</option>
-            </select>
+            <label>Carrier</label>
+            <div style="position: relative;">
+              <button class="select-btn" id="btn-ns-carrier" type="button" aria-haspopup="true" aria-expanded="false" style="width: 100%;">
+                UPS
+              </button>
+              <div class="menu" id="menu-ns-carrier" style="left: 0; top: 100%; margin-top: 4px; width: 100%; padding: var(--sp-2);">
+                <div class="menu-item" data-value="UPS">UPS</div>
+                <div class="menu-item" data-value="FedEx">FedEx</div>
+                <div class="menu-item" data-value="DHL">DHL</div>
+                <div class="menu-item" data-value="USPS">USPS</div>
+              </div>
+            </div>
+            <input type="hidden" id="ns-carrier" value="UPS" />
           </div>
           <div class="field mt-3">
             <label for="ns-destination">Destination City/State</label>
@@ -94,13 +100,19 @@ function openDrawer(id) {
             </div>
           </div>
           <div class="field mt-3">
-            <label for="ns-status">Initial Status</label>
-            <select id="ns-status" required>
-              <option>Pending pickup</option>
-              <option>In transit</option>
-              <option>Delayed</option>
-              <option>Exception</option>
-            </select>
+            <label>Initial Status</label>
+            <div style="position: relative;">
+              <button class="select-btn" id="btn-ns-status" type="button" aria-haspopup="true" aria-expanded="false" style="width: 100%;">
+                Pending pickup
+              </button>
+              <div class="menu" id="menu-ns-status" style="left: 0; top: 100%; margin-top: 4px; width: 100%; padding: var(--sp-2);">
+                <div class="menu-item" data-value="Pending pickup">Pending pickup</div>
+                <div class="menu-item" data-value="In transit">In transit</div>
+                <div class="menu-item" data-value="Delayed">Delayed</div>
+                <div class="menu-item" data-value="Exception">Exception</div>
+              </div>
+            </div>
+            <input type="hidden" id="ns-status" value="Pending pickup" />
           </div>
           <button class="btn-primary mt-4" type="submit">Create Shipment</button>
         </form>
@@ -108,10 +120,44 @@ function openDrawer(id) {
     document.body.appendChild(scrim);
   }
   if (!scrim) return;
+  if (id === 'new-shipment-drawer') {
+    setupNewShipmentDrawerDropdowns();
+  }
   scrim.classList.add("open");
   const onKey = (e) => { if (e.key === "Escape") closeDrawer(id); };
   scrim.addEventListener("click", (e) => { if (e.target === scrim) closeDrawer(id); });
   document.addEventListener("keydown", onKey, { once: true });
+}
+
+function setupNewShipmentDrawerDropdowns() {
+  const setupSingleSelect = (btnId, menuId, inputId) => {
+    const btn = document.getElementById(btnId);
+    const menu = document.getElementById(menuId);
+    const input = document.getElementById(inputId);
+    if (!btn || !menu || !input || btn.dataset.initialized === "true") return;
+
+    btn.dataset.initialized = "true";
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.querySelectorAll(".menu").forEach((m) => {
+        if (m !== menu) m.classList.remove("open");
+      });
+      menu.classList.toggle("open");
+    });
+
+    menu.querySelectorAll(".menu-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        const val = item.dataset.value;
+        input.value = val;
+        btn.textContent = item.textContent.trim();
+        menu.classList.remove("open");
+      });
+    });
+  };
+
+  setupSingleSelect("btn-ns-carrier", "menu-ns-carrier", "ns-carrier");
+  setupSingleSelect("btn-ns-status", "menu-ns-status", "ns-status");
 }
 function closeDrawer(id) {
   const scrim = document.getElementById(id);
@@ -179,6 +225,10 @@ function createNewShipment() {
   }
 
   document.getElementById("new-shipment-form").reset();
+  const btnCarrier = document.getElementById("btn-ns-carrier");
+  if (btnCarrier) btnCarrier.textContent = "UPS";
+  const btnStatus = document.getElementById("btn-ns-status");
+  if (btnStatus) btnStatus.textContent = "Pending pickup";
   closeDrawer("new-shipment-drawer");
   toast(`Shipment ${idVal} created successfully!`);
 }
@@ -190,6 +240,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const page = document.body.dataset.page;
   document.querySelectorAll(".nav-item").forEach((el) => {
     el.classList.toggle("active", el.dataset.page === page);
+  });
+
+  // Close menus when clicking outside
+  document.addEventListener("click", (e) => {
+    document.querySelectorAll(".menu").forEach((menu) => {
+      const btn = menu.previousElementSibling;
+      if (!menu.contains(e.target) && e.target !== btn) {
+        menu.classList.remove("open");
+      }
+    });
   });
 
   // Sidebar Search hover rotator animation

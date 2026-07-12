@@ -429,13 +429,19 @@
           <input type="text" id="ns-customer" required placeholder="e.g. Sarah Jenkins" />
         </div>
         <div class="field mt-3">
-          <label for="ns-carrier">Carrier</label>
-          <select id="ns-carrier" required>
-            <option>UPS</option>
-            <option>FedEx</option>
-            <option>DHL</option>
-            <option>USPS</option>
-          </select>
+          <label>Carrier</label>
+          <div style="position: relative;">
+            <button class="select-btn" id="btn-ns-carrier" type="button" aria-haspopup="true" aria-expanded="false" style="width: 100%;">
+              UPS
+            </button>
+            <div class="menu" id="menu-ns-carrier" style="left: 0; top: 100%; margin-top: 4px; width: 100%; padding: var(--sp-2);">
+              <div class="menu-item" data-value="UPS">UPS</div>
+              <div class="menu-item" data-value="FedEx">FedEx</div>
+              <div class="menu-item" data-value="DHL">DHL</div>
+              <div class="menu-item" data-value="USPS">USPS</div>
+            </div>
+          </div>
+          <input type="hidden" id="ns-carrier" value="UPS" />
         </div>
         <div class="field mt-3">
           <label for="ns-destination">Destination City/State</label>
@@ -452,13 +458,19 @@
           </div>
         </div>
         <div class="field mt-3">
-          <label for="ns-status">Initial Status</label>
-          <select id="ns-status" required>
-            <option>Pending pickup</option>
-            <option>In transit</option>
-            <option>Delayed</option>
-            <option>Exception</option>
-          </select>
+          <label>Initial Status</label>
+          <div style="position: relative;">
+            <button class="select-btn" id="btn-ns-status" type="button" aria-haspopup="true" aria-expanded="false" style="width: 100%;">
+              Pending pickup
+            </button>
+            <div class="menu" id="menu-ns-status" style="left: 0; top: 100%; margin-top: 4px; width: 100%; padding: var(--sp-2);">
+              <div class="menu-item" data-value="Pending pickup">Pending pickup</div>
+              <div class="menu-item" data-value="In transit">In transit</div>
+              <div class="menu-item" data-value="Delayed">Delayed</div>
+              <div class="menu-item" data-value="Exception">Exception</div>
+            </div>
+          </div>
+          <input type="hidden" id="ns-status" value="Pending pickup" />
         </div>
         <button class="btn-primary mt-4" type="submit">Create Shipment</button>
       </form>
