@@ -563,6 +563,17 @@ tbody tr.selected { background: var(--surface-3); }
   0% { stroke-dashoffset: 100; }
   100% { stroke-dashoffset: 0; }
 }
+.metric-card .clock-hands-path {
+  transform-origin: 12px 12px;
+}
+.metric-card:hover .clock-hands-path {
+  animation: clock-rotate 300ms ease-in-out forwards;
+}
+@keyframes clock-rotate {
+  0% { transform: rotate(0deg); }
+  60% { transform: rotate(72deg); }
+  100% { transform: rotate(0deg); }
+}
 .metric-card .value { font-size: 26px; font-weight: 600; line-height: 1; letter-spacing: -0.01em; }
 .metric-card .delta {
   font-size: 11px; color: var(--text-muted); margin-top: var(--sp-2);

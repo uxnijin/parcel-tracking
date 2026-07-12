@@ -106,7 +106,14 @@
           <div class="metric-card accent-warning">
             <div class="mc-top">
               <div class="label">Delayed</div>
-              <span class="mc-icon"><i class="ti ti-clock-exclamation" aria-hidden="true"></i></span>
+              <span class="mc-icon">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon-clock-exclamation" width="16" height="16" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                  <path d="M20.986 12.51a9 9 0 1 0 -5.71 7.873" class="clock-body-path" />
+                  <path d="M12 7v5l3 3" class="clock-hands-path" />
+                  <path d="M19 16v3" class="exclamation-body-path" />
+                  <path d="M19 22v.01" class="exclamation-dot-path" />
+                </svg>
+              </span>
             </div>
             <div class="value" id="metric-delayed">0</div>
             <div class="delta"><i class="ti ti-arrow-up-right" aria-hidden="true"></i>+18 since 9am</div>
