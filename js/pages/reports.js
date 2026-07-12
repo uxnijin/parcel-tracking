@@ -11,7 +11,10 @@ function cssVar(name) {
 function setupCanvas(canvas) {
   const ratio = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
-  const cssHeight = parseInt(canvas.getAttribute("height"), 10) || 200;
+  if (!canvas.dataset.origHeight) {
+    canvas.dataset.origHeight = canvas.getAttribute("height") || "200";
+  }
+  const cssHeight = parseInt(canvas.dataset.origHeight, 10);
   canvas.width = rect.width * ratio;
   canvas.height = cssHeight * ratio;
   canvas.style.height = cssHeight + "px";
