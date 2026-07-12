@@ -450,7 +450,7 @@
                 <p class="text-secondary mb-4" style="font-size: var(--fs-footnote); line-height: 1.5; margin-top:8px;">
                   Your next renewal is on August 12, 2026.
                 </p>
-                <button class="btn-primary btn-sm">Upgrade Plan</button>
+                <button class="btn-primary btn-sm" onclick="openDrawer('upgrade-plan-modal')">Upgrade Plan</button>
               </div>
 
               <div class="card" style="margin-top: var(--sp-4);">
@@ -812,6 +812,93 @@
             <button type="submit" class="btn-primary">Save Changes</button>
           </div>
         </form>
+      </aside>
+    </div>
+
+    <div class="drawer-scrim scrim-center" id="upgrade-plan-modal">
+      <aside class="drawer modal-center" role="dialog" aria-label="Upgrade Plan"
+        style="width: 860px; max-width: 95vw; padding: var(--sp-6);">
+        <div class="flex justify-between items-center mb-4">
+          <h2 style="font-size: 16px; margin: 0;">Upgrade Plan</h2>
+          <button class="icon-btn" aria-label="Close" onclick="closeDrawer('upgrade-plan-modal')"><i class="ti ti-x"
+              aria-hidden="true"></i></button>
+        </div>
+        
+        <div class="pricing-grid">
+          <!-- Free Plan -->
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-title-row">
+                <span class="pricing-name" style="font-size:18px; font-weight:600;">Free</span>
+                <span class="pricing-badge current">Current</span>
+              </div>
+              <p class="pricing-desc">For keeping an eye on a few packages.</p>
+            </div>
+            <div class="pricing-price-box">
+              <span class="pricing-price">$0</span>
+            </div>
+            <div class="pricing-billing-info">Free forever</div>
+            
+            <button class="pricing-btn" disabled>Current plan</button>
+            
+            <ul class="pricing-features">
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Up to 50 shipments / month</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>1 connected inbox</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Auto-detect from email</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>3,000+ carriers</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Email & push notifications</span></li>
+            </ul>
+          </div>
+          
+          <!-- Pro Plan -->
+          <div class="pricing-card popular">
+            <div class="pricing-header">
+              <div class="pricing-title-row">
+                <span class="pricing-name" style="font-size:18px; font-weight:600;">Pro</span>
+              </div>
+              <p class="pricing-desc">For people who order all the time.</p>
+            </div>
+            <div class="pricing-price-box">
+              <span class="pricing-price">$7</span>
+              <span class="pricing-period">/ mo</span>
+            </div>
+            <div class="pricing-billing-info">Billed annually ($84/yr)</div>
+            
+            <button class="pricing-btn btn-primary-plan" onclick="toast('Plan upgraded to Pro!')">Upgrade to Pro</button>
+            
+            <ul class="pricing-features">
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Everything in Free</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Unlimited shipments</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Unlimited inboxes & stores</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>SMS delivery alerts</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Priority inbox scanning</span></li>
+            </ul>
+          </div>
+          
+          <!-- Business Plan -->
+          <div class="pricing-card">
+            <div class="pricing-header">
+              <div class="pricing-title-row">
+                <span class="pricing-name" style="font-size:18px; font-weight:600;">Business</span>
+              </div>
+              <p class="pricing-desc">For teams tracking together.</p>
+            </div>
+            <div class="pricing-price-box">
+              <span class="pricing-price">$24</span>
+              <span class="pricing-period">/ mo</span>
+            </div>
+            <div class="pricing-billing-info">Billed annually ($288/yr)</div>
+            
+            <button class="pricing-btn" onclick="toast('Plan upgraded to Business!')">Choose Business</button>
+            
+            <ul class="pricing-features">
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Everything in Pro</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Up to 10 team members</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>Shared workspace</span></li>
+              <li><i class="ti ti-check" aria-hidden="true"></i> <span>API access</span></li>
+            </ul>
+          </div>
+        </div>
       </aside>
     </div>
 
