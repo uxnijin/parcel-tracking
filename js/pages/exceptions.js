@@ -2,7 +2,7 @@
    Exceptions queue page
    ========================================================================== */
 
-const excState = { search: "", severity: "" };
+const excState = { search: "", severities: new Set() };
 let currentException = null;
 
 function sevLabel(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
@@ -10,7 +10,7 @@ function sevLabel(s) { return s.charAt(0).toUpperCase() + s.slice(1); }
 function getFilteredExceptions() {
   const q = excState.search.trim().toLowerCase();
   return ALL_EXCEPTIONS.filter((e) => {
-    if (excState.severity && e.severity !== excState.severity) return false;
+    if (excState.severities.size > 0 && !excState.severities.has(e.severity)) return false;
     if (q && !(e.tracking.toLowerCase().includes(q) || e.customer.toLowerCase().includes(q) || e.title.toLowerCase().includes(q))) return false;
     return true;
   });
@@ -109,7 +109,39 @@ function resolveException() {
 }
 
 document.getElementById("exc-search").addEventListener("input", debounce((e) => { excState.search = e.target.value; renderExceptions(); }, 200));
-document.getElementById("exc-severity").addEventListener("change", (e) => { excState.severity = e.target.value; renderExceptions(); });
+
+// Dropdown toggle logic
+const btnSeverity = document.getElementById("btn-filter-severity");
+const menuSeverity = document.getElementById("menu-filter-severity");
+if (btnSeverity && menuSeverity) {
+  btnSeverity.addEventListener("click", (e) => {
+    e.stopPropagation();
+    menuSeverity.classList.toggle("open");
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!menuSeverity.contains(e.target) && e.target !== btnSeverity) {
+      menuSeverity.classList.remove("open");
+    }
+  });
+
+  const checkboxes = menuSeverity.querySelectorAll("input[type='checkbox']");
+  checkboxes.forEach((cb) => {
+    cb.addEventListener("change", () => {
+      const checked = Array.from(checkboxes).filter(c => c.checked).map(c => c.value);
+      excState.severities = new Set(checked);
+      
+      if (checked.length === 0) {
+        btnSeverity.textContent = "All severities";
+      } else if (checked.length === 1) {
+        btnSeverity.textContent = checked[0].charAt(0).toUpperCase() + checked[0].slice(1);
+      } else {
+        btnSeverity.textContent = `${checked.length} severities`;
+      }
+      renderExceptions();
+    });
+  });
+}
 
 const assignSelect = document.getElementById("exc-assign");
 if (assignSelect) {

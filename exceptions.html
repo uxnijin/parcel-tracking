@@ -96,12 +96,27 @@
         <div class="table-toolbar">
           <div class="filter-row">
             <input type="text" id="exc-search" placeholder="Search" />
-            <select id="exc-severity">
-              <option value="">All severities</option>
-              <option value="high">High</option>
-              <option value="medium">Medium</option>
-              <option value="low">Low</option>
-            </select>
+            <div style="position: relative;">
+              <button class="select-btn" id="btn-filter-severity" type="button" aria-haspopup="true"
+                aria-expanded="false">
+                All severities
+              </button>
+              <div class="menu" id="menu-filter-severity"
+                style="left: 0; top: 100%; margin-top: 4px; min-width: 150px; padding: var(--sp-2);">
+                <label class="menu-item"
+                  style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                  <input type="checkbox" value="high" /> High
+                </label>
+                <label class="menu-item"
+                  style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                  <input type="checkbox" value="medium" /> Medium
+                </label>
+                <label class="menu-item"
+                  style="cursor: pointer; display: flex; align-items: center; gap: 8px; margin: 0; font-weight: normal;">
+                  <input type="checkbox" value="low" /> Low
+                </label>
+              </div>
+            </div>
           </div>
         </div>
         <table>
