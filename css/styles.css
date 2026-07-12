@@ -316,6 +316,33 @@ button {
   transition: width 0.3s ease;
 }
 
+.user-chip-upgrade-btn {
+  margin-top: var(--sp-2);
+  width: 100%;
+  padding: var(--sp-1-5) var(--sp-2);
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--on-primary);
+  background: var(--fill-primary);
+  border: 1px solid var(--fill-primary);
+  border-radius: var(--radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+.user-chip-upgrade-btn:hover {
+  background: var(--fill-primary-hover);
+  border-color: var(--fill-primary-hover);
+}
+
+.user-chip-upgrade-btn:active {
+  transform: scale(0.98);
+}
+
 /* Account Dropdown Popover */
 .account-popover {
   position: absolute;

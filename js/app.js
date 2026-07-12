@@ -813,6 +813,9 @@ function initUserChip() {
       <div class="user-chip-progress-bg">
         <div class="user-chip-progress-bar" style="width: 50%;"></div>
       </div>
+      <button class="user-chip-upgrade-btn" onclick="event.stopPropagation(); if (typeof openDrawer === 'function' && document.getElementById('upgrade-plan-modal')) { openDrawer('upgrade-plan-modal'); } else { window.location.href = 'settings.html?panel=billing&upgrade=true'; }">
+        <i class="ti ti-arrow-up-right" style="font-size: 11px; margin-right: 4px;"></i>Upgrade Plan
+      </button>
     </div>
   `;
 

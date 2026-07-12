@@ -270,6 +270,9 @@ function handleUrlPanel() {
         targetPanel.classList.add("active");
         if (panel === "billing") {
           animateBillingUsage();
+          if (params.get("upgrade") === "true" && typeof openDrawer === "function" && document.getElementById("upgrade-plan-modal")) {
+            openDrawer("upgrade-plan-modal");
+          }
         }
       }
     }
