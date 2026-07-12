@@ -420,13 +420,19 @@
                   </div>
                 </div>
                 <div class="field">
-                  <label for="w-carrier">Default carrier</label>
-                  <select id="w-carrier" style="width:100%;">
-                    <option selected>FedEx</option>
-                    <option>UPS</option>
-                    <option>DHL</option>
-                    <option>USPS</option>
-                  </select>
+                  <label>Default carrier</label>
+                  <div style="position: relative;">
+                    <button class="select-btn" id="btn-w-carrier" type="button" aria-haspopup="true" aria-expanded="false" style="width: 100%;">
+                      FedEx
+                    </button>
+                    <div class="menu" id="menu-w-carrier" style="left: 0; top: 100%; margin-top: 4px; width: 100%; padding: var(--sp-2);">
+                      <div class="menu-item" data-value="FedEx">FedEx</div>
+                      <div class="menu-item" data-value="UPS">UPS</div>
+                      <div class="menu-item" data-value="DHL">DHL</div>
+                      <div class="menu-item" data-value="USPS">USPS</div>
+                    </div>
+                  </div>
+                  <input type="hidden" id="w-carrier" value="FedEx" />
                 </div>
                 <div class="save-row">
                   <button class="btn-primary" onclick="simulateSave('workspace')">Save changes</button>
@@ -559,12 +565,18 @@
                 <div id="gmail-config"
                   style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
                   <div class="field" style="margin-bottom: var(--sp-4)">
-                    <label for="gmail-scope" style="font-weight:500">Sync scope</label>
-                    <select id="gmail-scope" style="width: 100%">
-                      <option value="inbox">Inbox messages only</option>
-                      <option value="all">Inbox and Archived folders</option>
-                      <option value="label">Only messages labeled "Orders"</option>
-                    </select>
+                    <label style="font-weight:500">Sync scope</label>
+                    <div style="position: relative;">
+                      <button class="select-btn" id="btn-gmail-scope" type="button" aria-haspopup="true" aria-expanded="false" style="width: 100%;">
+                        Inbox messages only
+                      </button>
+                      <div class="menu" id="menu-gmail-scope" style="left: 0; top: 100%; margin-top: 4px; width: 100%; padding: var(--sp-2);">
+                        <div class="menu-item" data-value="inbox">Inbox messages only</div>
+                        <div class="menu-item" data-value="all">Inbox and Archived folders</div>
+                        <div class="menu-item" data-value="label">Only messages labeled "Orders"</div>
+                      </div>
+                    </div>
+                    <input type="hidden" id="gmail-scope" value="inbox" />
                   </div>
                   <div class="field" style="margin-bottom: 0">
                     <label style="font-weight:500; margin-bottom: 8px">AI Parsing Filters</label>

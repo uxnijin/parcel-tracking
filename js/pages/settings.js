@@ -339,3 +339,36 @@ window.searchHelp = searchHelp;
 window.submitSupportTicket = submitSupportTicket;
 window.submitPaymentEdit = submitPaymentEdit;
 
+function setupSettingsDropdowns() {
+  const setupSingleSelect = (btnId, menuId, inputId) => {
+    const btn = document.getElementById(btnId);
+    const menu = document.getElementById(menuId);
+    const input = document.getElementById(inputId);
+    if (!btn || !menu || !input || btn.dataset.initialized === "true") return;
+
+    btn.dataset.initialized = "true";
+
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      document.querySelectorAll(".menu").forEach((m) => {
+        if (m !== menu) m.classList.remove("open");
+      });
+      menu.classList.toggle("open");
+    });
+
+    menu.querySelectorAll(".menu-item").forEach((item) => {
+      item.addEventListener("click", () => {
+        const val = item.dataset.value;
+        input.value = val;
+        btn.textContent = item.textContent.trim();
+        menu.classList.remove("open");
+      });
+    });
+  };
+
+  setupSingleSelect("btn-w-carrier", "menu-w-carrier", "w-carrier");
+  setupSingleSelect("btn-gmail-scope", "menu-gmail-scope", "gmail-scope");
+}
+
+document.addEventListener("DOMContentLoaded", setupSettingsDropdowns);
+
