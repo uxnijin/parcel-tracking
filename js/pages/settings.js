@@ -202,7 +202,10 @@ window.submitInvite = submitInvite;
 
 function handleUrlPanel() {
   const params = new URLSearchParams(window.location.search);
-  const panel = params.get("panel");
+  let panel = params.get("panel");
+  if (panel === "usage") {
+    panel = "billing";
+  }
   if (panel) {
     const navItem = document.querySelector(`.settings-nav .item[data-panel="${panel}"]`);
     if (navItem) {

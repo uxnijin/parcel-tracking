@@ -769,7 +769,7 @@ function initUserChip() {
     <a href="settings.html?panel=billing" class="account-popover-item">
       <i class="ti ti-credit-card"></i> Billing & Plans
     </a>
-    <a href="settings.html?panel=usage" class="account-popover-item">
+    <a href="settings.html?panel=billing" class="account-popover-item">
       <i class="ti ti-chart-pie"></i> Usage
     </a>
     <a href="settings.html?panel=notifications" class="account-popover-item">
