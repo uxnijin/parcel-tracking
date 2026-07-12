@@ -345,6 +345,9 @@ button i { font-size: 15px; }
 
 .btn-sm { height: 28px; padding: 0 var(--sp-2); font-size: var(--fs-caption); }
 #btn-prev-top, #btn-next-top, #btn-prev, #btn-next { height: 32px; }
+#btn-prev-top i, #btn-prev i, #btn-next-top i, #btn-next i { display: inline-block; transition: transform var(--dur-fast) var(--ease-out); }
+#btn-prev-top:hover i, #btn-prev:hover i { transform: translateX(-4px); }
+#btn-next-top:hover i, #btn-next:hover i { transform: translateX(4px); }
 .btn-ghost { border-color: transparent; background: transparent; }
 .btn-ghost:hover { background: var(--surface-2); }
 
