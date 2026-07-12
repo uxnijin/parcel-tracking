@@ -281,7 +281,7 @@ button { font-family: inherit; }
 }
 .topbar-actions { display: flex; align-items: center; gap: var(--sp-2); flex: 0 1 auto; min-width: 0; }
 .icon-btn {
-  width: 34px; height: 34px;
+  width: 36px; height: 36px;
   display: flex; align-items: center; justify-content: center;
   border-radius: var(--radius);
   color: var(--text-secondary);
@@ -302,6 +302,20 @@ button { font-family: inherit; }
 }
 .icon-btn:hover .ti-settings {
   transform: rotate(90deg);
+}
+.icon-btn .ti-bell {
+  transform-origin: top center;
+}
+.icon-btn:hover .ti-bell {
+  animation: pendulum-swing 0.8s ease-in-out;
+}
+@keyframes pendulum-swing {
+  0% { transform: rotate(0deg); }
+  20% { transform: rotate(15deg); }
+  40% { transform: rotate(-12deg); }
+  60% { transform: rotate(9deg); }
+  80% { transform: rotate(-6deg); }
+  100% { transform: rotate(0deg); }
 }
 
 
