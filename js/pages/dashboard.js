@@ -499,13 +499,16 @@ function renderSavedViews() {
   // Render Custom Views
   customViews.forEach(view => {
     html += `
-      <div class="saved-view-item" data-view-id="${view.id}">
-        <a class="nav-item ${state.activeViewId === view.id ? 'active' : ''}" href="#" onclick="applySavedView(event, '${view.id}')">
-          <i class="ti ti-star" aria-hidden="true"></i>${escapeHtml(view.name)}
-        </a>
-        <button class="btn-delete-view" onclick="deleteSavedView(event, '${view.id}')" title="Delete view">
-          <i class="ti ti-trash"></i>
-        </button>
+      <div class="saved-view-item" data-view-id="${view.id}" style="display: flex; flex-direction: column; align-items: stretch; width: 100%; position: relative;">
+        <div style="display: flex; align-items: center; width: 100%; position: relative;">
+          <a class="nav-item ${state.activeViewId === view.id ? 'active' : ''}" href="#" onclick="applySavedView(event, '${view.id}')" style="flex-grow: 1;">
+            <i class="ti ti-star" aria-hidden="true"></i>${escapeHtml(view.name)}
+          </a>
+          <button class="btn-delete-view" onclick="deleteSavedView(event, '${view.id}')" title="Delete view">
+            <i class="ti ti-trash"></i>
+          </button>
+        </div>
+        <div class="delete-confirm-container" style="display: none; padding: 0 var(--sp-2) var(--sp-2) var(--sp-2);"></div>
       </div>
     `;
   });
@@ -683,19 +686,22 @@ function deleteSavedView(e, viewId) {
   const itemEl = document.querySelector(`.saved-view-item[data-view-id="${viewId}"]`);
   if (!itemEl) return;
 
+  const container = itemEl.querySelector('.delete-confirm-container');
+  if (!container) return;
+
   const customViews = getCustomViews();
   const customView = customViews.find(v => v.id === viewId);
   if (!customView) return;
 
-  // Render inline deletion UI within the sidebar item, increasing height and adding confirmation buttons
-  itemEl.style.height = "auto";
-  itemEl.innerHTML = `
+  // Render stacked delete and cancel buttons inline under the active nav-item, with hover-styled class names
+  container.innerHTML = `
     <div class="saved-view-delete-confirm" style="display: flex; flex-direction: column; gap: 8px; padding: 12px 10px; width: 100%; border-radius: var(--radius); background: var(--surface-2); border: 0.5px solid var(--border); box-sizing: border-box; margin: 4px 0;">
-      <div style="font-size: 11px; font-weight: 500; color: var(--text-secondary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; margin-bottom: 2px;">Delete "${escapeHtml(customView.name)}"?</div>
-      <button onclick="confirmDeleteSavedView(event, '${viewId}')" class="btn-danger" style="width: 100%; padding: 6px; font-size: 11px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: none; cursor: pointer; font-weight: 500;">Delete</button>
-      <button onclick="cancelDeleteSavedView(event, '${viewId}')" class="btn-ghost" style="width: 100%; padding: 6px; font-size: 11px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: 0.5px solid var(--border); cursor: pointer; color: var(--text-secondary); background: transparent;">Cancel</button>
+      <div style="font-size: 11px; font-weight: 500; color: var(--text-secondary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap; margin-bottom: 2px;">Delete this view?</div>
+      <button onclick="confirmDeleteSavedView(event, '${viewId}')" class="btn-delete-confirm-action" style="width: 100%; padding: 6px; font-size: 11px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: none; cursor: pointer; background: var(--border-danger); color: white; font-weight: 600; transition: background 0.15s, transform 0.1s;">Delete</button>
+      <button onclick="cancelDeleteSavedView(event, '${viewId}')" class="btn-cancel-confirm-action" style="width: 100%; padding: 6px; font-size: 11px; height: 28px; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: 0.5px solid var(--border); cursor: pointer; color: var(--text-secondary); background: transparent; transition: background 0.15s, color 0.15s, border-color 0.15s;">Cancel</button>
     </div>
   `;
+  container.style.display = "block";
 }
 
 function confirmDeleteSavedView(e, viewId) {

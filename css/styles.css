@@ -2490,3 +2490,14 @@ tr.row-highlight {
     opacity: 1;
   }
 }
+
+/* Inline Confirm Buttons Hover Effects */
+.btn-delete-confirm-action:hover {
+  background: var(--text-danger) !important;
+}
+
+.btn-cancel-confirm-action:hover {
+  background: var(--surface-3) !important;
+  color: var(--text-primary) !important;
+  border-color: var(--border-focus) !important;
+}
