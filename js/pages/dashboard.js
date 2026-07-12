@@ -14,6 +14,7 @@ const state = {
   severities: new Set(),
   selected: new Set(),
   dateDay: null,
+  activeViewId: null,
 };
 
 /** Extracts the July day number from an eta string like "Jul 9". */
@@ -267,6 +268,16 @@ function updateClearButtonState() {
   if (btnClear) {
     btnClear.style.display = totalFilters > 0 ? "inline-flex" : "none";
   }
+  const btnSave = document.getElementById("btn-save-current-view");
+  if (btnSave) {
+    btnSave.style.display = totalFilters > 0 ? "inline-flex" : "none";
+  }
+  if (totalFilters === 0) {
+    const list = document.getElementById('saved-views-list');
+    if (list) {
+      list.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    }
+  }
 }
 
 /** Shows the "Jul N, 2026" chip in the filter toolbar when arriving from the calendar. */
@@ -371,6 +382,7 @@ document.getElementById("btn-clear-filters").addEventListener("click", () => {
   state.serviceLevels.clear();
   state.severities.clear();
   state.dateDay = null;
+  state.activeViewId = null;
   hideDateFilterChip();
   state.page = 1;
   document.getElementById("table-search").value = "";
@@ -394,7 +406,10 @@ document.getElementById("btn-clear-filters").addEventListener("click", () => {
     badge.textContent = "0";
   }
   document.getElementById("btn-clear-filters").style.display = "none";
+  const btnSave = document.getElementById("btn-save-current-view");
+  if (btnSave) btnSave.style.display = "none";
 
+  renderSavedViews();
   renderTable();
 });
 document.getElementById("btn-prev").addEventListener("click", () => { if (state.page > 1) { state.page--; renderTable(); } });
@@ -470,12 +485,12 @@ function renderSavedViews() {
   // Render Defaults
   html += `
     <div class="saved-view-item">
-      <a class="nav-item" href="#" onclick="applySavedView(event, 'delayed')">
+      <a class="nav-item ${state.activeViewId === 'delayed' ? 'active' : ''}" href="#" onclick="applySavedView(event, 'delayed')">
         <i class="ti ti-star" aria-hidden="true"></i>Delayed today
       </a>
     </div>
     <div class="saved-view-item">
-      <a class="nav-item" href="#" onclick="applySavedView(event, 'exceptions')">
+      <a class="nav-item ${state.activeViewId === 'exceptions' ? 'active' : ''}" href="#" onclick="applySavedView(event, 'exceptions')">
         <i class="ti ti-star" aria-hidden="true"></i>Open exceptions
       </a>
     </div>
@@ -485,7 +500,7 @@ function renderSavedViews() {
   customViews.forEach(view => {
     html += `
       <div class="saved-view-item" data-view-id="${view.id}">
-        <a class="nav-item" href="#" onclick="applySavedView(event, '${view.id}')">
+        <a class="nav-item ${state.activeViewId === view.id ? 'active' : ''}" href="#" onclick="applySavedView(event, '${view.id}')">
           <i class="ti ti-star" aria-hidden="true"></i>${escapeHtml(view.name)}
         </a>
         <button class="btn-delete-view" onclick="deleteSavedView(event, '${view.id}')" title="Delete view">
@@ -504,6 +519,22 @@ function escapeHtml(str) {
 
 function applySavedView(e, viewId) {
   if (e) e.preventDefault();
+  state.activeViewId = viewId;
+
+  // Highlight active view in sidebar
+  const list = document.getElementById('saved-views-list');
+  if (list) {
+    list.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    let activeLink = null;
+    if (e && e.currentTarget && e.currentTarget.classList.contains('nav-item')) {
+      activeLink = e.currentTarget;
+    } else {
+      activeLink = list.querySelector(`a[onclick*="'${viewId}'"]`);
+    }
+    if (activeLink) {
+      activeLink.classList.add('active');
+    }
+  }
   
   let filters = null;
   let viewName = "";
@@ -637,6 +668,7 @@ function submitSaveView() {
 
   customViews.push(newView);
   saveCustomViews(customViews);
+  state.activeViewId = newView.id;
   renderSavedViews();
   closeDrawer('save-view-modal');
   toast(`Saved view "${name}" created`);

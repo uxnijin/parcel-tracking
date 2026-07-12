@@ -39,12 +39,7 @@
             aria-hidden="true"></i>Settings</a>
       </nav>
       <nav class="nav-group" id="saved-views-container">
-        <div style="display: flex; align-items: center; justify-content: space-between; padding-right: var(--sp-2);">
-          <span class="nav-label" style="margin-bottom: 0;">Saved views</span>
-          <button id="btn-add-saved-view" title="Save current view" style="background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 2px; border-radius: 4px; transition: background 0.2s, color 0.2s;" onclick="openSaveViewModal(event)">
-            <i class="ti ti-plus" style="font-size: 14px;"></i>
-          </button>
-        </div>
+        <span class="nav-label">Saved views</span>
         <div id="saved-views-list" style="display: flex; flex-direction: column; gap: 1px; margin-top: var(--sp-1);">
           <!-- Dynamic saved views will render here -->
         </div>
@@ -283,6 +278,9 @@
               </span>
               <button class="btn-ghost" id="btn-clear-filters" style="display: none;"><i class="ti ti-x"
                   aria-hidden="true"></i>Clear</button>
+              <button class="btn-primary" id="btn-save-current-view" style="display: none; height: 32px; padding: 0 var(--sp-3); font-size: var(--fs-caption); gap: var(--sp-1); align-items: center;" onclick="openSaveViewModal(event)">
+                <i class="ti ti-star"></i>Save as view
+              </button>
             </div>
             <div class="flex items-center gap-3">
               <div class="flex items-center gap-2 text-secondary" style="font-size: var(--fs-caption);">
