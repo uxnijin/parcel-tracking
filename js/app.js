@@ -3,7 +3,7 @@
    ========================================================================== */
 
 // Theme Management
-(function() {
+(function () {
   const savedTheme = localStorage.getItem("sf_theme") || "system";
   applyTheme(savedTheme);
 })();
@@ -455,7 +455,7 @@ window.addEventListener("sf-data-updated", () => {
 function initGmailBanner() {
   const card = document.getElementById("dashboard-gmail-card");
   if (!card) return;
-  
+
   const connected = typeof isGmailConnected !== "undefined" && isGmailConnected();
   if (connected) {
     card.style.display = "none";
@@ -536,7 +536,7 @@ function searchShipments(rawQuery) {
     else if (trackNs.includes(qns)) score = 2;
     else {
       const fields = [s.customer, s.orderId, s.destination, s.origin, s.carrier,
-        s.status, s.email, s.id, s.serviceLevel, s.exceptionId, s.title];
+      s.status, s.email, s.id, s.serviceLevel, s.exceptionId, s.title];
       if (fields.some((f) => f && lower(f).includes(q))) score = 3;
     }
     if (score !== -1) scored.push({ s, score });
@@ -691,7 +691,7 @@ function positionPopover(popover, btn) {
 function renderPopoverNotifications(popover) {
   const notifications = (typeof ALL_NOTIFICATIONS !== 'undefined') ? ALL_NOTIFICATIONS : [];
   const unreadCount = notifications.filter(n => !n.read).length;
-  
+
   // Show top 5 notifications
   const recent = notifications.slice(0, 5);
 
@@ -741,9 +741,6 @@ function initUserChip() {
   const userChip = document.querySelector(".user-chip");
   if (!userChip) return;
 
-  const roleEl = userChip.querySelector(".role");
-  if (roleEl) roleEl.remove();
-
   const currentContent = userChip.innerHTML;
   userChip.innerHTML = `
     <div class="user-chip-header">
@@ -759,6 +756,54 @@ function initUserChip() {
       </div>
     </div>
   `;
+
+  const metricsSpan = userChip.querySelector(".user-chip-usage-metrics");
+  const progressBar = userChip.querySelector(".user-chip-progress-bar");
+
+  if (metricsSpan && progressBar) {
+    const metricsText = metricsSpan.textContent;
+    const match = metricsText.match(/(\d+)\s*\/\s*(\d+)\s*(.*)/);
+    if (match) {
+      const targetVal = parseInt(match[1], 10);
+      const maxVal = parseInt(match[2], 10);
+      const suffix = match[3] || "Tracks";
+      const targetPercent = maxVal > 0 ? (targetVal / maxVal) * 100 : 50;
+
+      let animFrameId = null;
+      let startTimestamp = null;
+      const duration = 600; // 600ms transition
+
+      function animate(timestamp) {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const easeProgress = progress * (2 - progress); // easeOutQuad
+        
+        const currentVal = Math.floor(easeProgress * targetVal);
+        const currentPercent = easeProgress * targetPercent;
+        
+        progressBar.style.width = `${currentPercent}%`;
+        metricsSpan.textContent = `${currentVal} / ${maxVal} ${suffix}`;
+        
+        if (progress < 1) {
+          animFrameId = requestAnimationFrame(animate);
+        }
+      }
+
+      userChip.addEventListener("mouseenter", () => {
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        startTimestamp = null;
+        progressBar.style.transition = "none";
+        animFrameId = requestAnimationFrame(animate);
+      });
+
+      userChip.addEventListener("mouseleave", () => {
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        progressBar.style.transition = "width 0.3s ease";
+        progressBar.style.width = `${targetPercent}%`;
+        metricsSpan.textContent = metricsText;
+      });
+    }
+  }
 
   const popover = document.createElement("div");
   popover.className = "account-popover";
@@ -866,7 +911,7 @@ function initProfilePopover() {
   function togglePopover(e) {
     e.stopPropagation();
     const isVisible = popover.style.display === "flex";
-    
+
     const notifPopover = document.getElementById("global-notification-popover");
     if (notifPopover) notifPopover.style.display = "none";
 
