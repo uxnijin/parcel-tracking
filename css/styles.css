@@ -1238,7 +1238,8 @@ tbody tr.selected {
 /* ---------- Tabs ---------- */
 .tabs {
   position: sticky;
-  top: var(--topbar-h);
+  top: -24px;
+  padding-top: 24px;
   background: var(--surface-0);
   z-index: 10;
   display: flex;
@@ -1493,6 +1494,7 @@ tbody tr.selected {
     padding-bottom: 10px;
     margin-bottom: 0;
   }
+
   40% {
     opacity: 0;
     transform: translateX(120%);
@@ -1502,6 +1504,7 @@ tbody tr.selected {
     padding-bottom: 10px;
     margin-bottom: 0;
   }
+
   100% {
     opacity: 0;
     transform: translateX(120%);

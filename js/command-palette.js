@@ -10,7 +10,7 @@
     { label: "Inbox Scan", href: "inbox.html", icon: "ti-mail" },
     { label: "Calendar", href: "calendar.html", icon: "ti-calendar" },
     { label: "Notifications", href: "notifications.html", icon: "ti-bell" },
-    { label: "Import shipments", href: "import.html", icon: "ti-upload" },
+    { label: "Import shipments", href: "import.html", icon: "ti-download" },
     { label: "Reports", href: "reports.html", icon: "ti-chart-bar" },
     { label: "Settings", href: "settings.html", icon: "ti-settings" },
   ];

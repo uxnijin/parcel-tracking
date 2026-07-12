@@ -1,259 +1,359 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Notifications — ShipFlow</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
-<link rel="stylesheet" href="css/tokens.css" />
-<link rel="stylesheet" href="css/styles.css" />
-<style>
-  .notif-list { max-width: none; overflow: hidden; }
-  .notif-row {
-    display: flex; gap: var(--sp-3);
-    padding: var(--sp-3);
-    border-bottom: 0.5px solid var(--border);
-    cursor: pointer;
-    transition: background var(--dur-fast) var(--ease-out);
-  }
-  .notif-row:hover { background: var(--surface-2); }
-  .notif-row:last-child { border-bottom: none; }
-  .notif-row.unread { background: var(--surface-1); }
-  .notif-row.unread::after { content:""; }
-  .notif-icon {
-    width: 32px; height: 32px; border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    flex-shrink: 0; font-size: 16px;
-  }
-  .notif-icon.danger { background: var(--bg-danger); color: var(--text-danger); }
-  .notif-icon.success { background: var(--bg-success); color: var(--text-success); }
-  .notif-icon.warning { background: var(--bg-warning); color: var(--text-warning); }
-  .notif-icon.neutral { background: var(--bg-neutral); color: var(--text-neutral); }
-  .notif-body { flex: 1; min-width: 0; }
-  .notif-title { font-size: 13px; font-weight: 500; display: flex; align-items: center; gap: 6px; }
-  .notif-title .unread-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-primary); flex-shrink: 0; }
-  .notif-text { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
-  .notif-time { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-  .notif-container {
-    display: grid;
-    grid-template-columns: 1fr 300px;
-    gap: var(--sp-4);
-    align-items: start;
-    margin-top: var(--sp-4);
-  }
-  @media (max-width: 900px) {
-    .notif-container {
-      grid-template-columns: 1fr;
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Notifications — ShipFlow</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .notif-list {
+      max-width: none;
+      overflow: hidden;
     }
-  }
-  .notif-sidebar {
-    position: sticky;
-    top: var(--topbar-h);
-  }
-  .showcase-card {
-    background: var(--surface-1);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    padding: var(--sp-4);
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-4);
-  }
-  .showcase-header h2 {
-    font-size: 14px;
-    font-weight: 600;
-    margin: 0;
-  }
-  .showcase-header p {
-    font-size: 12px;
-    color: var(--text-secondary);
-    margin: 4px 0 0 0;
-    line-height: 1.4;
-  }
-  .showcase-list {
-    display: flex;
-    flex-direction: column;
-    gap: var(--sp-3);
-  }
-  .showcase-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--sp-2);
-    padding-bottom: var(--sp-3);
-    border-bottom: 0.5px solid var(--border);
-  }
-  .showcase-item:last-child {
-    border-bottom: none;
-    padding-bottom: 0;
-  }
-  .showcase-item-left {
-    display: flex;
-    align-items: center;
-    gap: var(--sp-2);
-    min-width: 0;
-  }
-  .showcase-card-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: var(--radius);
-    background: var(--surface-2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    color: var(--text-primary);
-    flex-shrink: 0;
-  }
-  .showcase-item-text {
-    min-width: 0;
-  }
-  .showcase-card-title {
-    font-size: 13px;
-    font-weight: 500;
-    margin: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .showcase-card-desc {
-    font-size: 11px;
-    color: var(--text-muted);
-    margin: 2px 0 0 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .showcase-card-action {
-    flex-shrink: 0;
-  }
-</style>
+
+    .notif-row {
+      display: flex;
+      gap: var(--sp-3);
+      padding: var(--sp-3);
+      border-bottom: 0.5px solid var(--border);
+      cursor: pointer;
+      transition: background var(--dur-fast) var(--ease-out);
+    }
+
+    .notif-row:hover {
+      background: var(--surface-2);
+    }
+
+    .notif-row:last-child {
+      border-bottom: none;
+    }
+
+    .notif-row.unread {
+      background: var(--surface-1);
+    }
+
+    .notif-row.unread::after {
+      content: "";
+    }
+
+    .notif-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      font-size: 16px;
+    }
+
+    .notif-icon.danger {
+      background: var(--bg-danger);
+      color: var(--text-danger);
+    }
+
+    .notif-icon.success {
+      background: var(--bg-success);
+      color: var(--text-success);
+    }
+
+    .notif-icon.warning {
+      background: var(--bg-warning);
+      color: var(--text-warning);
+    }
+
+    .notif-icon.neutral {
+      background: var(--bg-neutral);
+      color: var(--text-neutral);
+    }
+
+    .notif-body {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .notif-title {
+      font-size: 13px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .notif-title .unread-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--text-primary);
+      flex-shrink: 0;
+    }
+
+    .notif-text {
+      font-size: 13px;
+      color: var(--text-secondary);
+      margin-top: 2px;
+    }
+
+    .notif-time {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .notif-container {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: var(--sp-4);
+      align-items: start;
+      margin-top: var(--sp-4);
+    }
+
+    @media (max-width: 900px) {
+      .notif-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .notif-sidebar {
+      position: sticky;
+      top: var(--sp-4);
+    }
+
+    .showcase-card {
+      background: var(--surface-1);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: var(--sp-4);
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-4);
+    }
+
+    .showcase-header h2 {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .showcase-header p {
+      font-size: 12px;
+      color: var(--text-secondary);
+      margin: 4px 0 0 0;
+      line-height: 1.4;
+    }
+
+    .showcase-list {
+      display: flex;
+      flex-direction: column;
+      gap: var(--sp-3);
+    }
+
+    .showcase-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--sp-2);
+      padding-bottom: var(--sp-3);
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .showcase-item:last-child {
+      border-bottom: none;
+      padding-bottom: 0;
+    }
+
+    .showcase-item-left {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-2);
+      min-width: 0;
+    }
+
+    .showcase-card-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius);
+      background: var(--surface-2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: var(--text-primary);
+      flex-shrink: 0;
+    }
+
+    .showcase-item-text {
+      min-width: 0;
+    }
+
+    .showcase-card-title {
+      font-size: 13px;
+      font-weight: 500;
+      margin: 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .showcase-card-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin: 2px 0 0 0;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+
+    .showcase-card-action {
+      flex-shrink: 0;
+    }
+  </style>
 </head>
+
 <body data-page="notifications">
 
-<div class="app-shell">
-  <aside class="sidebar">
-    <a href="index.html" class="sidebar-brand">ShipFlow</a>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a href="index.html" class="sidebar-brand">ShipFlow</a>
       <button class="sidebar-search" onclick="openCommandPalette()" aria-label="Search shipments, customers, or pages">
         <i class="ti ti-search" aria-hidden="true"></i>
         <span>Search…</span>
       </button>
-    <nav class="nav-group">
-      <span class="nav-label">Workspace</span>
-      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">—</span></a>
-      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">—</span></a>
-      <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox Scan<span class="count" style="display:none"></span></a>
-      <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i>Calendar</a>
-      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">—</span></a>
-      <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload" aria-hidden="true"></i>Import</a>
-      <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar" aria-hidden="true"></i>Reports</a>
-      <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i>Settings</a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="avatar">JD</div>
-        <div><div class="who">Jordan Diaz</div><div class="role">Operations</div></div>
-      </div>
-    </div>
-  </aside>
-
-  <div class="main">
-    <header class="topbar">
-      <div class="topbar-lead">
-        <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
-        <h1>Notifications</h1>
-      </div>
-      <div class="topbar-actions">
-        <button id="btn-mark-all"><i class="ti ti-checks" aria-hidden="true"></i>Mark all as read</button>
-        <div class="topbar-divider"></div>
-        <div class="topbar-track">
-        <i class="ti ti-search" aria-hidden="true"></i>
-        <input type="text" id="tracking-search" placeholder="Track a shipment…" autocomplete="off" aria-label="Search shipments by tracking, customer, or destination" />
-      </div>
-        <button class="icon-btn" aria-label="Notifications"><i class="ti ti-bell" aria-hidden="true"></i></button>
-        <button class="icon-btn" aria-label="Settings" onclick="location.href='settings.html'"><i class="ti ti-settings" aria-hidden="true"></i></button>
-        <div class="avatar">JD</div>
-      </div>
-    </header>
-
-    <main class="content">
-
-      <div class="tabs" role="tablist">
-        <div class="tab active" data-filter="all" role="tab">All</div>
-        <div class="tab" data-filter="unread" role="tab">Unread</div>
-        <div class="tab" data-filter="exceptions" role="tab">Exceptions</div>
-        <div class="tab" data-filter="alerts" role="tab">Alerts & Delays</div>
-        <div class="tab" data-filter="deliveries" role="tab">Deliveries</div>
-      </div>
-
-      <div class="notif-container">
-        <div class="notif-main">
-          <div class="notif-list card" style="padding:0" id="notif-list"></div>
-          <div class="empty-state" id="notif-empty" style="display:none">
-            <i class="ti ti-bell-off" aria-hidden="true"></i>
-            <h3>You're all caught up</h3>
-            <p>No unread notifications right now.</p>
+      <nav class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package"
+            aria-hidden="true"></i>Shipments<span class="count">—</span></a>
+        <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle"
+            aria-hidden="true"></i>Exceptions<span class="count">—</span></a>
+        <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox
+          Scan<span class="count" style="display:none"></span></a>
+        <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar"
+            aria-hidden="true"></i>Calendar</a>
+        <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell"
+            aria-hidden="true"></i>Notifications<span class="count">—</span></a>
+        <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-download"
+            aria-hidden="true"></i>Import</a>
+        <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar"
+            aria-hidden="true"></i>Reports</a>
+        <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings"
+            aria-hidden="true"></i>Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="avatar">JD</div>
+          <div>
+            <div class="who">Jordan Diaz</div>
+            <div class="role">Operations</div>
           </div>
         </div>
+      </div>
+    </aside>
 
-        <aside class="notif-sidebar">
-          <div class="showcase-card">
-            <div class="showcase-header">
-              <h2>Track everywhere</h2>
-              <p>Get real-time updates on all your devices and platforms.</p>
-            </div>
-            <div class="showcase-list">
-              <div class="showcase-item">
-                <div class="showcase-item-left">
-                  <div class="showcase-card-icon"><i class="ti ti-brand-chrome" aria-hidden="true"></i></div>
-                  <div class="showcase-item-text">
-                    <h3 class="showcase-card-title">Browser Extension</h3>
-                    <p class="showcase-card-desc">Browser Extension</p>
-                  </div>
-                </div>
-                <button class="btn-secondary btn-sm showcase-card-action">Get it</button>
-              </div>
-              <div class="showcase-item">
-                <div class="showcase-item-left">
-                  <div class="showcase-card-icon"><i class="ti ti-brand-apple" aria-hidden="true"></i></div>
-                  <div class="showcase-item-text">
-                    <h3 class="showcase-card-title">iOS App</h3>
-                    <p class="showcase-card-desc">iOS App</p>
-                  </div>
-                </div>
-                <button class="btn-secondary btn-sm showcase-card-action">Install</button>
-              </div>
-              <div class="showcase-item">
-                <div class="showcase-item-left">
-                  <div class="showcase-card-icon"><i class="ti ti-brand-android" aria-hidden="true"></i></div>
-                  <div class="showcase-item-text">
-                    <h3 class="showcase-card-title">Android App</h3>
-                    <p class="showcase-card-desc">Android App</p>
-                  </div>
-                </div>
-                <button class="btn-secondary btn-sm showcase-card-action">Install</button>
-              </div>
-              <div class="showcase-item">
-                <div class="showcase-item-left">
-                  <div class="showcase-card-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
-                  <div class="showcase-item-text">
-                    <h3 class="showcase-card-title">Email Notifications</h3>
-                    <p class="showcase-card-desc">Email Notifications</p>
-                  </div>
-                </div>
-                <button class="btn-primary btn-sm showcase-card-action" onclick="location.href='settings.html?panel=notifications'">Enable</button>
-              </div>
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-lead">
+          <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left"
+              aria-hidden="true"></i></a>
+          <h1>Notifications</h1>
+        </div>
+        <div class="topbar-actions">
+          <button id="btn-mark-all"><i class="ti ti-checks" aria-hidden="true"></i>Mark all as read</button>
+          <div class="topbar-divider"></div>
+          <div class="topbar-track">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <input type="text" id="tracking-search" placeholder="Track a shipment…" autocomplete="off"
+              aria-label="Search shipments by tracking, customer, or destination" />
+          </div>
+          <button class="icon-btn" aria-label="Notifications"><i class="ti ti-bell" aria-hidden="true"></i></button>
+          <button class="icon-btn" aria-label="Settings" onclick="location.href='settings.html'"><i
+              class="ti ti-settings" aria-hidden="true"></i></button>
+          <div class="avatar">JD</div>
+        </div>
+      </header>
+
+      <main class="content">
+
+        <div class="tabs" role="tablist">
+          <div class="tab active" data-filter="all" role="tab">All</div>
+          <div class="tab" data-filter="unread" role="tab">Unread</div>
+          <div class="tab" data-filter="exceptions" role="tab">Exceptions</div>
+          <div class="tab" data-filter="alerts" role="tab">Alerts & Delays</div>
+          <div class="tab" data-filter="deliveries" role="tab">Deliveries</div>
+        </div>
+
+        <div class="notif-container">
+          <div class="notif-main">
+            <div class="notif-list card" style="padding:0" id="notif-list"></div>
+            <div class="empty-state" id="notif-empty" style="display:none">
+              <i class="ti ti-bell-off" aria-hidden="true"></i>
+              <h3>You're all caught up</h3>
+              <p>No unread notifications right now.</p>
             </div>
           </div>
-        </aside>
-      </div>
-    </main>
-  </div>
-</div>
 
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
-<script src="js/command-palette.js"></script>
-<script src="js/pages/notifications.js"></script>
+          <aside class="notif-sidebar">
+            <div class="showcase-card">
+              <div class="showcase-header">
+                <h2>Track everywhere</h2>
+                <p>Get real-time updates on all your devices and platforms.</p>
+              </div>
+              <div class="showcase-list">
+                <div class="showcase-item">
+                  <div class="showcase-item-left">
+                    <div class="showcase-card-icon"><i class="ti ti-brand-chrome" aria-hidden="true"></i></div>
+                    <div class="showcase-item-text">
+                      <h3 class="showcase-card-title">Browser Extension</h3>
+                      <p class="showcase-card-desc">Browser Extension</p>
+                    </div>
+                  </div>
+                  <button class="btn-secondary btn-sm showcase-card-action">Get it</button>
+                </div>
+                <div class="showcase-item">
+                  <div class="showcase-item-left">
+                    <div class="showcase-card-icon"><i class="ti ti-brand-apple" aria-hidden="true"></i></div>
+                    <div class="showcase-item-text">
+                      <h3 class="showcase-card-title">iOS App</h3>
+                      <p class="showcase-card-desc">iOS App</p>
+                    </div>
+                  </div>
+                  <button class="btn-secondary btn-sm showcase-card-action">Install</button>
+                </div>
+                <div class="showcase-item">
+                  <div class="showcase-item-left">
+                    <div class="showcase-card-icon"><i class="ti ti-brand-android" aria-hidden="true"></i></div>
+                    <div class="showcase-item-text">
+                      <h3 class="showcase-card-title">Android App</h3>
+                      <p class="showcase-card-desc">Android App</p>
+                    </div>
+                  </div>
+                  <button class="btn-secondary btn-sm showcase-card-action">Install</button>
+                </div>
+                <div class="showcase-item">
+                  <div class="showcase-item-left">
+                    <div class="showcase-card-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
+                    <div class="showcase-item-text">
+                      <h3 class="showcase-card-title">Email Notifications</h3>
+                      <p class="showcase-card-desc">Email Notifications</p>
+                    </div>
+                  </div>
+                  <button class="btn-primary btn-sm showcase-card-action"
+                    onclick="location.href='settings.html?panel=notifications'">Enable</button>
+                </div>
+              </div>
+            </div>
+          </aside>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/app.js"></script>
+  <script src="js/command-palette.js"></script>
+  <script src="js/pages/notifications.js"></script>
 </body>
+
 </html>
