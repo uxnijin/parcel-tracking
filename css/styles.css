@@ -344,6 +344,7 @@ button i { font-size: 15px; }
 .btn-danger:hover { background: var(--bg-danger); }
 
 .btn-sm { height: 28px; padding: 0 var(--sp-2); font-size: var(--fs-caption); }
+#btn-prev-top, #btn-next-top, #btn-prev, #btn-next { height: 32px; }
 .btn-ghost { border-color: transparent; background: transparent; }
 .btn-ghost:hover { background: var(--surface-2); }
 
