@@ -805,22 +805,26 @@ function initUserChip() {
     <div class="user-chip-header">
       ${currentContent}
     </div>
-    <div class="user-chip-usage">
-      <div class="user-chip-usage-info">
-        <span class="user-chip-usage-plan">Starter Plan</span>
-        <span class="user-chip-usage-metrics">50 / 100 Tracks</span>
-      </div>
-      <div class="user-chip-progress-bg">
-        <div class="user-chip-progress-bar" style="width: 50%;"></div>
-      </div>
-      <button class="btn-primary user-chip-upgrade-btn" onclick="event.stopPropagation(); if (typeof openDrawer === 'function' && document.getElementById('upgrade-plan-modal')) { openDrawer('upgrade-plan-modal'); } else { window.location.href = 'settings.html?panel=billing&upgrade=true'; }">
-        <i class="ti ti-bolt" aria-hidden="true"></i>Upgrade Plan
-      </button>
-    </div>
   `;
 
-  const metricsSpan = userChip.querySelector(".user-chip-usage-metrics");
-  const progressBar = userChip.querySelector(".user-chip-progress-bar");
+  const usageCard = document.createElement("div");
+  usageCard.className = "user-chip-usage-card";
+  usageCard.innerHTML = `
+    <div class="user-chip-usage-info">
+      <span class="user-chip-usage-plan">Starter Plan</span>
+      <span class="user-chip-usage-metrics">50 / 100 Tracks</span>
+    </div>
+    <div class="user-chip-progress-bg">
+      <div class="user-chip-progress-bar" style="width: 50%;"></div>
+    </div>
+    <button class="btn-primary user-chip-upgrade-btn" onclick="event.stopPropagation(); if (typeof openDrawer === 'function' && document.getElementById('upgrade-plan-modal')) { openDrawer('upgrade-plan-modal'); } else { window.location.href = 'settings.html?panel=billing&upgrade=true'; }">
+      <i class="ti ti-bolt" aria-hidden="true"></i>Upgrade Plan
+    </button>
+  `;
+  userChip.parentNode.insertBefore(usageCard, userChip);
+
+  const metricsSpan = usageCard.querySelector(".user-chip-usage-metrics");
+  const progressBar = usageCard.querySelector(".user-chip-progress-bar");
 
   if (metricsSpan && progressBar) {
     const metricsText = metricsSpan.textContent;
@@ -851,14 +855,14 @@ function initUserChip() {
         }
       }
 
-      userChip.addEventListener("mouseenter", () => {
+      usageCard.addEventListener("mouseenter", () => {
         if (animFrameId) cancelAnimationFrame(animFrameId);
         startTimestamp = null;
         progressBar.style.transition = "none";
         animFrameId = requestAnimationFrame(animate);
       });
 
-      userChip.addEventListener("mouseleave", () => {
+      usageCard.addEventListener("mouseleave", () => {
         if (animFrameId) cancelAnimationFrame(animFrameId);
         progressBar.style.transition = "width 0.3s ease";
         progressBar.style.width = `${targetPercent}%`;

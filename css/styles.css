@@ -249,6 +249,9 @@ button {
   margin-top: auto;
   padding-top: var(--sp-4);
   border-top: 0.5px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
 }
 
 .user-chip {
@@ -269,6 +272,18 @@ button {
 
 .user-chip:hover {
   background: var(--surface-2);
+}
+
+.user-chip-usage-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-3);
+  border-radius: var(--radius);
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  box-sizing: border-box;
+  width: 100%;
 }
 
 .user-chip-header {
