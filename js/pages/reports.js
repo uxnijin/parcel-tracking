@@ -76,7 +76,7 @@ function drawLineChart(canvas, seriesA, seriesB, labels) {
 function drawBarChart(canvas, data) {
   const { ctx, w, h } = setupCanvas(canvas);
   ctx.clearRect(0, 0, w, h);
-  const pad = { l: 34, r: 8, t: 10, b: 24 };
+  const pad = { l: 34, r: 8, t: 20, b: 24 };
   const max = 100;
   const gap = 28;
   const barW = (w - pad.l - pad.r - gap * (data.length - 1)) / data.length;
