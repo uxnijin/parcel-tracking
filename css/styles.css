@@ -2819,3 +2819,70 @@ tr.row-highlight {
   font-size: 14px;
   margin-top: 2px;
 }
+
+/* Pricing Accent Colors & Premium Gradients */
+:root {
+  --color-free: #10B981;
+  --color-pro-start: #6366F1;
+  --color-pro-end: #A855F7;
+  --color-biz-start: #3B82F6;
+  --color-biz-end: #06B6D4;
+}
+
+/* Free Card accent styling */
+.pricing-card:nth-child(1) {
+  border-top: 4px solid var(--color-free);
+}
+.pricing-card:nth-child(1) .pricing-features li i {
+  color: var(--color-free);
+}
+
+/* Pro Card (Most Popular) gradient styling */
+.pricing-card.popular {
+  border: none;
+  padding: calc(var(--sp-5) + 1px);
+  background: linear-gradient(var(--surface-1), var(--surface-1)) padding-box,
+              linear-gradient(135deg, var(--color-pro-start), var(--color-pro-end)) border-box;
+  border: 2px solid transparent;
+}
+.pricing-card.popular::before {
+  background: linear-gradient(135deg, var(--color-pro-start), var(--color-pro-end));
+  color: #FFFFFF;
+}
+.pricing-card.popular .pricing-features li i {
+  color: var(--color-pro-start);
+}
+.pricing-card.popular .pricing-price {
+  background: linear-gradient(135deg, var(--color-pro-start), var(--color-pro-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.pricing-card.popular .pricing-btn.btn-primary-plan {
+  background: linear-gradient(135deg, var(--color-pro-start), var(--color-pro-end));
+  border: none;
+  color: #FFFFFF;
+}
+.pricing-card.popular .pricing-btn.btn-primary-plan:hover {
+  opacity: 0.9;
+  background: linear-gradient(135deg, var(--color-pro-start), var(--color-pro-end));
+}
+
+/* Business Card gradient styling */
+.pricing-card:nth-child(3) {
+  border-top: 4px solid var(--color-biz-start);
+}
+.pricing-card:nth-child(3) .pricing-features li i {
+  color: var(--color-biz-start);
+}
+.pricing-card:nth-child(3) .pricing-price {
+  background: linear-gradient(135deg, var(--color-biz-start), var(--color-biz-end));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.pricing-card:nth-child(3) .pricing-btn {
+  border-color: var(--color-biz-start);
+  color: var(--color-biz-start);
+}
+.pricing-card:nth-child(3) .pricing-btn:hover {
+  background: rgba(59, 130, 246, 0.05);
+}
