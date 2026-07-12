@@ -93,8 +93,6 @@ function renderTable(highlightId = null) {
       tbody.innerHTML = "";
       emptyState.style.display = "flex";
       document.getElementById("page-label").textContent = "Showing 0 of 0";
-      const labelTop = document.getElementById("page-label-top");
-      if (labelTop) labelTop.textContent = "0 of 0";
       const btnPrevTop = document.getElementById("btn-prev-top");
       if (btnPrevTop) btnPrevTop.disabled = true;
       const btnNextTop = document.getElementById("btn-next-top");
@@ -119,8 +117,6 @@ function renderTable(highlightId = null) {
     const end = Math.min(start + state.perPage, rows.length);
     const labelText = `Showing ${start + 1}\u2013${end} of ${rows.length}`;
     document.getElementById("page-label").textContent = labelText;
-    const labelTop = document.getElementById("page-label-top");
-    if (labelTop) labelTop.textContent = `${start + 1}\u2013${end} of ${rows.length}`;
 
     const isPrevDisabled = state.page === 1;
     const isNextDisabled = end >= rows.length;
