@@ -186,12 +186,71 @@ function createNewShipment() {
 window.createNewShipment = createNewShipment;
 
 
-/** Marks the sidebar nav item matching data-page as active. */
+/** Marks the sidebar nav item matching data-page as active and initializes sidebar search rotator. */
 document.addEventListener("DOMContentLoaded", () => {
   const page = document.body.dataset.page;
   document.querySelectorAll(".nav-item").forEach((el) => {
     el.classList.toggle("active", el.dataset.page === page);
   });
+
+  // Sidebar Search hover rotator animation
+  const searchBtn = document.querySelector(".sidebar-search");
+  if (searchBtn) {
+    const textSpan = searchBtn.querySelector("span");
+    if (textSpan) {
+      textSpan.className = "sidebar-search-span";
+      textSpan.innerHTML = `
+        <span class="static-text">Search…</span>
+        <span class="dynamic-text">
+          <span class="search-prefix">Search for</span>
+          <span class="rotator-wrapper">
+            <span class="rotator-item active">settings</span>
+            <span class="rotator-item">shipments</span>
+            <span class="rotator-item">exceptions</span>
+            <span class="rotator-item">inbox</span>
+          </span>
+        </span>
+      `;
+
+      const rotatorItems = textSpan.querySelectorAll(".rotator-item");
+      let currentIndex = 0;
+      let intervalId = null;
+
+      function startRotation() {
+        if (intervalId) return;
+        intervalId = setInterval(() => {
+          const currentItem = rotatorItems[currentIndex];
+          currentItem.classList.remove("active");
+          currentItem.classList.add("exit");
+
+          setTimeout(() => {
+            currentItem.classList.remove("exit");
+          }, 300);
+
+          currentIndex = (currentIndex + 1) % rotatorItems.length;
+          const nextItem = rotatorItems[currentIndex];
+          nextItem.classList.add("active");
+        }, 1800);
+      }
+
+      function stopRotation() {
+        clearInterval(intervalId);
+        intervalId = null;
+        rotatorItems.forEach((item, index) => {
+          item.classList.remove("exit");
+          if (index === 0) {
+            item.classList.add("active");
+          } else {
+            item.classList.remove("active");
+          }
+        });
+        currentIndex = 0;
+      }
+
+      searchBtn.addEventListener("mouseenter", startRotation);
+      searchBtn.addEventListener("mouseleave", stopRotation);
+    }
+  }
 });
 
 /** Debounce helper for search inputs. */
