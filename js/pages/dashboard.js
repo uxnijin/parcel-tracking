@@ -405,7 +405,15 @@ document.getElementById("btn-prev").addEventListener("click", () => { if (state.
 document.getElementById("btn-next").addEventListener("click", () => { state.page++; renderTable(); });
 document.getElementById("btn-prev-top")?.addEventListener("click", () => { if (state.page > 1) { state.page--; renderTable(); } });
 document.getElementById("btn-next-top")?.addEventListener("click", () => { state.page++; renderTable(); });
-document.getElementById("btn-refresh").addEventListener("click", () => { toast("Shipments refreshed"); renderTable(); });
+document.getElementById("btn-refresh").addEventListener("click", function() {
+  const icon = this.querySelector(".ti-refresh");
+  if (icon) icon.classList.add("sf-spin");
+  this.disabled = true;
+  toast("Refreshing page...");
+  setTimeout(() => {
+    location.reload();
+  }, 800);
+});
 document.getElementById("select-all").addEventListener("change", (e) => {
   const rows = getFiltered().slice((state.page - 1) * state.perPage, state.page * state.perPage);
   rows.forEach((s) => e.target.checked ? state.selected.add(s.id) : state.selected.delete(s.id));
