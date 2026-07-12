@@ -2830,9 +2830,6 @@ tr.row-highlight {
 }
 
 /* Free Card accent styling */
-.pricing-card:nth-child(1) {
-  border-top: 4px solid var(--color-free);
-}
 .pricing-card:nth-child(1) .pricing-features li i {
   color: var(--color-free);
 }
@@ -2868,9 +2865,6 @@ tr.row-highlight {
 }
 
 /* Business Card gradient styling */
-.pricing-card:nth-child(3) {
-  border-top: 4px solid var(--color-biz-start);
-}
 .pricing-card:nth-child(3) .pricing-features li i {
   color: var(--color-biz-start);
 }
