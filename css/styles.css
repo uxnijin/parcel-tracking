@@ -27,7 +27,7 @@ h2,
 h3,
 h4 {
   margin: 0;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 p {
@@ -90,7 +90,7 @@ button {
   gap: var(--sp-2);
   padding: 0 var(--sp-2);
   font-size: var(--fs-heading);
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   user-select: none;
 }
@@ -232,7 +232,7 @@ button {
 .nav-item.active {
   background: var(--surface-3);
   color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .nav-item .count {
@@ -293,7 +293,7 @@ button {
 }
 
 .user-chip-usage-plan {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-primary);
 }
 
@@ -377,13 +377,13 @@ button {
   align-items: center;
   justify-content: center;
   font-size: 11px;
-  font-weight: 500;
+  font-weight: 600;
   flex-shrink: 0;
 }
 
 .user-chip .who {
   font-size: 13px;
-  font-weight: 500;
+  font-weight: 600;
   line-height: 1.3;
 }
 
@@ -509,7 +509,7 @@ button {
 
 .tsi-tracking {
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .tsi-sub {
@@ -654,6 +654,7 @@ button,
   background: var(--surface-1);
   color: var(--text-primary);
   font-size: var(--fs-footnote);
+  font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
   display: inline-flex;
@@ -840,7 +841,7 @@ table {
 
 thead th {
   text-align: left;
-  font-weight: 500;
+  font-weight: 600;
   font-size: var(--fs-caption);
   color: var(--text-secondary);
   padding: var(--sp-2) var(--sp-3);
@@ -968,7 +969,7 @@ tbody tr.selected {
   align-items: center;
   gap: 5px;
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   padding: 2px 8px;
   border-radius: 100px;
   white-space: nowrap;
@@ -1042,7 +1043,7 @@ tbody tr.selected {
 .metric-card .label {
   font-size: var(--fs-caption);
   color: var(--text-secondary);
-  font-weight: 500;
+  font-weight: 600;
   margin: 0;
 }
 
@@ -1211,7 +1212,7 @@ tbody tr.selected {
 .tab.active {
   color: var(--text-primary);
   border-bottom-color: var(--text-primary);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .tab-panel {
@@ -1289,7 +1290,7 @@ tbody tr.selected {
 
 .timeline-item .t-title {
   font-size: var(--fs-footnote);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .timeline-item .t-meta {
@@ -1389,7 +1390,7 @@ tbody tr.selected {
   text-decoration: underline;
   text-underline-offset: 2px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   margin-left: 4px;
   background: none;
   border: none;
@@ -1921,7 +1922,7 @@ kbd {
 
 .segmented button.active {
   background: var(--surface-3);
-  font-weight: 500;
+  font-weight: 600;
 }
 
 /* ---------- Avatar stack ---------- */
@@ -2316,7 +2317,7 @@ tr.row-highlight {
 }
 
 .notification-popover-item-title {
-  font-weight: 500;
+  font-weight: 600;
   color: var(--text-primary);
 }
 
@@ -2337,7 +2338,7 @@ tr.row-highlight {
   text-align: center;
   border-top: 0.5px solid var(--border);
   font-size: 12px;
-  font-weight: 500;
+  font-weight: 600;
   background: var(--surface-0);
 }
 
