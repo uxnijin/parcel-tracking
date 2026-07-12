@@ -255,7 +255,7 @@ button {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  gap: var(--sp-2);
+  gap: var(--sp-4);
   padding: var(--sp-3) var(--sp-2);
   border-radius: var(--radius);
   cursor: pointer;
@@ -1420,7 +1420,7 @@ tbody tr.selected {
 }
 
 .toast.toast-out {
-  animation: toast-out 2000ms var(--ease-out) forwards;
+  animation: toast-out 5000ms var(--ease-out) forwards;
   overflow: hidden;
 }
 
