@@ -105,7 +105,10 @@ function renderTable(highlightId = null) {
     tbody.innerHTML = pageRows.map((s) => `
       <tr data-id="${s.id}" tabindex="0" role="button" aria-label="Open ${s.id}, ${s.status}" class="${s.id === highlightId ? "row-highlight" : ""}">
         <td onclick="event.stopPropagation()"><input type="checkbox" class="row-check" data-id="${s.id}" ${state.selected.has(s.id) ? "checked" : ""} aria-label="Select ${s.id}" /></td>
-        <td class="mono">${escapeHtml(s.tracking)}</td>
+        <td class="mono">
+          <div>${escapeHtml(s.tracking)}</div>
+          ${s.tags && s.tags.length ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">${s.tags.map(t => `<span class="badge-tag">${escapeHtml(t)}</span>`).join("")}</div>` : ""}
+        </td>
         <td class="ellipsis">${escapeHtml(s.customer)}</td>
         <td class="text-secondary">${s.carrier}</td>
         <td><span class="badge ${statusBadgeClass(s.status)}"><span class="sw"></span>${s.status}</span></td>
@@ -169,6 +172,7 @@ function openQuickView(id) {
     <div class="kv-row"><span class="k">ETA</span><span class="v">${s.eta}</span></div>
     <div class="kv-row"><span class="k">Weight</span><span class="v">${s.weight}</span></div>
     <div class="kv-row"><span class="k">Declared value</span><span class="v">${s.value}</span></div>
+    ${s.tags && s.tags.length ? `<div class="kv-row"><span class="k">Tags</span><span class="v" style="display:flex; gap:4px; flex-wrap:wrap;">${s.tags.map(t => `<span class="badge-tag">${escapeHtml(t)}</span>`).join("")}</span></div>` : ""}
   `;
 
   const fdBtn = document.getElementById("btn-qv-full-detail");
@@ -455,6 +459,53 @@ document.querySelectorAll(".bulk-bar .btn-danger").forEach((btn) => {
     });
   });
 });
+
+const btnBulkTag = document.getElementById("btn-bulk-tag");
+if (btnBulkTag) {
+  btnBulkTag.addEventListener("click", () => {
+    const ids = Array.from(state.selected);
+    if (!ids.length) return;
+    document.getElementById("tag-input-field").value = "";
+    if (typeof openDrawer === "function") {
+      openDrawer("bulk-tag-modal");
+    }
+  });
+}
+
+function submitBulkTag() {
+  const input = document.getElementById("tag-input-field");
+  const tag = input.value.trim();
+  if (!tag) return;
+
+  const ids = Array.from(state.selected);
+  if (!ids.length) return;
+
+  ids.forEach((id) => {
+    const s = ALL_SHIPMENTS.find((x) => x.id === id);
+    if (s) {
+      const tags = s.tags ? [...s.tags] : [];
+      if (!tags.includes(tag)) {
+        tags.push(tag);
+      }
+      if (typeof updateShipment !== "undefined") {
+        updateShipment(id, { tags });
+      }
+    }
+  });
+
+  state.selected.clear();
+  renderTable();
+  updateBulkBar();
+
+  if (typeof closeDrawer === "function") {
+    closeDrawer("bulk-tag-modal");
+  }
+
+  toast(`Added tag "${tag}" to ${ids.length} shipment${ids.length > 1 ? "s" : ""}`, {
+    icon: "ti-tag"
+  });
+}
+window.submitBulkTag = submitBulkTag;
 
 // Dynamic Saved Views Logic
 function getCustomViews() {

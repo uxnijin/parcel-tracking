@@ -335,7 +335,7 @@
           <div class="bulk-bar" id="bulk-bar">
             <span id="bulk-count">0 selected</span>
             <div class="spacer"></div>
-            <button class="btn-sm"><i class="ti ti-tag" aria-hidden="true"></i>Add tag</button>
+            <button class="btn-sm" id="btn-bulk-tag"><i class="ti ti-tag" aria-hidden="true"></i>Add tag</button>
             <button class="btn-sm"><i class="ti ti-mail" aria-hidden="true"></i>Notify customer</button>
             <button class="btn-sm btn-danger"><i class="ti ti-archive" aria-hidden="true"></i>Archive</button>
           </div>
@@ -492,6 +492,27 @@
         <div class="flex gap-2 mt-4">
           <button class="btn-primary" style="flex:1" type="submit">Save view</button>
           <button class="btn-ghost" type="button" onclick="closeDrawer('save-view-modal')">Cancel</button>
+        </div>
+      </form>
+    </aside>
+  </div>
+
+  <!-- Bulk Tag Modal -->
+  <div class="drawer-scrim" id="bulk-tag-modal">
+    <aside class="drawer" role="dialog" aria-label="Add tag to selected" style="width: 360px; max-width: 90vw;">
+      <div class="flex justify-between items-center mb-4">
+        <h2 style="font-size:16px">Add Tag</h2>
+        <button class="icon-btn" aria-label="Close" onclick="closeDrawer('bulk-tag-modal')"><i class="ti ti-x"
+            aria-hidden="true"></i></button>
+      </div>
+      <form id="bulk-tag-form" onsubmit="event.preventDefault(); submitBulkTag();">
+        <div class="field mt-3">
+          <label for="tag-input-field">Tag Name</label>
+          <input type="text" id="tag-input-field" required placeholder="e.g. Urgent, Fragile, VIP" autocomplete="off" />
+        </div>
+        <div class="flex gap-2 mt-4">
+          <button class="btn-primary" style="flex:1" type="submit">Add tag</button>
+          <button class="btn-ghost" type="button" onclick="closeDrawer('bulk-tag-modal')">Cancel</button>
         </div>
       </form>
     </aside>

@@ -35,6 +35,19 @@ function loadShipmentDetails(s) {
   document.getElementById("det-value").textContent = s.value;
   document.getElementById("det-service-level").textContent = s.serviceLevel || "Ground Saver";
   
+  // Tags
+  const tagsRow = document.getElementById("det-tags-row");
+  const tagsContainer = document.getElementById("det-tags");
+  if (tagsRow && tagsContainer) {
+    if (s.tags && s.tags.length) {
+      tagsRow.style.display = "flex";
+      tagsContainer.innerHTML = s.tags.map(t => `<span class="badge-tag">${escapeHtml(t)}</span>`).join("");
+    } else {
+      tagsRow.style.display = "none";
+      tagsContainer.innerHTML = "—";
+    }
+  }
+  
   document.getElementById("det-carrier").textContent = s.carrier;
   document.getElementById("det-carrier-service").textContent = s.serviceLevel || "Ground Saver";
   document.getElementById("det-origin").textContent = s.origin || "Origin facility";
