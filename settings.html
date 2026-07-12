@@ -29,13 +29,15 @@
   .save-row { display: flex; align-items: center; gap: 10px; margin-top: var(--sp-4); }
   .save-status { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
   .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); margin-top: var(--sp-2); max-width: 360px; }
-  .theme-option { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); cursor: pointer; text-align: center; transition: all var(--dur-fast) var(--ease-out); background: var(--surface-1); display: flex; align-items: center; justify-content: center; gap: var(--sp-2); outline: none; }
-  .theme-option:hover { border-color: var(--border-stronger); background: var(--surface-2); }
-  .theme-option.active { border-color: var(--fill-primary); background: var(--surface-2); box-shadow: 0 0 0 1px var(--fill-primary); }
-  .theme-option .theme-icon { font-size: 16px; color: var(--text-secondary); }
+  .theme-option { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); cursor: pointer; text-align: center; transition: all var(--dur-fast) var(--ease-out); background: var(--surface-1); display: flex; align-items: center; justify-content: center; gap: var(--sp-2); outline: none; position: relative; }
+  .theme-option:hover { border-color: var(--border-stronger); background: var(--surface-2); transform: translateY(-1px); }
+  .theme-option.active { border-color: var(--fill-primary); background: var(--surface-1); box-shadow: 0 0 0 1px var(--fill-primary), 0 4px 12px rgba(24, 24, 21, 0.08); transform: translateY(-1px); }
+  .theme-option.active:hover { background: var(--surface-1); border-color: var(--fill-primary); }
+  .theme-option .theme-icon { font-size: 16px; color: var(--text-secondary); transition: color var(--dur-fast) var(--ease-out); }
   .theme-option.active .theme-icon { color: var(--text-primary); }
-  .theme-option .theme-name { font-size: 13px; font-weight: 500; color: var(--text-secondary); }
-  .theme-option.active .theme-name { color: var(--text-primary); }
+  .theme-option .theme-name { font-size: 13px; font-weight: 500; color: var(--text-secondary); transition: color var(--dur-fast) var(--ease-out); }
+  .theme-option.active .theme-name { color: var(--text-primary); font-weight: 600; }
+  .theme-option.active::after { content: ""; position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--fill-primary); }
 </style>
 </head>
 <body data-page="settings">
