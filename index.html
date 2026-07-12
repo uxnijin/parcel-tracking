@@ -38,12 +38,16 @@
         <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings"
             aria-hidden="true"></i>Settings</a>
       </nav>
-      <nav class="nav-group">
-        <span class="nav-label">Saved views</span>
-        <a class="nav-item" href="#" onclick="applySavedView(event,'delayed')"><i class="ti ti-star"
-            aria-hidden="true"></i>Delayed today</a>
-        <a class="nav-item" href="#" onclick="applySavedView(event,'exceptions')"><i class="ti ti-star"
-            aria-hidden="true"></i>Open exceptions</a>
+      <nav class="nav-group" id="saved-views-container">
+        <div style="display: flex; align-items: center; justify-content: space-between; padding-right: var(--sp-2);">
+          <span class="nav-label" style="margin-bottom: 0;">Saved views</span>
+          <button id="btn-add-saved-view" title="Save current view" style="background: none; border: none; color: var(--text-muted); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 2px; border-radius: 4px; transition: background 0.2s, color 0.2s;" onclick="openSaveViewModal(event)">
+            <i class="ti ti-plus" style="font-size: 14px;"></i>
+          </button>
+        </div>
+        <div id="saved-views-list" style="display: flex; flex-direction: column; gap: 1px; margin-top: var(--sp-1);">
+          <!-- Dynamic saved views will render here -->
+        </div>
       </nav>
       <div class="sidebar-footer">
         <div class="user-chip">
@@ -471,6 +475,26 @@
           <input type="hidden" id="ns-status" value="Pending pickup" />
         </div>
         <button class="btn-primary mt-4" type="submit">Create Shipment</button>
+      </form>
+  </div>
+
+  <!-- Save View Modal -->
+  <div class="drawer-scrim" id="save-view-modal">
+    <aside class="drawer" role="dialog" aria-label="Save current view" style="width: 360px; max-width: 90vw;">
+      <div class="flex justify-between items-center mb-4">
+        <h2 style="font-size:16px">Save Current View</h2>
+        <button class="icon-btn" aria-label="Close" onclick="closeDrawer('save-view-modal')"><i class="ti ti-x"
+            aria-hidden="true"></i></button>
+      </div>
+      <form id="save-view-form" onsubmit="event.preventDefault(); submitSaveView();">
+        <div class="field mt-3">
+          <label for="sv-name">View Name</label>
+          <input type="text" id="sv-name" required placeholder="e.g. FedEx In Transit" autocomplete="off" />
+        </div>
+        <div class="flex gap-2 mt-4">
+          <button class="btn-primary" style="flex:1" type="submit">Save view</button>
+          <button class="btn-ghost" type="button" onclick="closeDrawer('save-view-modal')">Cancel</button>
+        </div>
       </form>
     </aside>
   </div>

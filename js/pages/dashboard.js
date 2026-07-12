@@ -441,47 +441,227 @@ document.querySelectorAll(".bulk-bar .btn-danger").forEach((btn) => {
   });
 });
 
-function applySavedView(e, view) {
-  e.preventDefault();
-  const statusVal = view === "delayed" ? "Delayed" : "Exception";
+// Dynamic Saved Views Logic
+function getCustomViews() {
+  try {
+    const raw = localStorage.getItem('shipflow_saved_views');
+    return raw ? JSON.parse(raw) : [];
+  } catch (err) {
+    console.error('Error reading saved views from localStorage', err);
+    return [];
+  }
+}
 
-  // Uncheck other statuses/carriers, and check matching status checkbox
-  document.querySelectorAll("#menu-filter-carrier input[type='checkbox'], #menu-filter-status input[type='checkbox'], #menu-filters input[type='checkbox']").forEach((cb) => {
-    cb.checked = (cb.value === statusVal);
+function saveCustomViews(views) {
+  try {
+    localStorage.setItem('shipflow_saved_views', JSON.stringify(views));
+  } catch (err) {
+    console.error('Error writing saved views to localStorage', err);
+  }
+}
+
+function renderSavedViews() {
+  const container = document.getElementById('saved-views-list');
+  if (!container) return;
+
+  const customViews = getCustomViews();
+  let html = '';
+
+  // Render Defaults
+  html += `
+    <div class="saved-view-item">
+      <a class="nav-item" href="#" onclick="applySavedView(event, 'delayed')">
+        <i class="ti ti-star" aria-hidden="true"></i>Delayed today
+      </a>
+    </div>
+    <div class="saved-view-item">
+      <a class="nav-item" href="#" onclick="applySavedView(event, 'exceptions')">
+        <i class="ti ti-star" aria-hidden="true"></i>Open exceptions
+      </a>
+    </div>
+  `;
+
+  // Render Custom Views
+  customViews.forEach(view => {
+    html += `
+      <div class="saved-view-item" data-view-id="${view.id}">
+        <a class="nav-item" href="#" onclick="applySavedView(event, '${view.id}')">
+          <i class="ti ti-star" aria-hidden="true"></i>${escapeHtml(view.name)}
+        </a>
+        <button class="btn-delete-view" onclick="deleteSavedView(event, '${view.id}')" title="Delete view">
+          <i class="ti ti-trash"></i>
+        </button>
+      </div>
+    `;
   });
 
+  container.innerHTML = html;
+}
+
+function escapeHtml(str) {
+  return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+}
+
+function applySavedView(e, viewId) {
+  if (e) e.preventDefault();
+  
+  let filters = null;
+  let viewName = "";
+
+  if (viewId === 'delayed') {
+    filters = { statuses: ['Delayed'] };
+    viewName = "Delayed today";
+  } else if (viewId === 'exceptions') {
+    filters = { statuses: ['Exception'] };
+    viewName = "Open exceptions";
+  } else {
+    const customViews = getCustomViews();
+    const customView = customViews.find(v => v.id === viewId);
+    if (customView) {
+      filters = customView.filters;
+      viewName = customView.name;
+    }
+  }
+
+  if (!filters) return;
+
+  // Reset state to empty
   state.carriers.clear();
   state.statuses.clear();
-  state.statuses.add(statusVal);
   state.serviceLevels.clear();
   state.severities.clear();
   state.dateDay = null;
-  hideDateFilterChip();
-  history.replaceState(null, "", location.pathname);
+  state.search = "";
 
-  // Reset labels
+  // Apply filters
+  if (filters.carriers) filters.carriers.forEach(c => state.carriers.add(c));
+  if (filters.statuses) filters.statuses.forEach(s => state.statuses.add(s));
+  if (filters.serviceLevels) filters.serviceLevels.forEach(sl => state.serviceLevels.add(sl));
+  if (filters.severities) filters.severities.forEach(sev => state.severities.add(sev));
+  if (filters.dateDay !== undefined && filters.dateDay !== null) {
+    state.dateDay = filters.dateDay;
+    showDateFilterChip(state.dateDay);
+  } else {
+    hideDateFilterChip();
+  }
+  if (filters.search) {
+    state.search = filters.search;
+  }
+  
+  // Update inputs in DOM
+  const searchInput = document.getElementById("table-search");
+  if (searchInput) {
+    searchInput.value = state.search;
+  }
+
+  // Update checkmarks in Carrier & Status dropdowns
+  document.querySelectorAll("#menu-filter-carrier input[type='checkbox']").forEach(cb => {
+    cb.checked = state.carriers.has(cb.value);
+  });
+  document.querySelectorAll("#menu-filter-status input[type='checkbox']").forEach(cb => {
+    cb.checked = state.statuses.has(cb.value);
+  });
+  // Update checkmarks in More filters menu
+  document.querySelectorAll("#menu-filters input[type='checkbox']").forEach(cb => {
+    cb.checked = state.serviceLevels.has(cb.value) || state.severities.has(cb.value);
+  });
+
+  // Update button text labels
   const btnCarrier = document.getElementById("btn-filter-carrier");
-  if (btnCarrier) btnCarrier.textContent = "All carriers";
-  const btnStatus = document.getElementById("btn-filter-status");
-  if (btnStatus) btnStatus.textContent = statusVal;
+  if (btnCarrier) {
+    if (state.carriers.size === 0) btnCarrier.textContent = "All carriers";
+    else if (state.carriers.size === 1) btnCarrier.textContent = Array.from(state.carriers)[0];
+    else btnCarrier.textContent = `${state.carriers.size} carriers`;
+  }
 
-  // Reset More badge
+  const btnStatus = document.getElementById("btn-filter-status");
+  if (btnStatus) {
+    if (state.statuses.size === 0) btnStatus.textContent = "All statuses";
+    else if (state.statuses.size === 1) btnStatus.textContent = Array.from(state.statuses)[0];
+    else btnStatus.textContent = `${state.statuses.size} statuses`;
+  }
+
+  // Update advanced filters badge
+  const advancedFilters = state.serviceLevels.size + state.severities.size;
   const badge = document.getElementById("filter-badge");
   if (badge) {
-    badge.style.display = "none";
-    badge.textContent = "0";
+    badge.textContent = advancedFilters;
+    badge.style.display = advancedFilters > 0 ? "inline-block" : "none";
   }
 
-  // Show clear button
-  const btnClear = document.getElementById("btn-clear-filters");
-  if (btnClear) {
-    btnClear.style.display = "inline-flex";
-  }
+  // Update Clear button state
+  updateClearButtonState();
 
   state.page = 1;
   renderTable();
-  toast(view === "delayed" ? "Showing delayed today" : "Showing open exceptions");
+  toast(`Showing saved view: ${viewName}`);
 }
+
+function openSaveViewModal(e) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  const modal = document.getElementById('save-view-modal');
+  if (modal) {
+    modal.classList.add('open');
+    const input = document.getElementById('sv-name');
+    if (input) {
+      input.value = '';
+      input.focus();
+    }
+  }
+}
+
+function submitSaveView() {
+  const input = document.getElementById('sv-name');
+  if (!input) return;
+  const name = input.value.trim();
+  if (!name) return;
+
+  const currentFilters = {
+    carriers: Array.from(state.carriers),
+    statuses: Array.from(state.statuses),
+    serviceLevels: Array.from(state.serviceLevels),
+    severities: Array.from(state.severities),
+    dateDay: state.dateDay,
+    search: state.search
+  };
+
+  const customViews = getCustomViews();
+  const newView = {
+    id: 'view_' + Date.now(),
+    name: name,
+    filters: currentFilters
+  };
+
+  customViews.push(newView);
+  saveCustomViews(customViews);
+  renderSavedViews();
+  closeDrawer('save-view-modal');
+  toast(`Saved view "${name}" created`);
+}
+
+function deleteSavedView(e, viewId) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  
+  if (!confirm("Are you sure you want to delete this saved view?")) return;
+
+  let customViews = getCustomViews();
+  customViews = customViews.filter(v => v.id !== viewId);
+  saveCustomViews(customViews);
+  renderSavedViews();
+  toast("Saved view deleted");
+}
+
+// Make sure functions are globally accessible
+window.openSaveViewModal = openSaveViewModal;
+window.submitSaveView = submitSaveView;
+window.deleteSavedView = deleteSavedView;
+window.applySavedView = applySavedView;
 
 
 
@@ -567,4 +747,5 @@ if (btnColumns && columnsMenu) {
   });
 }
 
+renderSavedViews();
 renderTable();

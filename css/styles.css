@@ -2424,3 +2424,44 @@ tr.row-highlight {
   box-sizing: border-box;
   animation: popover-in 150ms cubic-bezier(0.16, 1, 0.3, 1);
 }
+
+/* Saved Views Styles */
+.saved-view-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.saved-view-item a {
+  flex-grow: 1;
+}
+
+.btn-delete-view {
+  position: absolute;
+  right: var(--sp-2);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 4px;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s;
+}
+
+.btn-delete-view:hover {
+  color: var(--text-danger) !important;
+  background: var(--surface-3);
+}
+
+.saved-view-item:hover .btn-delete-view {
+  display: flex;
+}
+
+#btn-add-saved-view:hover {
+  color: var(--text-primary) !important;
+  background: var(--surface-2);
+}
