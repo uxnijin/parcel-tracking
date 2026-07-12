@@ -45,7 +45,7 @@ function toast(message, opts = {}) {
   region.appendChild(el);
   function dismiss() {
     el.classList.add("toast-out");
-    setTimeout(() => el.remove(), 400);
+    setTimeout(() => el.remove(), 600);
   }
   const timer = setTimeout(dismiss, duration);
   el.addEventListener("mouseenter", () => clearTimeout(timer));
