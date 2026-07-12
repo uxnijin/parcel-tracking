@@ -674,50 +674,64 @@ function submitSaveView() {
   toast(`Saved view "${name}" created`);
 }
 
-let pendingDeleteViewId = null;
-
 function deleteSavedView(e, viewId) {
   if (e) {
     e.preventDefault();
     e.stopPropagation();
   }
   
+  const itemEl = document.querySelector(`.saved-view-item[data-view-id="${viewId}"]`);
+  if (!itemEl) return;
+
   const customViews = getCustomViews();
   const customView = customViews.find(v => v.id === viewId);
   if (!customView) return;
 
-  pendingDeleteViewId = viewId;
-  const nameEl = document.getElementById('delete-view-name');
-  if (nameEl) nameEl.textContent = `"${customView.name}"`;
-
-  const modal = document.getElementById('delete-view-modal');
-  if (modal) {
-    modal.classList.add('open');
-  }
+  // Render inline deletion UI within the sidebar item, increasing height and adding confirmation buttons
+  itemEl.style.height = "auto";
+  itemEl.innerHTML = `
+    <div class="saved-view-delete-confirm" style="display: flex; flex-direction: column; gap: 6px; padding: 8px; width: 100%; border-radius: var(--radius); background: var(--surface-2); border: 0.5px solid var(--border); box-sizing: border-box; margin: 2px 0;">
+      <div style="font-size: 11px; font-weight: 500; color: var(--text-secondary); text-overflow: ellipsis; overflow: hidden; white-space: nowrap;">Delete "${escapeHtml(customView.name)}"?</div>
+      <div style="display: flex; gap: 4px;">
+        <button onclick="confirmDeleteSavedView(event, '${viewId}')" class="btn-danger" style="flex: 1; padding: 4px; font-size: 10px; height: 22px; line-height: 1; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: none; cursor: pointer;">Delete</button>
+        <button onclick="cancelDeleteSavedView(event, '${viewId}')" class="btn-ghost" style="flex: 1; padding: 4px; font-size: 10px; height: 22px; line-height: 1; display: flex; align-items: center; justify-content: center; border-radius: 4px; border: 0.5px solid var(--border); cursor: pointer; color: var(--text-secondary);">Cancel</button>
+      </div>
+    </div>
+  `;
 }
 
-// Confirm Delete Event Listener
-document.getElementById('btn-confirm-delete-view')?.addEventListener('click', () => {
-  if (!pendingDeleteViewId) return;
+function confirmDeleteSavedView(e, viewId) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
 
   let customViews = getCustomViews();
-  customViews = customViews.filter(v => v.id !== pendingDeleteViewId);
+  customViews = customViews.filter(v => v.id !== viewId);
   saveCustomViews(customViews);
   
-  if (state.activeViewId === pendingDeleteViewId) {
+  if (state.activeViewId === viewId) {
     state.activeViewId = null;
   }
 
   renderSavedViews();
-  closeDrawer('delete-view-modal');
   toast("Saved view deleted");
-  pendingDeleteViewId = null;
-});
+}
+
+function cancelDeleteSavedView(e, viewId) {
+  if (e) {
+    e.preventDefault();
+    e.stopPropagation();
+  }
+  renderSavedViews();
+}
 
 // Make sure functions are globally accessible
 window.openSaveViewModal = openSaveViewModal;
 window.submitSaveView = submitSaveView;
 window.deleteSavedView = deleteSavedView;
+window.confirmDeleteSavedView = confirmDeleteSavedView;
+window.cancelDeleteSavedView = cancelDeleteSavedView;
 window.applySavedView = applySavedView;
 
 
