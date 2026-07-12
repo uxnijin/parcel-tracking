@@ -1917,7 +1917,7 @@ kbd {
   padding: 0 10px;
   font-size: 12px;
   background: transparent;
-  border-radius: 4px;
+  border-radius: var(--radius);
 }
 
 .segmented button.active {
