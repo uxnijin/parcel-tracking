@@ -980,57 +980,6 @@ tbody tr.selected {
 
 .metric-card .ti-truck-delivery {
   display: inline-block;
-  transition: transform 0.3s ease-out;
-}
-
-.metric-card:hover .ti-truck-delivery {
-  animation: truck-drive-bounce 350ms ease-in-out forwards;
-}
-
-.metric-card:hover:has(.ti-truck-delivery) .mc-icon::after {
-  animation: road-move 350ms cubic-bezier(0.25, 1, 0.5, 1) forwards;
-}
-
-@keyframes road-move {
-  0% {
-    opacity: 0;
-    transform: translateX(4px);
-  }
-
-  20% {
-    opacity: 0.6;
-  }
-
-  80% {
-    opacity: 0.6;
-  }
-
-  100% {
-    opacity: 0;
-    transform: translateX(-6px);
-  }
-}
-
-@keyframes truck-drive-bounce {
-  0% {
-    transform: translateY(0) rotate(0deg);
-  }
-
-  25% {
-    transform: translateY(-1px) rotate(-1deg);
-  }
-
-  50% {
-    transform: translateY(0.5px) rotate(1deg);
-  }
-
-  75% {
-    transform: translateY(-0.5px) rotate(-0.5deg);
-  }
-
-  100% {
-    transform: translateY(0) rotate(0deg);
-  }
 }
 
 .metric-card .checkmark-path {
@@ -1038,40 +987,8 @@ tbody tr.selected {
   stroke-dashoffset: 0;
 }
 
-.metric-card:hover .checkmark-path {
-  animation: draw-checkmark 280ms ease-in-out forwards;
-}
-
-@keyframes draw-checkmark {
-  0% {
-    stroke-dashoffset: 100;
-  }
-
-  100% {
-    stroke-dashoffset: 0;
-  }
-}
-
 .metric-card .clock-hands-path {
   transform-origin: 12px 12px;
-}
-
-.metric-card:hover .clock-hands-path {
-  animation: clock-rotate 300ms ease-in-out forwards;
-}
-
-@keyframes clock-rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  60% {
-    transform: rotate(72deg);
-  }
-
-  100% {
-    transform: rotate(0deg);
-  }
 }
 
 .metric-card .value {
