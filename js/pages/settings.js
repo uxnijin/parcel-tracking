@@ -195,6 +195,24 @@ function submitInvite() {
 document.addEventListener("DOMContentLoaded", initSettingsGmail);
 document.addEventListener("DOMContentLoaded", initIntegrationStates);
 document.addEventListener("DOMContentLoaded", initThemeSelector);
+document.addEventListener("DOMContentLoaded", handleUrlPanel);
 window.toggleGmailConnection = toggleGmailConnection;
 window.toggleIntegrationConnection = toggleIntegrationConnection;
 window.submitInvite = submitInvite;
+
+function handleUrlPanel() {
+  const params = new URLSearchParams(window.location.search);
+  const panel = params.get("panel");
+  if (panel) {
+    const navItem = document.querySelector(`.settings-nav .item[data-panel="${panel}"]`);
+    if (navItem) {
+      document.querySelectorAll(".settings-nav .item").forEach((i) => i.classList.remove("active"));
+      document.querySelectorAll(".settings-panel").forEach((p) => p.classList.remove("active"));
+      navItem.classList.add("active");
+      const targetPanel = document.getElementById(`panel-${panel}`);
+      if (targetPanel) {
+        targetPanel.classList.add("active");
+      }
+    }
+  }
+}

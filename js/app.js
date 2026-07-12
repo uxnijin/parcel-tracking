@@ -760,22 +760,22 @@ function initUserChip() {
   const popover = document.createElement("div");
   popover.className = "account-popover";
   popover.innerHTML = `
-    <a href="settings.html" class="account-popover-item">
+    <a href="settings.html?panel=profile" class="account-popover-item">
       <i class="ti ti-user"></i> My Profile
     </a>
-    <a href="settings.html" class="account-popover-item">
+    <a href="settings.html?panel=workspace" class="account-popover-item">
       <i class="ti ti-briefcase"></i> Workspace
     </a>
-    <a href="settings.html" class="account-popover-item">
+    <a href="settings.html?panel=billing" class="account-popover-item">
       <i class="ti ti-credit-card"></i> Billing & Plans
     </a>
-    <a href="settings.html" class="account-popover-item">
+    <a href="settings.html?panel=usage" class="account-popover-item">
       <i class="ti ti-chart-pie"></i> Usage
     </a>
-    <a href="settings.html" class="account-popover-item">
+    <a href="settings.html?panel=notifications" class="account-popover-item">
       <i class="ti ti-bell"></i> Notification Settings
     </a>
-    <a href="#" class="account-popover-item">
+    <a href="help.html" class="account-popover-item">
       <i class="ti ti-help"></i> Help Center
     </a>
     <div class="account-popover-divider"></div>

@@ -253,6 +253,9 @@
         <div class="settings-grid">
           <nav class="settings-nav">
             <div class="item active" data-panel="profile">Profile</div>
+            <div class="item" data-panel="workspace">Workspace</div>
+            <div class="item" data-panel="billing">Billing & Plans</div>
+            <div class="item" data-panel="usage">Usage</div>
             <div class="item" data-panel="notifications">Notifications</div>
             <div class="item" data-panel="team">Team</div>
             <div class="item" data-panel="integrations">Integrations</div>
@@ -304,6 +307,77 @@
                     <span class="theme-name">System</span>
                   </div>
                 </div>
+              </div>
+            </div>
+
+            <div class="settings-panel" id="panel-workspace">
+              <div class="card">
+                <div class="card-title">Workspace Settings</div>
+                <div class="field">
+                  <label for="w-name">Workspace name</label>
+                  <input type="text" id="w-name" value="Acme Logistics" />
+                </div>
+                <div class="field">
+                  <label for="w-url">Workspace URL</label>
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <input type="text" id="w-url" value="acme" style="flex:1;" />
+                    <span style="font-size:13px; color:var(--text-muted);">.shipflow.com</span>
+                  </div>
+                </div>
+                <div class="field">
+                  <label for="w-carrier">Default carrier</label>
+                  <select id="w-carrier" style="width:100%;">
+                    <option selected>FedEx</option>
+                    <option>UPS</option>
+                    <option>DHL</option>
+                    <option>USPS</option>
+                  </select>
+                </div>
+                <div class="save-row">
+                  <button class="btn-primary" onclick="simulateSave('workspace')">Save changes</button>
+                  <span class="save-status" id="save-status-workspace"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-panel" id="panel-billing">
+              <div class="card">
+                <div class="card-title">Current Plan</div>
+                <div class="kv-row">
+                  <span class="k" style="font-weight:500;">Starter Plan</span>
+                  <span class="v" style="font-weight:500;">$19 / month</span>
+                </div>
+                <p class="text-secondary mb-4" style="font-size: var(--fs-footnote); line-height: 1.5; margin-top:8px;">
+                  Your next renewal is on August 12, 2026.
+                </p>
+                <button class="btn-primary btn-sm">Upgrade Plan</button>
+              </div>
+              <div class="card" style="margin-top: var(--sp-4);">
+                <div class="card-title">Payment Method</div>
+                <div style="display:flex; align-items: center; gap: 12px;">
+                  <i class="ti ti-credit-card" style="font-size:24px; color:var(--text-secondary);"></i>
+                  <div>
+                    <div style="font-size:13px; font-weight:500;">Visa ending in 4242</div>
+                    <div style="font-size:12px; color:var(--text-muted);">Expires 12/28</div>
+                  </div>
+                  <button class="btn-sm btn-secondary" style="margin-left:auto;">Edit</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-panel" id="panel-usage">
+              <div class="card">
+                <div class="card-title">Monthly Usage</div>
+                <div class="kv-row" style="margin-bottom:8px;">
+                  <span class="k">Tracking usage</span>
+                  <span class="v">50 / 100 tracks used</span>
+                </div>
+                <div class="user-chip-progress-bg" style="height:8px; border-radius:2px; margin-bottom:16px;">
+                  <div class="user-chip-progress-bar" style="width: 50%; height:100%; border-radius:2px;"></div>
+                </div>
+                <p class="text-secondary" style="font-size: var(--fs-footnote); line-height: 1.5;">
+                  Your monthly limit resets on August 12, 2026. If you exceed your limit, tracking updates may be delayed.
+                </p>
               </div>
             </div>
 
