@@ -829,9 +829,44 @@ label {
 }
 
 input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
   width: 15px;
   height: 15px;
-  accent-color: var(--fill-primary);
+  border: 1.5px solid var(--border-stronger);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface-1);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  margin: 0;
+  vertical-align: middle;
+  transition: all 0.15s var(--ease-out);
+}
+
+input[type="checkbox"]::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  transform: scale(0);
+  background-color: var(--on-primary);
+  clip-path: polygon(14% 44%, 0 65%, 50% 100%, 100% 16%, 80% 0%, 43% 62%);
+  transition: 100ms transform ease-in-out;
+}
+
+input[type="checkbox"]:checked {
+  background-color: var(--fill-primary);
+  border-color: var(--fill-primary);
+}
+
+input[type="checkbox"]:checked::before {
+  transform: scale(1);
+}
+
+input[type="checkbox"]:focus-visible {
+  outline: 2px solid var(--fill-primary);
+  outline-offset: 2px;
 }
 
 /* ---------- Table ---------- */
