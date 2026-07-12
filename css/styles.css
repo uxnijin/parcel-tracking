@@ -2752,6 +2752,9 @@ tr.row-highlight {
   color: var(--text-primary);
   cursor: pointer;
   transition: all var(--dur-fast);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   text-align: center;
   font-size: 13px;
   margin-bottom: var(--sp-4);
