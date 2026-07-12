@@ -74,13 +74,23 @@ function renderInbox() {
     if (emails.length === 0) {
       tbody.closest(".table-wrap").style.display = "none";
       emptySection.style.display = "flex";
+      const importActions = document.getElementById("inbox-import-actions");
+      if (importActions) importActions.style.display = "none";
       const toolbar = connSection.querySelector(".flex.justify-between.items-center");
-      if (toolbar) toolbar.style.display = "none";
+      if (toolbar) {
+        toolbar.style.display = "flex";
+        toolbar.style.justifyContent = "flex-end";
+      }
     } else {
       tbody.closest(".table-wrap").style.display = "block";
       emptySection.style.display = "none";
+      const importActions = document.getElementById("inbox-import-actions");
+      if (importActions) importActions.style.display = "flex";
       const toolbar = connSection.querySelector(".flex.justify-between.items-center");
-      if (toolbar) toolbar.style.display = "flex";
+      if (toolbar) {
+        toolbar.style.display = "flex";
+        toolbar.style.justifyContent = "space-between";
+      }
 
       tbody.innerHTML = emails.map(email => `
         <tr>
