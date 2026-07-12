@@ -889,7 +889,7 @@ function initUserChip() {
         <i class="ti ti-moon"></i> <span>Dark Mode</span>
       </button>
       <div class="account-popover-divider"></div>
-      <a href="login.html" class="account-popover-item">
+      <a href="login.html" class="account-popover-item logout-link">
         <i class="ti ti-logout"></i> Sign Out
       </a>
     `;
@@ -943,6 +943,18 @@ function initUserChip() {
         }
         window.dispatchEvent(new Event("sf-theme-changed"));
         renderAccountMenu();
+      } else if (menuItem.classList.contains("logout-link")) {
+        e.preventDefault();
+        popover.style.display = "none";
+        showConfirmModal({
+          title: "Log Out",
+          message: "Are you sure you want to log out of ShipFlow?",
+          confirmText: "Log Out",
+          cancelText: "Cancel",
+          onConfirm: () => {
+            window.location.href = "login.html";
+          }
+        });
       } else {
         popover.style.display = "none";
       }
@@ -1052,6 +1064,18 @@ function initProfilePopover() {
         }
         window.dispatchEvent(new Event("sf-theme-changed"));
         renderProfileMenu();
+      } else if (menuItem.classList.contains("logout-link")) {
+        e.preventDefault();
+        popover.style.display = "none";
+        showConfirmModal({
+          title: "Log Out",
+          message: "Are you sure you want to log out of ShipFlow?",
+          confirmText: "Log Out",
+          cancelText: "Cancel",
+          onConfirm: () => {
+            window.location.href = "login.html";
+          }
+        });
       } else {
         popover.style.display = "none";
       }
