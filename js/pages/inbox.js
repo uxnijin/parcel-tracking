@@ -154,13 +154,19 @@ function connectGmailFromInbox(e) {
 
 function disconnectGmailFromInbox(e) {
   e.preventDefault();
-  if (confirm("Are you sure you want to disconnect Gmail?")) {
-    if (typeof setGmailConnected !== "undefined") {
-      setGmailConnected(false);
+  showConfirmModal({
+    title: "Disconnect Gmail",
+    message: "Are you sure you want to disconnect Gmail? This will stop scanning your inbox for shipping updates.",
+    confirmText: "Disconnect",
+    cancelText: "Cancel",
+    onConfirm: () => {
+      if (typeof setGmailConnected !== "undefined") {
+        setGmailConnected(false);
+      }
+      toast("Successfully disconnected Gmail!");
+      renderInbox();
     }
-    toast("Successfully disconnected Gmail!");
-    renderInbox();
-  }
+  });
 }
 
 function toggleSelectAllInbox(masterCheckbox) {
