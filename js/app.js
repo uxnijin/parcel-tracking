@@ -747,47 +747,62 @@ function initUserChip() {
       ${currentContent}
     </div>
     <div class="user-chip-usage">
+      <div class="user-chip-usage-info">
+        <span class="user-chip-usage-plan">Starter Plan</span>
+        <span class="user-chip-usage-metrics">50 / 100 Tracks</span>
+      </div>
       <div class="user-chip-progress-bg">
         <div class="user-chip-progress-bar" style="width: 50%;"></div>
       </div>
     </div>
   `;
 
+  const metricsSpan = userChip.querySelector(".user-chip-usage-metrics");
   const progressBar = userChip.querySelector(".user-chip-progress-bar");
 
-  if (progressBar) {
-    const targetPercent = 50;
+  if (metricsSpan && progressBar) {
+    const metricsText = metricsSpan.textContent;
+    const match = metricsText.match(/(\d+)\s*\/\s*(\d+)\s*(.*)/);
+    if (match) {
+      const targetVal = parseInt(match[1], 10);
+      const maxVal = parseInt(match[2], 10);
+      const suffix = match[3] || "Tracks";
+      const targetPercent = maxVal > 0 ? (targetVal / maxVal) * 100 : 50;
 
-    let animFrameId = null;
-    let startTimestamp = null;
-    const duration = 600; // 600ms transition
+      let animFrameId = null;
+      let startTimestamp = null;
+      const duration = 600; // 600ms transition
 
-    function animate(timestamp) {
-      if (!startTimestamp) startTimestamp = timestamp;
-      const progress = Math.min((timestamp - startTimestamp) / duration, 1);
-      const easeProgress = progress * (2 - progress); // easeOutQuad
-      
-      const currentPercent = easeProgress * targetPercent;
-      
-      progressBar.style.width = `${currentPercent}%`;
-      
-      if (progress < 1) {
-        animFrameId = requestAnimationFrame(animate);
+      function animate(timestamp) {
+        if (!startTimestamp) startTimestamp = timestamp;
+        const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+        const easeProgress = progress * (2 - progress); // easeOutQuad
+        
+        const currentVal = Math.floor(easeProgress * targetVal);
+        const currentPercent = easeProgress * targetPercent;
+        
+        progressBar.style.width = `${currentPercent}%`;
+        metricsSpan.textContent = `${currentVal} / ${maxVal} ${suffix}`;
+        
+        if (progress < 1) {
+          animFrameId = requestAnimationFrame(animate);
+        }
       }
+
+      userChip.addEventListener("mouseenter", () => {
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        startTimestamp = null;
+        progressBar.style.transition = "none";
+        animFrameId = requestAnimationFrame(animate);
+      });
+
+      userChip.addEventListener("mouseleave", () => {
+        if (animFrameId) cancelAnimationFrame(animFrameId);
+        progressBar.style.transition = "width 0.3s ease";
+        progressBar.style.width = `${targetPercent}%`;
+        metricsSpan.textContent = metricsText;
+      });
     }
-
-    userChip.addEventListener("mouseenter", () => {
-      if (animFrameId) cancelAnimationFrame(animFrameId);
-      startTimestamp = null;
-      progressBar.style.transition = "none";
-      animFrameId = requestAnimationFrame(animate);
-    });
-
-    userChip.addEventListener("mouseleave", () => {
-      if (animFrameId) cancelAnimationFrame(animFrameId);
-      progressBar.style.transition = "width 0.3s ease";
-      progressBar.style.width = `${targetPercent}%`;
-    });
   }
 
   const popover = document.createElement("div");
@@ -873,13 +888,13 @@ function initProfilePopover() {
 
   function renderProfileMenu() {
     popover.innerHTML = `
-      <a href="settings.html" class="user-chip-menu-item settings-link">
+      <a href="settings.html" class="account-popover-item settings-link">
         <i class="ti ti-settings"></i> Settings
       </a>
-      <button class="user-chip-menu-item theme-toggle-btn">
+      <button class="account-popover-item theme-toggle-btn">
         <i class="ti ti-moon"></i> <span>Dark Mode</span>
       </button>
-      <a href="login.html" class="user-chip-menu-item logout-link">
+      <a href="login.html" class="account-popover-item logout-link">
         <i class="ti ti-logout"></i> Log Out
       </a>
     `;
@@ -899,6 +914,8 @@ function initProfilePopover() {
 
     const notifPopover = document.getElementById("global-notification-popover");
     if (notifPopover) notifPopover.style.display = "none";
+    const accountPopover = document.querySelector(".account-popover");
+    if (accountPopover) accountPopover.style.display = "none";
 
     if (isVisible) {
       popover.style.display = "none";
@@ -920,7 +937,7 @@ function initProfilePopover() {
   });
 
   popover.addEventListener("click", (e) => {
-    const menuItem = e.target.closest('.user-chip-menu-item');
+    const menuItem = e.target.closest('.account-popover-item');
     if (menuItem) {
       e.stopPropagation();
       if (menuItem.classList.contains("theme-toggle-btn")) {
