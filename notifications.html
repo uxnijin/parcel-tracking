@@ -34,26 +34,17 @@
   .notif-title .unread-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-primary); flex-shrink: 0; }
   .notif-text { font-size: 13px; color: var(--text-secondary); margin-top: 2px; }
   .notif-time { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-  .showcase-section {
-    margin-top: var(--sp-6);
-  }
-  .showcase-header {
-    margin-bottom: var(--sp-4);
-  }
-  .showcase-header h2 {
-    font-size: 16px;
-    font-weight: 600;
-    margin: 0;
-  }
-  .showcase-header p {
-    font-size: 13px;
-    color: var(--text-secondary);
-    margin: 4px 0 0 0;
-  }
-  .showcase-grid {
+  .notif-container {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    grid-template-columns: 1fr 300px;
     gap: var(--sp-4);
+    align-items: start;
+    margin-top: var(--sp-4);
+  }
+  @media (max-width: 900px) {
+    .notif-container {
+      grid-template-columns: 1fr;
+    }
   }
   .showcase-card {
     background: var(--surface-1);
@@ -62,38 +53,75 @@
     padding: var(--sp-4);
     display: flex;
     flex-direction: column;
-    gap: var(--sp-3);
-    transition: border-color var(--dur-fast) var(--ease-out), transform var(--dur-fast) var(--ease-out);
+    gap: var(--sp-4);
   }
-  .showcase-card:hover {
-    border-color: var(--border-stronger);
-    transform: translateY(-2px);
+  .showcase-header h2 {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+  }
+  .showcase-header p {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin: 4px 0 0 0;
+    line-height: 1.4;
+  }
+  .showcase-list {
+    display: flex;
+    flex-direction: column;
+    gap: var(--sp-3);
+  }
+  .showcase-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--sp-2);
+    padding-bottom: var(--sp-3);
+    border-bottom: 0.5px solid var(--border);
+  }
+  .showcase-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+  .showcase-item-left {
+    display: flex;
+    align-items: center;
+    gap: var(--sp-2);
+    min-width: 0;
   }
   .showcase-card-icon {
-    width: 36px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     border-radius: var(--radius);
     background: var(--surface-2);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 18px;
+    font-size: 16px;
     color: var(--text-primary);
+    flex-shrink: 0;
+  }
+  .showcase-item-text {
+    min-width: 0;
   }
   .showcase-card-title {
-    font-size: 14px;
-    font-weight: 600;
+    font-size: 13px;
+    font-weight: 500;
     margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .showcase-card-desc {
-    font-size: 12px;
-    color: var(--text-secondary);
-    line-height: 1.4;
-    margin: 0;
+    font-size: 11px;
+    color: var(--text-muted);
+    margin: 2px 0 0 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .showcase-card-action {
-    margin-top: auto;
-    width: 100%;
+    flex-shrink: 0;
   }
 </style>
 </head>
@@ -154,45 +182,67 @@
         <div class="tab" data-filter="deliveries" role="tab">Deliveries</div>
       </div>
 
-      <div class="notif-list card" style="padding:0" id="notif-list"></div>
-      <div class="empty-state" id="notif-empty" style="display:none">
-        <i class="ti ti-bell-off" aria-hidden="true"></i>
-        <h3>You're all caught up</h3>
-        <p>No unread notifications right now.</p>
-      </div>
+      <div class="notif-container">
+        <div class="notif-main">
+          <div class="notif-list card" style="padding:0" id="notif-list"></div>
+          <div class="empty-state" id="notif-empty" style="display:none">
+            <i class="ti ti-bell-off" aria-hidden="true"></i>
+            <h3>You're all caught up</h3>
+            <p>No unread notifications right now.</p>
+          </div>
+        </div>
 
-      <section class="showcase-section">
-        <div class="showcase-header">
-          <h2>Track everywhere</h2>
-          <p>Get real-time updates on all your devices and platforms.</p>
-        </div>
-        <div class="showcase-grid">
+        <aside class="notif-sidebar">
           <div class="showcase-card">
-            <div class="showcase-card-icon"><i class="ti ti-extension" aria-hidden="true"></i></div>
-            <h3 class="showcase-card-title">Browser Extension</h3>
-            <p class="showcase-card-desc">Browser Extension</p>
-            <button class="btn-secondary btn-sm showcase-card-action">Get it</button>
+            <div class="showcase-header">
+              <h2>Track everywhere</h2>
+              <p>Get real-time updates on all your devices and platforms.</p>
+            </div>
+            <div class="showcase-list">
+              <div class="showcase-item">
+                <div class="showcase-item-left">
+                  <div class="showcase-card-icon"><i class="ti ti-extension" aria-hidden="true"></i></div>
+                  <div class="showcase-item-text">
+                    <h3 class="showcase-card-title">Browser Extension</h3>
+                    <p class="showcase-card-desc">Browser Extension</p>
+                  </div>
+                </div>
+                <button class="btn-secondary btn-sm showcase-card-action">Get it</button>
+              </div>
+              <div class="showcase-item">
+                <div class="showcase-item-left">
+                  <div class="showcase-card-icon"><i class="ti ti-brand-apple" aria-hidden="true"></i></div>
+                  <div class="showcase-item-text">
+                    <h3 class="showcase-card-title">iOS App</h3>
+                    <p class="showcase-card-desc">iOS App</p>
+                  </div>
+                </div>
+                <button class="btn-secondary btn-sm showcase-card-action">Get updates</button>
+              </div>
+              <div class="showcase-item">
+                <div class="showcase-item-left">
+                  <div class="showcase-card-icon"><i class="ti ti-brand-android" aria-hidden="true"></i></div>
+                  <div class="showcase-item-text">
+                    <h3 class="showcase-card-title">Android App</h3>
+                    <p class="showcase-card-desc">Android App</p>
+                  </div>
+                </div>
+                <button class="btn-secondary btn-sm showcase-card-action">Get updates</button>
+              </div>
+              <div class="showcase-item">
+                <div class="showcase-item-left">
+                  <div class="showcase-card-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
+                  <div class="showcase-item-text">
+                    <h3 class="showcase-card-title">Email Notifications</h3>
+                    <p class="showcase-card-desc">Email Notifications</p>
+                  </div>
+                </div>
+                <button class="btn-primary btn-sm showcase-card-action">Enable</button>
+              </div>
+            </div>
           </div>
-          <div class="showcase-card">
-            <div class="showcase-card-icon"><i class="ti ti-brand-apple" aria-hidden="true"></i></div>
-            <h3 class="showcase-card-title">iOS App</h3>
-            <p class="showcase-card-desc">iOS App</p>
-            <button class="btn-secondary btn-sm showcase-card-action">Get updates</button>
-          </div>
-          <div class="showcase-card">
-            <div class="showcase-card-icon"><i class="ti ti-brand-android" aria-hidden="true"></i></div>
-            <h3 class="showcase-card-title">Android App</h3>
-            <p class="showcase-card-desc">Android App</p>
-            <button class="btn-secondary btn-sm showcase-card-action">Get updates</button>
-          </div>
-          <div class="showcase-card">
-            <div class="showcase-card-icon"><i class="ti ti-mail" aria-hidden="true"></i></div>
-            <h3 class="showcase-card-title">Email Notifications</h3>
-            <p class="showcase-card-desc">Email Notifications</p>
-            <button class="btn-primary btn-sm showcase-card-action">Enable</button>
-          </div>
-        </div>
-      </section>
+        </aside>
+      </div>
     </main>
   </div>
 </div>
