@@ -834,7 +834,7 @@ input[type="checkbox"] {
   width: 15px;
   height: 15px;
   border: 1.5px solid var(--border-stronger);
-  border-radius: var(--radius-sm);
+  border-radius: 3px;
   background-color: var(--surface-1);
   display: inline-flex;
   align-items: center;
