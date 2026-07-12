@@ -741,6 +741,9 @@ function initUserChip() {
   const userChip = document.querySelector(".user-chip");
   if (!userChip) return;
 
+  const roleEl = userChip.querySelector(".role");
+  if (roleEl) roleEl.remove();
+
   const currentContent = userChip.innerHTML;
   userChip.innerHTML = `
     <div class="user-chip-header">
