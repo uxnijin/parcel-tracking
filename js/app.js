@@ -746,61 +746,78 @@ function initUserChip() {
     <div class="user-chip-header">
       ${currentContent}
     </div>
-    <div class="user-chip-details">
-      <div class="user-chip-menu">
-        <a href="settings.html" class="user-chip-menu-item settings-link">
-          <i class="ti ti-settings"></i> Settings
-        </a>
-        <button class="user-chip-menu-item theme-toggle-btn">
-          <i class="ti ti-moon"></i> <span>Dark Mode</span>
-        </button>
-        <a href="login.html" class="user-chip-menu-item logout-link">
-          <i class="ti ti-logout"></i> Log Out
-        </a>
+    <div class="user-chip-usage">
+      <div class="user-chip-usage-info">
+        <span class="user-chip-usage-plan">Starter Plan</span>
+        <span class="user-chip-usage-metrics">50 / 100 Tracks</span>
+      </div>
+      <div class="user-chip-progress-bg">
+        <div class="user-chip-progress-bar" style="width: 50%;"></div>
       </div>
     </div>
   `;
 
-  const themeBtn = userChip.querySelector(".theme-toggle-btn");
-  function updateThemeButton() {
-    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-    if (isDark) {
-      themeBtn.innerHTML = `<i class="ti ti-sun"></i> <span>Light Mode</span>`;
+  const popover = document.createElement("div");
+  popover.className = "account-popover";
+  popover.innerHTML = `
+    <a href="settings.html" class="account-popover-item">
+      <i class="ti ti-user"></i> My Profile
+    </a>
+    <a href="settings.html" class="account-popover-item">
+      <i class="ti ti-briefcase"></i> Workspace
+    </a>
+    <a href="settings.html" class="account-popover-item">
+      <i class="ti ti-credit-card"></i> Billing & Plans
+    </a>
+    <a href="settings.html" class="account-popover-item">
+      <i class="ti ti-chart-pie"></i> Usage
+    </a>
+    <a href="settings.html" class="account-popover-item">
+      <i class="ti ti-bell"></i> Notification Settings
+    </a>
+    <a href="#" class="account-popover-item">
+      <i class="ti ti-help"></i> Help Center
+    </a>
+    <div class="account-popover-divider"></div>
+    <a href="login.html" class="account-popover-item">
+      <i class="ti ti-logout"></i> Sign Out
+    </a>
+  `;
+  document.body.appendChild(popover);
+
+  function togglePopover(e) {
+    e.stopPropagation();
+    const isVisible = popover.style.display === "flex";
+
+    const notifPopover = document.getElementById("global-notification-popover");
+    if (notifPopover) notifPopover.style.display = "none";
+    const profilePopover = document.querySelector(".profile-popover");
+    if (profilePopover) profilePopover.style.display = "none";
+
+    if (isVisible) {
+      popover.style.display = "none";
     } else {
-      themeBtn.innerHTML = `<i class="ti ti-moon"></i> <span>Dark Mode</span>`;
+      popover.style.display = "flex";
+      const rect = userChip.getBoundingClientRect();
+      popover.style.left = `${rect.left + window.scrollX}px`;
+      popover.style.top = `${rect.top + window.scrollY - popover.offsetHeight - 8}px`;
+      requestAnimationFrame(() => {
+        popover.style.top = `${rect.top + window.scrollY - popover.offsetHeight - 8}px`;
+      });
     }
   }
-  updateThemeButton();
 
-  // Listen to theme changes in case changed elsewhere
-  window.addEventListener("sf-theme-changed", updateThemeButton);
-
-  userChip.addEventListener("click", (e) => {
-    const menuItem = e.target.closest('.user-chip-menu-item');
-    if (menuItem) {
-      e.stopPropagation();
-      if (menuItem.classList.contains("theme-toggle-btn")) {
-        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-        const nextTheme = isDark ? "light" : "dark";
-        localStorage.setItem("sf_theme", nextTheme);
-        if (typeof window.applyTheme === "function") {
-          window.applyTheme(nextTheme);
-        } else {
-          document.documentElement.setAttribute("data-theme", nextTheme);
-        }
-        updateThemeButton();
-        window.dispatchEvent(new Event("sf-theme-changed"));
-      }
-      return;
-    }
-    
-    userChip.classList.toggle("expanded");
-    e.stopPropagation();
-  });
+  userChip.addEventListener("click", togglePopover);
 
   document.addEventListener("click", (e) => {
-    if (!userChip.contains(e.target)) {
-      userChip.classList.remove("expanded");
+    if (!userChip.contains(e.target) && !popover.contains(e.target)) {
+      popover.style.display = "none";
+    }
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") {
+      popover.style.display = "none";
     }
   });
 }
