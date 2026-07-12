@@ -200,18 +200,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if (textSpan) {
       textSpan.className = "sidebar-search-span";
       textSpan.innerHTML = `
-        <span class="static-text">Search…</span>
-        <span class="dynamic-text">
-          <span class="search-prefix">Search for</span>
-          <span class="rotator-wrapper">
-            <span class="rotator-item active">settings</span>
-            <span class="rotator-item">shipments</span>
-            <span class="rotator-item">exceptions</span>
-            <span class="rotator-item">inbox</span>
-          </span>
-        </span>
+        <span class="static-search-text">Search</span><span class="placeholder-dots">…</span><span class="rotator-wrapper"><span class="rotator-item active">&nbsp;for settings</span><span class="rotator-item">&nbsp;for shipments</span><span class="rotator-item">&nbsp;for exceptions</span><span class="rotator-item">&nbsp;for inbox</span></span>
       `;
-
       const rotatorItems = textSpan.querySelectorAll(".rotator-item");
       let currentIndex = 0;
       let intervalId = null;

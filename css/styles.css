@@ -129,52 +129,43 @@ button {
 }
 
 .sidebar-search-span {
-  position: relative;
   display: inline-flex;
   align-items: center;
   height: 100%;
+}
+
+.sidebar-search-span .static-search-text {
+  display: inline-block;
+  white-space: nowrap;
+}
+
+.sidebar-search-span .placeholder-dots {
+  display: inline-block;
+  opacity: 1;
+  max-width: 20px;
+  transition: opacity 0.2s ease, max-width 0.2s ease;
+}
+
+.sidebar-search:hover .placeholder-dots {
+  opacity: 0;
+  max-width: 0;
   overflow: hidden;
-}
-
-.sidebar-search-span .static-text {
-  display: block;
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  transform: translateY(0);
-  opacity: 1;
-}
-
-.sidebar-search-span .dynamic-text {
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  display: flex;
-  align-items: center;
-  opacity: 0;
-  transform: translateY(10px);
-  transition: opacity 0.25s ease, transform 0.25s ease;
-  pointer-events: none;
-  width: 100%;
-}
-
-.sidebar-search:hover .static-text {
-  opacity: 0;
-  transform: translateY(-10px);
-}
-
-.sidebar-search:hover .dynamic-text {
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .sidebar-search-span .rotator-wrapper {
   position: relative;
-  display: inline-block;
-  margin-left: 4px;
-  flex: 1;
+  display: inline-flex;
+  align-items: center;
   height: 1.2em;
   overflow: hidden;
-  vertical-align: middle;
+  max-width: 0;
+  opacity: 0;
+  transition: max-width 0.25s ease, opacity 0.2s ease;
+}
+
+.sidebar-search:hover .rotator-wrapper {
+  max-width: 160px;
+  opacity: 1;
 }
 
 .sidebar-search-span .rotator-item {
@@ -190,11 +181,13 @@ button {
 .sidebar-search-span .rotator-item.active {
   opacity: 1;
   transform: translateY(0);
+  position: relative;
 }
 
 .sidebar-search-span .rotator-item.exit {
   opacity: 0;
   transform: translateY(-100%);
+  position: absolute;
 }
 
 .sidebar-search kbd {
