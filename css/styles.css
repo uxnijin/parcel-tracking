@@ -2915,3 +2915,33 @@ tr.row-highlight {
 .pricing-card:nth-child(3) .pricing-btn:hover {
   background: rgba(59, 130, 246, 0.05);
 }
+
+/* Billing cycle toggle */
+.billing-toggle {
+  display: flex;
+  background: var(--surface-2);
+  border-radius: var(--radius-lg);
+  padding: 2px;
+  gap: 2px;
+  align-items: center;
+}
+
+.billing-toggle .toggle-btn {
+  border: none;
+  background: none;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: var(--radius-sm);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all var(--dur-fast);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.billing-toggle .toggle-btn.active {
+  background: var(--surface-1);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+}

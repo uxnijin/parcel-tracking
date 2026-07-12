@@ -819,7 +819,13 @@
       <aside class="drawer modal-center" role="dialog" aria-label="Upgrade Plan"
         style="width: 860px; max-width: 95vw; padding: var(--sp-6);">
         <div class="flex justify-between items-center mb-4">
-          <h2 style="font-size: 16px; margin: 0;">Upgrade Plan</h2>
+          <div style="display: flex; align-items: center; gap: var(--sp-4);">
+            <h2 style="font-size: 16px; margin: 0;">Upgrade Plan</h2>
+            <div class="billing-toggle">
+              <button type="button" class="toggle-btn active" onclick="setBillingCycle('annual')">Annually</button>
+              <button type="button" class="toggle-btn" onclick="setBillingCycle('monthly')">Monthly</button>
+            </div>
+          </div>
           <button class="icon-btn" aria-label="Close" onclick="closeDrawer('upgrade-plan-modal')"><i class="ti ti-x"
               aria-hidden="true"></i></button>
         </div>
@@ -860,10 +866,10 @@
               <p class="pricing-desc">For people who order all the time.</p>
             </div>
             <div class="pricing-price-box">
-              <span class="pricing-price">$7</span>
-              <span class="pricing-period">/ mo</span>
+              <span class="pricing-price" id="pro-price">$7</span>
+              <span class="pricing-period" id="pro-period">/ mo</span>
             </div>
-            <div class="pricing-billing-info">Billed annually ($84/yr)</div>
+            <div class="pricing-billing-info" id="pro-billing">Billed annually ($84/yr)</div>
             
             <button class="pricing-btn btn-primary-plan" onclick="toast('Plan upgraded to Pro!')">Upgrade to Pro</button>
             
@@ -885,10 +891,10 @@
               <p class="pricing-desc">For teams tracking together.</p>
             </div>
             <div class="pricing-price-box">
-              <span class="pricing-price">$24</span>
-              <span class="pricing-period">/ mo</span>
+              <span class="pricing-price" id="biz-price">$24</span>
+              <span class="pricing-period" id="biz-period">/ mo</span>
             </div>
-            <div class="pricing-billing-info">Billed annually ($288/yr)</div>
+            <div class="pricing-billing-info" id="biz-billing">Billed annually ($288/yr)</div>
             
             <button class="pricing-btn" onclick="toast('Plan upgraded to Business!')">Choose Business</button>
             
@@ -902,6 +908,45 @@
         </div>
       </aside>
     </div>
+
+    <script>
+      function setBillingCycle(cycle) {
+        const buttons = document.querySelectorAll('.billing-toggle .toggle-btn');
+        buttons.forEach(btn => {
+          if (btn.textContent.toLowerCase().includes(cycle.slice(0, 3))) {
+            btn.classList.add('active');
+          } else {
+            btn.classList.remove('active');
+          }
+        });
+
+        const proPrice = document.getElementById('pro-price');
+        const proPeriod = document.getElementById('pro-period');
+        const proBilling = document.getElementById('pro-billing');
+        
+        const bizPrice = document.getElementById('biz-price');
+        const bizPeriod = document.getElementById('biz-period');
+        const bizBilling = document.getElementById('biz-billing');
+
+        if (cycle === 'annual') {
+          if (proPrice) proPrice.textContent = '$7';
+          if (proPeriod) proPeriod.textContent = '/ mo';
+          if (proBilling) proBilling.textContent = 'Billed annually ($84/yr)';
+
+          if (bizPrice) bizPrice.textContent = '$24';
+          if (bizPeriod) bizPeriod.textContent = '/ mo';
+          if (bizBilling) bizBilling.textContent = 'Billed annually ($288/yr)';
+        } else {
+          if (proPrice) proPrice.textContent = '$9';
+          if (proPeriod) proPeriod.textContent = '/ mo';
+          if (proBilling) proBilling.textContent = 'Billed monthly ($108/yr)';
+
+          if (bizPrice) bizPrice.textContent = '$29';
+          if (bizPeriod) bizPeriod.textContent = '/ mo';
+          if (bizBilling) bizBilling.textContent = 'Billed monthly ($348/yr)';
+        }
+      }
+    </script>
 
     <script src="js/data.js"></script>
     <script src="js/app.js"></script>
