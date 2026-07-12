@@ -159,6 +159,7 @@ function disconnectGmailFromInbox(e) {
     message: "Are you sure you want to disconnect Gmail? This will stop scanning your inbox for shipping updates.",
     confirmText: "Disconnect",
     cancelText: "Cancel",
+    kind: "danger",
     onConfirm: () => {
       if (typeof setGmailConnected !== "undefined") {
         setGmailConnected(false);

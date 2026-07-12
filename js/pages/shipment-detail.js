@@ -163,31 +163,40 @@ function addNote() {
 function resolveShipmentDetail() {
   if (!currentShipment) return;
   
-  if (typeof updateShipment !== "undefined") {
-    updateShipment(currentShipment.id, {
-      status: STATUS.DELIVERED,
-      eta: "Delivered",
-      exceptionId: undefined,
-      title: undefined,
-      detail: undefined,
-      severity: undefined,
-      age: undefined,
-      assignedTo: undefined
-    });
-  }
+  showConfirmModal({
+    title: "Resolve Exception",
+    message: `Are you sure you want to resolve the exception for ${currentShipment.id} and mark it as delivered?`,
+    confirmText: "Resolve",
+    cancelText: "Cancel",
+    kind: "primary",
+    onConfirm: () => {
+      if (typeof updateShipment !== "undefined") {
+        updateShipment(currentShipment.id, {
+          status: STATUS.DELIVERED,
+          eta: "Delivered",
+          exceptionId: undefined,
+          title: undefined,
+          detail: undefined,
+          severity: undefined,
+          age: undefined,
+          assignedTo: undefined
+        });
+      }
 
-  if (typeof addNotification !== "undefined") {
-    addNotification({
-      icon: "ti-truck-delivery",
-      kind: "success",
-      title: "Exception resolved",
-      body: `${currentShipment.id} was marked as resolved and delivered.`,
-      time: "Just now",
-      read: false
-    });
-  }
+      if (typeof addNotification !== "undefined") {
+        addNotification({
+          icon: "ti-truck-delivery",
+          kind: "success",
+          title: "Exception resolved",
+          body: `${currentShipment.id} was marked as resolved and delivered.`,
+          time: "Just now",
+          read: false
+        });
+      }
 
-  toast("Exception resolved and delivered!");
+      toast("Exception resolved and delivered!");
+    }
+  });
 }
 
 // Initial page setup

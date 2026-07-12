@@ -1110,7 +1110,7 @@ function initProfilePopover() {
  * @param {string} [options.cancelText] - Label for the cancel button.
  * @param {function} options.onConfirm - Callback when user clicks confirm.
  */
-function showConfirmModal({ title, message, confirmText, cancelText, onConfirm }) {
+function showConfirmModal({ title, message, confirmText, cancelText, onConfirm, kind = "primary" }) {
   let scrim = document.getElementById("custom-confirm-modal");
   if (!scrim) {
     scrim = document.createElement("div");
@@ -1119,11 +1119,18 @@ function showConfirmModal({ title, message, confirmText, cancelText, onConfirm }
     document.body.appendChild(scrim);
   }
 
+  const isDanger = kind === "danger";
+  const iconClass = isDanger ? "ti ti-alert-triangle" : "ti ti-circle-check";
+  const iconColor = isDanger ? "var(--text-danger)" : "var(--text-success)";
+  const btnBg = isDanger ? "var(--border-danger)" : "var(--fill-primary)";
+  const btnBorder = isDanger ? "var(--border-danger)" : "var(--fill-primary)";
+  const btnColor = isDanger ? "#FFFFFF" : "var(--on-primary)";
+
   scrim.innerHTML = `
     <aside class="drawer modal-center" role="dialog" aria-label="${title}" style="width: 400px; max-width: 90vw; padding: var(--sp-5); display: flex; flex-direction: column; gap: var(--sp-4); box-sizing: border-box; text-align: left; background: var(--surface-1); border-radius: 12px; border: 1px solid var(--border); box-shadow: var(--shadow-float);">
       <div style="display: flex; flex-direction: column; gap: var(--sp-2);">
         <h3 style="font-size: 16px; font-weight: 600; margin: 0; display: flex; align-items: center; gap: var(--sp-2); color: var(--text-primary);">
-          <i class="ti ti-alert-triangle" style="color: var(--text-danger); font-size: 20px;"></i>
+          <i class="${iconClass}" style="color: ${iconColor}; font-size: 20px;"></i>
           ${title}
         </h3>
         <p style="font-size: 13px; color: var(--text-secondary); margin: 0; line-height: 1.5;">
@@ -1134,7 +1141,7 @@ function showConfirmModal({ title, message, confirmText, cancelText, onConfirm }
         <button class="btn" id="confirm-modal-cancel" style="height: 36px; padding: 0 var(--sp-4); font-size: 13px; background: var(--surface-1); border: 0.5px solid var(--border-strong); color: var(--text-primary); cursor: pointer; border-radius: var(--radius); font-weight: 500;">
           ${cancelText || "Cancel"}
         </button>
-        <button class="btn-primary" id="confirm-modal-submit" style="background: var(--border-danger); border-color: var(--border-danger); color: #FFFFFF; height: 36px; padding: 0 var(--sp-4); font-size: 13px; font-weight: 500; cursor: pointer; border-radius: var(--radius);">
+        <button class="btn-primary" id="confirm-modal-submit" style="background: ${btnBg}; border-color: ${btnBorder}; color: ${btnColor}; height: 36px; padding: 0 var(--sp-4); font-size: 13px; font-weight: 500; cursor: pointer; border-radius: var(--radius);">
           ${confirmText || "Confirm"}
         </button>
       </div>
