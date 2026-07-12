@@ -44,7 +44,7 @@ function loadShipmentDetails(s) {
       tagsContainer.innerHTML = s.tags.map(t => {
         const text = typeof t === "string" ? t : t.text;
         const colorClass = typeof t === "string" ? "tag-gray" : `tag-${t.color || "gray"}`;
-        return `<span class="badge-tag ${colorClass}">${escapeHtml(text)}</span>`;
+        return `<span class="badge-tag ${colorClass}" style="display:inline-flex; align-items:center; gap:4px;">${escapeHtml(text)}<i class="ti ti-x" style="cursor:pointer; font-size:9px;" onclick="event.stopPropagation(); removeTag('${s.id}', '${escapeHtml(text)}')"></i></span>`;
       }).join("");
     } else {
       tagsRow.style.display = "none";
@@ -219,3 +219,16 @@ window.addEventListener("sf-data-updated", (e) => {
 
 // Run setup
 initPage();
+
+function removeTag(shipmentId, tagName) {
+  if (currentShipment && currentShipment.id === shipmentId) {
+    const tags = (currentShipment.tags || []).filter(t => (typeof t === "string" ? t !== tagName : t.text !== tagName));
+    if (typeof updateShipment !== "undefined") {
+      updateShipment(shipmentId, { tags });
+    }
+    currentShipment.tags = tags;
+    loadShipmentDetails(currentShipment);
+    toast(`Tag "${tagName}" removed`, { icon: "ti-trash" });
+  }
+}
+window.removeTag = removeTag;

@@ -110,7 +110,7 @@ function renderTable(highlightId = null) {
           ${s.tags && s.tags.length ? `<div style="display:flex; flex-wrap:wrap; gap:4px; margin-top:4px;">${s.tags.map(t => {
             const text = typeof t === "string" ? t : t.text;
             const colorClass = typeof t === "string" ? "tag-gray" : `tag-${t.color || "gray"}`;
-            return `<span class="badge-tag ${colorClass}">${escapeHtml(text)}</span>`;
+            return `<span class="badge-tag ${colorClass}" style="display:inline-flex; align-items:center; gap:4px;">${escapeHtml(text)}<i class="ti ti-x" style="cursor:pointer; font-size:9px;" onclick="event.stopPropagation(); removeTag('${s.id}', '${escapeHtml(text)}')"></i></span>`;
           }).join("")}</div>` : ""}
         </td>
         <td class="ellipsis">${escapeHtml(s.customer)}</td>
@@ -179,7 +179,7 @@ function openQuickView(id) {
     ${s.tags && s.tags.length ? `<div class="kv-row"><span class="k">Tags</span><span class="v" style="display:flex; gap:4px; flex-wrap:wrap;">${s.tags.map(t => {
       const text = typeof t === "string" ? t : t.text;
       const colorClass = typeof t === "string" ? "tag-gray" : `tag-${t.color || "gray"}`;
-      return `<span class="badge-tag ${colorClass}">${escapeHtml(text)}</span>`;
+      return `<span class="badge-tag ${colorClass}" style="display:inline-flex; align-items:center; gap:4px;">${escapeHtml(text)}<i class="ti ti-x" style="cursor:pointer; font-size:9px;" onclick="event.stopPropagation(); removeTag('${s.id}', '${escapeHtml(text)}')"></i></span>`;
     }).join("")}</span></div>` : ""}
   `;
 
@@ -521,6 +521,25 @@ function submitBulkTag() {
   });
 }
 window.submitBulkTag = submitBulkTag;
+
+function removeTag(shipmentId, tagName) {
+  const s = ALL_SHIPMENTS.find((x) => x.id === shipmentId);
+  if (s && s.tags) {
+    const tags = s.tags.filter(t => (typeof t === "string" ? t !== tagName : t.text !== tagName));
+    if (typeof updateShipment !== "undefined") {
+      updateShipment(shipmentId, { tags });
+    }
+    s.tags = tags;
+    renderTable();
+    
+    const qvTitle = document.getElementById("qv-title");
+    if (qvTitle && qvTitle.textContent === shipmentId) {
+      openQuickView(shipmentId);
+    }
+    toast(`Tag "${tagName}" removed`, { icon: "ti-trash" });
+  }
+}
+window.removeTag = removeTag;
 
 // Dynamic Saved Views Logic
 function getCustomViews() {
