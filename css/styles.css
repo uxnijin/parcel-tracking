@@ -2808,8 +2808,8 @@ tr.row-highlight {
 /* Pricing Accent Colors & Premium Gradients */
 :root {
   --color-free: #10B981;
-  --color-pro-start: #F59E0B;
-  --color-pro-end: #EAB308;
+  --color-pro-start: #D97706;
+  --color-pro-end: #CA8A04;
   --color-biz-start: #3B82F6;
   --color-biz-end: #06B6D4;
 }
