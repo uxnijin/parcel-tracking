@@ -1,340 +1,549 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Settings — ShipFlow</title>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
-<link rel="stylesheet" href="css/tokens.css" />
-<link rel="stylesheet" href="css/styles.css" />
-<style>
-  .settings-grid { display: grid; grid-template-columns: 200px 1fr; gap: var(--sp-6); max-width: none; }
-  @media (max-width: 760px) { .settings-grid { grid-template-columns: 1fr; } }
-  .settings-nav { display: flex; flex-direction: column; gap: 1px; }
-  .settings-nav .item { padding: 8px 10px; border-radius: var(--radius-sm); font-size: 13px; color: var(--text-secondary); cursor: pointer; }
-  .settings-nav .item:hover { background: var(--surface-2); color: var(--text-primary); }
-  .settings-nav .item.active { background: var(--surface-3); color: var(--text-primary); font-weight: 500; }
-  .settings-panel { display: none; }
-  .settings-panel.active { display: block; }
-  .field-hint { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-  .field-error { font-size: 12px; color: var(--text-danger); margin-top: 4px; display: none; }
-  .field.has-error input { border-color: var(--border-danger); }
-  .field.has-error .field-error { display: block; }
-  .locked-note { display: flex; align-items: center; gap: 6px; font-size: 12px; color: var(--text-muted); margin-top: 4px; }
-  .team-row { display: flex; align-items: center; gap: var(--sp-3); padding: var(--sp-2) 0; border-bottom: 0.5px solid var(--border); }
-  .team-row:last-child { border-bottom: none; }
-  .team-row .who { flex: 1; }
-  .team-row .name { font-size: 13px; font-weight: 500; }
-  .team-row .email { font-size: 12px; color: var(--text-muted); }
-  .save-row { display: flex; align-items: center; gap: 10px; margin-top: var(--sp-4); }
-  .save-status { font-size: 12px; color: var(--text-muted); display: flex; align-items: center; gap: 5px; }
-  .theme-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-2); margin-top: var(--sp-2); max-width: 360px; }
-  .theme-option { border: 1px solid var(--border); border-radius: var(--radius); padding: var(--sp-2) var(--sp-3); cursor: pointer; text-align: center; transition: all var(--dur-fast) var(--ease-out); background: var(--surface-1); display: flex; align-items: center; justify-content: center; gap: var(--sp-2); outline: none; position: relative; }
-  .theme-option:hover { border-color: var(--border-stronger); background: var(--surface-2); transform: translateY(-1px); }
-  .theme-option.active { border-color: var(--fill-primary); background: var(--surface-1); box-shadow: 0 0 0 1px var(--fill-primary), 0 4px 12px rgba(24, 24, 21, 0.08); transform: translateY(-1px); }
-  .theme-option.active:hover { background: var(--surface-1); border-color: var(--fill-primary); }
-  .theme-option .theme-icon { font-size: 16px; color: var(--text-secondary); transition: color var(--dur-fast) var(--ease-out); }
-  .theme-option.active .theme-icon { color: var(--text-primary); }
-  .theme-option .theme-name { font-size: 13px; font-weight: 500; color: var(--text-secondary); transition: color var(--dur-fast) var(--ease-out); }
-  .theme-option.active .theme-name { color: var(--text-primary); font-weight: 600; }
-  .theme-option.active::after { content: ""; position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; border-radius: 50%; background: var(--fill-primary); }
-</style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Settings — ShipFlow</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@2.44.0/tabler-icons.min.css" />
+  <link rel="stylesheet" href="css/tokens.css" />
+  <link rel="stylesheet" href="css/styles.css" />
+  <style>
+    .settings-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: var(--sp-6);
+      max-width: none;
+    }
+
+    @media (max-width: 760px) {
+      .settings-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .settings-nav {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .settings-nav .item {
+      padding: 8px 10px;
+      border-radius: var(--radius-sm);
+      font-size: 13px;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .settings-nav .item:hover {
+      background: var(--surface-2);
+      color: var(--text-primary);
+    }
+
+    .settings-nav .item.active {
+      background: var(--surface-3);
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .settings-panel {
+      display: none;
+    }
+
+    .settings-panel.active {
+      display: block;
+    }
+
+    .field-hint {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .field-error {
+      font-size: 12px;
+      color: var(--text-danger);
+      margin-top: 4px;
+      display: none;
+    }
+
+    .field.has-error input {
+      border-color: var(--border-danger);
+    }
+
+    .field.has-error .field-error {
+      display: block;
+    }
+
+    .locked-note {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .team-row {
+      display: flex;
+      align-items: center;
+      gap: var(--sp-3);
+      padding: var(--sp-2) 0;
+      border-bottom: 0.5px solid var(--border);
+    }
+
+    .team-row:last-child {
+      border-bottom: none;
+    }
+
+    .team-row .who {
+      flex: 1;
+    }
+
+    .team-row .name {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .team-row .email {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .save-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: var(--sp-4);
+    }
+
+    .save-status {
+      font-size: 12px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .theme-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--sp-2);
+      margin-top: var(--sp-2);
+      max-width: 360px;
+    }
+
+    .theme-option {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: var(--sp-2) var(--sp-3);
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--dur-fast) var(--ease-out);
+      background: var(--surface-1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--sp-2);
+      outline: none;
+    }
+
+    .theme-option:hover {
+      border-color: var(--border-stronger);
+      background: var(--surface-2);
+      transform: translateY(-1px);
+    }
+
+    .theme-option.active {
+      border-color: var(--fill-primary);
+      background: var(--fill-primary);
+      box-shadow: 0 4px 12px rgba(24, 24, 21, 0.15);
+      transform: translateY(-1px);
+    }
+
+    .theme-option.active:hover {
+      background: var(--fill-primary);
+      border-color: var(--fill-primary);
+    }
+
+    .theme-option .theme-icon {
+      font-size: 16px;
+      color: var(--text-secondary);
+      transition: color var(--dur-fast) var(--ease-out);
+    }
+
+    .theme-option.active .theme-icon {
+      color: var(--on-primary);
+    }
+
+    .theme-option .theme-name {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      transition: color var(--dur-fast) var(--ease-out);
+    }
+
+    .theme-option.active .theme-name {
+      color: var(--on-primary);
+      font-weight: 600;
+    }
+  </style>
 </head>
+
 <body data-page="settings">
 
-<div class="app-shell">
-  <aside class="sidebar">
-    <div class="sidebar-brand">ShipFlow</div>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="sidebar-brand">ShipFlow</div>
       <button class="sidebar-search" onclick="openCommandPalette()" aria-label="Search shipments, customers, or pages">
         <i class="ti ti-search" aria-hidden="true"></i>
         <span>Search…</span>
       </button>
-    <nav class="nav-group">
-      <span class="nav-label">Workspace</span>
-      <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package" aria-hidden="true"></i>Shipments<span class="count">—</span></a>
-      <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle" aria-hidden="true"></i>Exceptions<span class="count">—</span></a>
-      <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox Scan<span class="count" style="display:none"></span></a>
-      <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar" aria-hidden="true"></i>Calendar</a>
-      <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell" aria-hidden="true"></i>Notifications<span class="count">—</span></a>
-      <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload" aria-hidden="true"></i>Import</a>
-      <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar" aria-hidden="true"></i>Reports</a>
-      <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings" aria-hidden="true"></i>Settings</a>
-    </nav>
-    <div class="sidebar-footer">
-      <div class="user-chip">
-        <div class="avatar">JD</div>
-        <div><div class="who">Jordan Diaz</div><div class="role">Operations</div></div>
-      </div>
-    </div>
-  </aside>
-
-  <div class="main">
-    <header class="topbar">
-      <div class="topbar-lead">
-        <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left" aria-hidden="true"></i></a>
-        <h1>Settings</h1>
-      </div>
-      <div class="topbar-actions">
-        <div class="topbar-track">
-        <i class="ti ti-search" aria-hidden="true"></i>
-        <input type="text" id="tracking-search" placeholder="Track a shipment…" autocomplete="off" aria-label="Search shipments by tracking, customer, or destination" />
-      </div>
-        <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i class="ti ti-bell" aria-hidden="true"></i></button>
-        <div class="avatar">JD</div>
-      </div>
-    </header>
-
-    <main class="content">
-
-      <div class="settings-grid">
-        <nav class="settings-nav">
-          <div class="item active" data-panel="profile">Profile</div>
-          <div class="item" data-panel="notifications">Notifications</div>
-          <div class="item" data-panel="team">Team</div>
-          <div class="item" data-panel="integrations">Integrations</div>
-        </nav>
-
-        <div class="settings-content">
-          <div class="settings-panel active" id="panel-profile">
-            <div class="card">
-              <div class="card-title">Profile</div>
-              <div class="field">
-                <label for="f-name">Full name</label>
-                <input type="text" id="f-name" value="Jordan Diaz" />
-              </div>
-              <div class="field" id="f-email-field">
-                <label for="f-email">Work email</label>
-                <input type="text" id="f-email" value="jordan.diaz@acme.com" />
-                <p class="field-error">Enter a valid email address.</p>
-              </div>
-              <div class="field">
-                <label for="f-role">Role</label>
-                <input type="text" id="f-role" value="Operations manager" disabled />
-                <div class="locked-note"><i class="ti ti-lock" aria-hidden="true"></i>Roles are managed by your workspace admin.</div>
-              </div>
-              <div class="save-row">
-                <button class="btn-primary" onclick="simulateSave('profile')">Save changes</button>
-                <span class="save-status" id="save-status-profile"></span>
-              </div>
-            </div>
-
-            <div class="card" style="margin-top: var(--sp-4);">
-              <div class="card-title">Appearance</div>
-              <p class="text-secondary mb-4" style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
-                Customize the visual theme of the dashboard.
-              </p>
-              <div class="theme-grid">
-                <div class="theme-option" data-theme-val="light" tabindex="0" role="button" aria-label="Light mode">
-                  <i class="ti ti-sun theme-icon" aria-hidden="true"></i>
-                  <span class="theme-name">Light</span>
-                </div>
-                <div class="theme-option" data-theme-val="dark" tabindex="0" role="button" aria-label="Dark mode">
-                  <i class="ti ti-moon theme-icon" aria-hidden="true"></i>
-                  <span class="theme-name">Dark</span>
-                </div>
-                <div class="theme-option" data-theme-val="system" tabindex="0" role="button" aria-label="System default">
-                  <i class="ti ti-device-desktop theme-icon" aria-hidden="true"></i>
-                  <span class="theme-name">System</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="settings-panel" id="panel-notifications">
-            <div class="card">
-              <div class="card-title">Notification preferences</div>
-              <div class="kv-row"><span class="k">Exception raised</span><span class="v"><input type="checkbox" checked /></span></div>
-              <div class="kv-row"><span class="k">Shipment delivered</span><span class="v"><input type="checkbox" checked /></span></div>
-              <div class="kv-row"><span class="k">ETA changed</span><span class="v"><input type="checkbox" /></span></div>
-              <div class="kv-row"><span class="k">Weekly summary email</span><span class="v"><input type="checkbox" checked /></span></div>
-              <div class="save-row">
-                <button class="btn-primary" onclick="simulateSave('notifications')">Save changes</button>
-                <span class="save-status" id="save-status-notifications"></span>
-              </div>
-            </div>
-          </div>
-
-          <div class="settings-panel" id="panel-team">
-            <div class="card">
-              <div class="flex justify-between items-center mb-3">
-                <div class="card-title" style="margin:0">Team members</div>
-                <button class="btn-sm" onclick="openDrawer('invite-member-drawer')"><i class="ti ti-user-plus" aria-hidden="true"></i>Invite</button>
-              </div>
-              <div class="team-row">
-                <div class="avatar">JD</div>
-                <div class="who"><div class="name">Jordan Diaz</div><div class="email">jordan.diaz@acme.com</div></div>
-                <span class="badge badge-neutral">Admin</span>
-              </div>
-              <div class="team-row">
-                <div class="avatar">PN</div>
-                <div class="who"><div class="name">Priya Nair</div><div class="email">priya.nair@acme.com</div></div>
-                <span class="badge badge-neutral">Member</span>
-              </div>
-              <div class="team-row">
-                <div class="avatar">OC</div>
-                <div class="who"><div class="name">Owen Clarke</div><div class="email">owen.clarke@acme.com</div></div>
-                <span class="badge badge-warning"><span class="sw"></span>Invited</span>
-              </div>
-            </div>
-          </div>
-
-          <div class="settings-panel" id="panel-integrations">
-            <div class="card">
-              <div class="card-title">Email Integrations</div>
-              <p class="text-secondary mb-4" style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
-                Connect your workspace to scan incoming order confirmations and shipping updates.
-                Our AI parser automatically extracts carrier tracking numbers, transit statuses, and customer details,
-                and syncs them directly into your dashboard.
-              </p>
-
-              <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
-                <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <img src="assets/gmail.png" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
-                </div>
-                <div class="who" style="flex: 1;">
-                  <div class="name" style="font-weight: 500;">Google Gmail</div>
-                  <div class="email" style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
-                    Scan messages in inbox and folders for shipping updates.
-                  </div>
-                </div>
-                <div>
-                  <button class="btn-primary btn-sm" id="btn-connect-gmail" onclick="toggleGmailConnection(event)">Connect</button>
-                </div>
-              </div>
-
-              <div id="gmail-config" style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
-                <div class="field" style="margin-bottom: var(--sp-4)">
-                  <label for="gmail-scope" style="font-weight:500">Sync scope</label>
-                  <select id="gmail-scope" style="width: 100%">
-                    <option value="inbox">Inbox messages only</option>
-                    <option value="all">Inbox and Archived folders</option>
-                    <option value="label">Only messages labeled "Orders"</option>
-                  </select>
-                </div>
-                <div class="field" style="margin-bottom: 0">
-                  <label style="font-weight:500; margin-bottom: 8px">AI Parsing Filters</label>
-                  <div style="display: flex; flex-direction: column; gap: var(--sp-2);">
-                    <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin-bottom: 0; font-size: var(--fs-footnote);">
-                      <input type="checkbox" checked style="margin: 0;" /> Auto-import shipments matching carrier pattern
-                    </label>
-                    <label style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin-bottom: 0; font-size: var(--fs-footnote);">
-                      <input type="checkbox" checked style="margin: 0;" /> Send dynamic alerts to customer email
-                    </label>
-                  </div>
-                </div>
-              </div>
-
-              <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
-                <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <img src="assets/outlook.png" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
-                </div>
-                <div class="who" style="flex: 1;">
-                  <div class="name" style="font-weight: 500;">Microsoft Outlook</div>
-                  <div class="email integration-status" data-default="Scan Outlook inbox and shared mailboxes for shipping confirmations." style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
-                    Scan Outlook inbox and shared mailboxes for shipping confirmations.
-                  </div>
-                </div>
-                <div>
-                  <button class="btn-primary btn-sm" data-integration="outlook" data-label="Microsoft Outlook" onclick="toggleIntegrationConnection(event)">Connect</button>
-                </div>
-              </div>
-            </div>
-
-            <div class="card" style="margin-top: var(--sp-4);">
-              <div class="card-title">Notifications</div>
-              <p class="text-secondary mb-4" style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
-                Push real-time shipment activity to a chat channel so your team doesn't have to watch the dashboard.
-              </p>
-
-              <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
-                <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <i class="ti ti-brand-slack" aria-hidden="true" style="font-size: 20px; color: #4A154B;"></i>
-                </div>
-                <div class="who" style="flex: 1;">
-                  <div class="name" style="font-weight: 500;">Slack</div>
-                  <div class="email integration-status" data-default="Post exception alerts and delivery updates to a channel." style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
-                    Post exception alerts and delivery updates to a channel.
-                  </div>
-                </div>
-                <div>
-                  <button class="btn-primary btn-sm" data-integration="slack" data-label="Slack" data-config="slack-config" onclick="toggleIntegrationConnection(event)">Connect</button>
-                </div>
-              </div>
-
-              <div id="slack-config" style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
-                <div class="field" style="margin-bottom: 0">
-                  <label for="slack-channel" style="font-weight:500">Post to channel</label>
-                  <select id="slack-channel" style="width: 100%">
-                    <option value="ops-shipping">#ops-shipping</option>
-                    <option value="logistics-alerts">#logistics-alerts</option>
-                    <option value="general">#general</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
-            <div class="card" style="margin-top: var(--sp-4);">
-              <div class="card-title">Order Sources</div>
-              <p class="text-secondary mb-4" style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
-                Connect the storefront your orders come from so a shipment is created automatically the moment an order ships.
-              </p>
-
-              <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
-                <div style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
-                  <img src="assets/shopify.png" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
-                </div>
-                <div class="who" style="flex: 1;">
-                  <div class="name" style="font-weight: 500;">Shopify</div>
-                  <div class="email integration-status" data-default="Auto-create a shipment for every order marked as fulfilled." style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
-                    Auto-create a shipment for every order marked as fulfilled.
-                  </div>
-                </div>
-                <div>
-                  <button class="btn-primary btn-sm" data-integration="shopify" data-label="Shopify" data-config="shopify-config" onclick="toggleIntegrationConnection(event)">Connect</button>
-                </div>
-              </div>
-
-              <div id="shopify-config" style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
-                <div class="field" style="margin-bottom: 0">
-                  <label for="shopify-domain" style="font-weight:500">Store domain</label>
-                  <input type="text" id="shopify-domain" placeholder="yourstore.myshopify.com" style="width: 100%" />
-                </div>
-              </div>
-            </div>
+      <nav class="nav-group">
+        <span class="nav-label">Workspace</span>
+        <a class="nav-item" data-page="shipments" href="index.html"><i class="ti ti-package"
+            aria-hidden="true"></i>Shipments<span class="count">—</span></a>
+        <a class="nav-item" data-page="exceptions" href="exceptions.html"><i class="ti ti-alert-triangle"
+            aria-hidden="true"></i>Exceptions<span class="count">—</span></a>
+        <a class="nav-item" data-page="inbox" href="inbox.html"><i class="ti ti-mail" aria-hidden="true"></i>Inbox
+          Scan<span class="count" style="display:none"></span></a>
+        <a class="nav-item" data-page="calendar" href="calendar.html"><i class="ti ti-calendar"
+            aria-hidden="true"></i>Calendar</a>
+        <a class="nav-item" data-page="notifications" href="notifications.html"><i class="ti ti-bell"
+            aria-hidden="true"></i>Notifications<span class="count">—</span></a>
+        <a class="nav-item" data-page="import" href="import.html"><i class="ti ti-upload"
+            aria-hidden="true"></i>Import</a>
+        <a class="nav-item" data-page="reports" href="reports.html"><i class="ti ti-chart-bar"
+            aria-hidden="true"></i>Reports</a>
+        <a class="nav-item" data-page="settings" href="settings.html"><i class="ti ti-settings"
+            aria-hidden="true"></i>Settings</a>
+      </nav>
+      <div class="sidebar-footer">
+        <div class="user-chip">
+          <div class="avatar">JD</div>
+          <div>
+            <div class="who">Jordan Diaz</div>
+            <div class="role">Operations</div>
           </div>
         </div>
       </div>
-    </main>
-  </div>
-  <div class="drawer-scrim" id="invite-member-drawer">
-    <aside class="drawer" role="dialog" aria-label="Invite team member" style="width: 400px; max-width: 90vw; padding: var(--sp-4);">
-      <div class="flex justify-between items-center mb-4">
-        <h2 style="font-size:16px; margin: 0;">Invite Team Member</h2>
-        <button class="icon-btn" aria-label="Close" onclick="closeDrawer('invite-member-drawer')"><i class="ti ti-x" aria-hidden="true"></i></button>
-      </div>
-      <form id="invite-member-form" onsubmit="event.preventDefault(); submitInvite();">
-        <div class="field mt-3">
-          <label for="inv-email">Email Address</label>
-          <input type="email" id="inv-email" required placeholder="colleague@acme.com" style="width: 100%" />
-        </div>
-        <div class="field mt-3">
-          <label for="inv-role">Role</label>
-          <select id="inv-role" required style="width: 100%">
-            <option value="Member">Member</option>
-            <option value="Admin">Admin</option>
-          </select>
-        </div>
-        <div style="margin-top: var(--sp-6); display: flex; gap: var(--sp-2); justify-content: flex-end;">
-          <button type="button" class="btn-secondary" onclick="closeDrawer('invite-member-drawer')">Cancel</button>
-          <button type="submit" class="btn-primary">Send Invitation</button>
-        </div>
-      </form>
     </aside>
-  </div>
 
-<script src="js/data.js"></script>
-<script src="js/app.js"></script>
-<script src="js/command-palette.js"></script>
-<script src="js/pages/settings.js"></script>
+    <div class="main">
+      <header class="topbar">
+        <div class="topbar-lead">
+          <a class="back-btn" href="index.html" aria-label="Back to Shipments"><i class="ti ti-chevron-left"
+              aria-hidden="true"></i></a>
+          <h1>Settings</h1>
+        </div>
+        <div class="topbar-actions">
+          <div class="topbar-track">
+            <i class="ti ti-search" aria-hidden="true"></i>
+            <input type="text" id="tracking-search" placeholder="Track a shipment…" autocomplete="off"
+              aria-label="Search shipments by tracking, customer, or destination" />
+          </div>
+          <button class="icon-btn" aria-label="Notifications" onclick="location.href='notifications.html'"><i
+              class="ti ti-bell" aria-hidden="true"></i></button>
+          <div class="avatar">JD</div>
+        </div>
+      </header>
+
+      <main class="content">
+
+        <div class="settings-grid">
+          <nav class="settings-nav">
+            <div class="item active" data-panel="profile">Profile</div>
+            <div class="item" data-panel="notifications">Notifications</div>
+            <div class="item" data-panel="team">Team</div>
+            <div class="item" data-panel="integrations">Integrations</div>
+          </nav>
+
+          <div class="settings-content">
+            <div class="settings-panel active" id="panel-profile">
+              <div class="card">
+                <div class="card-title">Profile</div>
+                <div class="field">
+                  <label for="f-name">Full name</label>
+                  <input type="text" id="f-name" value="Jordan Diaz" />
+                </div>
+                <div class="field" id="f-email-field">
+                  <label for="f-email">Work email</label>
+                  <input type="text" id="f-email" value="jordan.diaz@acme.com" />
+                  <p class="field-error">Enter a valid email address.</p>
+                </div>
+                <div class="field">
+                  <label for="f-role">Role</label>
+                  <input type="text" id="f-role" value="Operations manager" disabled />
+                  <div class="locked-note"><i class="ti ti-lock" aria-hidden="true"></i>Roles are managed by your
+                    workspace admin.</div>
+                </div>
+                <div class="save-row">
+                  <button class="btn-primary" onclick="simulateSave('profile')">Save changes</button>
+                  <span class="save-status" id="save-status-profile"></span>
+                </div>
+              </div>
+
+              <div class="card" style="margin-top: var(--sp-4);">
+                <div class="card-title">Appearance</div>
+                <p class="text-secondary mb-4"
+                  style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
+                  Customize the visual theme of the dashboard.
+                </p>
+                <div class="theme-grid">
+                  <div class="theme-option" data-theme-val="light" tabindex="0" role="button" aria-label="Light mode">
+                    <i class="ti ti-sun theme-icon" aria-hidden="true"></i>
+                    <span class="theme-name">Light</span>
+                  </div>
+                  <div class="theme-option" data-theme-val="dark" tabindex="0" role="button" aria-label="Dark mode">
+                    <i class="ti ti-moon theme-icon" aria-hidden="true"></i>
+                    <span class="theme-name">Dark</span>
+                  </div>
+                  <div class="theme-option" data-theme-val="system" tabindex="0" role="button"
+                    aria-label="System default">
+                    <i class="ti ti-device-desktop theme-icon" aria-hidden="true"></i>
+                    <span class="theme-name">System</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-panel" id="panel-notifications">
+              <div class="card">
+                <div class="card-title">Notification preferences</div>
+                <div class="kv-row"><span class="k">Exception raised</span><span class="v"><input type="checkbox"
+                      checked /></span></div>
+                <div class="kv-row"><span class="k">Shipment delivered</span><span class="v"><input type="checkbox"
+                      checked /></span></div>
+                <div class="kv-row"><span class="k">ETA changed</span><span class="v"><input type="checkbox" /></span>
+                </div>
+                <div class="kv-row"><span class="k">Weekly summary email</span><span class="v"><input type="checkbox"
+                      checked /></span></div>
+                <div class="save-row">
+                  <button class="btn-primary" onclick="simulateSave('notifications')">Save changes</button>
+                  <span class="save-status" id="save-status-notifications"></span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-panel" id="panel-team">
+              <div class="card">
+                <div class="flex justify-between items-center mb-3">
+                  <div class="card-title" style="margin:0">Team members</div>
+                  <button class="btn-sm" onclick="openDrawer('invite-member-drawer')"><i class="ti ti-user-plus"
+                      aria-hidden="true"></i>Invite</button>
+                </div>
+                <div class="team-row">
+                  <div class="avatar">JD</div>
+                  <div class="who">
+                    <div class="name">Jordan Diaz</div>
+                    <div class="email">jordan.diaz@acme.com</div>
+                  </div>
+                  <span class="badge badge-neutral">Admin</span>
+                </div>
+                <div class="team-row">
+                  <div class="avatar">PN</div>
+                  <div class="who">
+                    <div class="name">Priya Nair</div>
+                    <div class="email">priya.nair@acme.com</div>
+                  </div>
+                  <span class="badge badge-neutral">Member</span>
+                </div>
+                <div class="team-row">
+                  <div class="avatar">OC</div>
+                  <div class="who">
+                    <div class="name">Owen Clarke</div>
+                    <div class="email">owen.clarke@acme.com</div>
+                  </div>
+                  <span class="badge badge-warning"><span class="sw"></span>Invited</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="settings-panel" id="panel-integrations">
+              <div class="card">
+                <div class="card-title">Email Integrations</div>
+                <p class="text-secondary mb-4"
+                  style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
+                  Connect your workspace to scan incoming order confirmations and shipping updates.
+                  Our AI parser automatically extracts carrier tracking numbers, transit statuses, and customer details,
+                  and syncs them directly into your dashboard.
+                </p>
+
+                <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
+                  <div
+                    style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <img src="assets/gmail.png" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
+                  </div>
+                  <div class="who" style="flex: 1;">
+                    <div class="name" style="font-weight: 500;">Google Gmail</div>
+                    <div class="email" style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
+                      Scan messages in inbox and folders for shipping updates.
+                    </div>
+                  </div>
+                  <div>
+                    <button class="btn-primary btn-sm" id="btn-connect-gmail"
+                      onclick="toggleGmailConnection(event)">Connect</button>
+                  </div>
+                </div>
+
+                <div id="gmail-config"
+                  style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
+                  <div class="field" style="margin-bottom: var(--sp-4)">
+                    <label for="gmail-scope" style="font-weight:500">Sync scope</label>
+                    <select id="gmail-scope" style="width: 100%">
+                      <option value="inbox">Inbox messages only</option>
+                      <option value="all">Inbox and Archived folders</option>
+                      <option value="label">Only messages labeled "Orders"</option>
+                    </select>
+                  </div>
+                  <div class="field" style="margin-bottom: 0">
+                    <label style="font-weight:500; margin-bottom: 8px">AI Parsing Filters</label>
+                    <div style="display: flex; flex-direction: column; gap: var(--sp-2);">
+                      <label
+                        style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin-bottom: 0; font-size: var(--fs-footnote);">
+                        <input type="checkbox" checked style="margin: 0;" /> Auto-import shipments matching carrier
+                        pattern
+                      </label>
+                      <label
+                        style="display: flex; align-items: center; gap: 8px; font-weight: normal; margin-bottom: 0; font-size: var(--fs-footnote);">
+                        <input type="checkbox" checked style="margin: 0;" /> Send dynamic alerts to customer email
+                      </label>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
+                  <div
+                    style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <img src="assets/outlook.png" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
+                  </div>
+                  <div class="who" style="flex: 1;">
+                    <div class="name" style="font-weight: 500;">Microsoft Outlook</div>
+                    <div class="email integration-status"
+                      data-default="Scan Outlook inbox and shared mailboxes for shipping confirmations."
+                      style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
+                      Scan Outlook inbox and shared mailboxes for shipping confirmations.
+                    </div>
+                  </div>
+                  <div>
+                    <button class="btn-primary btn-sm" data-integration="outlook" data-label="Microsoft Outlook"
+                      onclick="toggleIntegrationConnection(event)">Connect</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card" style="margin-top: var(--sp-4);">
+                <div class="card-title">Notifications</div>
+                <p class="text-secondary mb-4"
+                  style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
+                  Push real-time shipment activity to a chat channel so your team doesn't have to watch the dashboard.
+                </p>
+
+                <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
+                  <div
+                    style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <i class="ti ti-brand-slack" aria-hidden="true" style="font-size: 20px; color: #4A154B;"></i>
+                  </div>
+                  <div class="who" style="flex: 1;">
+                    <div class="name" style="font-weight: 500;">Slack</div>
+                    <div class="email integration-status"
+                      data-default="Post exception alerts and delivery updates to a channel."
+                      style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
+                      Post exception alerts and delivery updates to a channel.
+                    </div>
+                  </div>
+                  <div>
+                    <button class="btn-primary btn-sm" data-integration="slack" data-label="Slack"
+                      data-config="slack-config" onclick="toggleIntegrationConnection(event)">Connect</button>
+                  </div>
+                </div>
+
+                <div id="slack-config"
+                  style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
+                  <div class="field" style="margin-bottom: 0">
+                    <label for="slack-channel" style="font-weight:500">Post to channel</label>
+                    <select id="slack-channel" style="width: 100%">
+                      <option value="ops-shipping">#ops-shipping</option>
+                      <option value="logistics-alerts">#logistics-alerts</option>
+                      <option value="general">#general</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card" style="margin-top: var(--sp-4);">
+                <div class="card-title">Order Sources</div>
+                <p class="text-secondary mb-4"
+                  style="font-size: var(--fs-footnote); line-height: 1.5; margin-bottom: 20px;">
+                  Connect the storefront your orders come from so a shipment is created automatically the moment an
+                  order ships.
+                </p>
+
+                <div class="team-row" style="align-items: flex-start; gap: var(--sp-3); padding: var(--sp-3) 0;">
+                  <div
+                    style="background: var(--surface-1); border: 0.5px solid var(--border); width: 40px; height: 40px; border-radius: var(--radius); display: flex; align-items: center; justify-content: center; flex-shrink: 0;">
+                    <img src="assets/shopify.png" alt="" aria-hidden="true" style="width: 20px; height: auto;" />
+                  </div>
+                  <div class="who" style="flex: 1;">
+                    <div class="name" style="font-weight: 500;">Shopify</div>
+                    <div class="email integration-status"
+                      data-default="Auto-create a shipment for every order marked as fulfilled."
+                      style="margin-top: 4px; line-height: 1.4; color: var(--text-secondary);">
+                      Auto-create a shipment for every order marked as fulfilled.
+                    </div>
+                  </div>
+                  <div>
+                    <button class="btn-primary btn-sm" data-integration="shopify" data-label="Shopify"
+                      data-config="shopify-config" onclick="toggleIntegrationConnection(event)">Connect</button>
+                  </div>
+                </div>
+
+                <div id="shopify-config"
+                  style="display: none; margin-top: var(--sp-4); padding-top: var(--sp-4); border-top: 0.5px dashed var(--border)">
+                  <div class="field" style="margin-bottom: 0">
+                    <label for="shopify-domain" style="font-weight:500">Store domain</label>
+                    <input type="text" id="shopify-domain" placeholder="yourstore.myshopify.com" style="width: 100%" />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+    <div class="drawer-scrim" id="invite-member-drawer">
+      <aside class="drawer" role="dialog" aria-label="Invite team member"
+        style="width: 400px; max-width: 90vw; padding: var(--sp-4);">
+        <div class="flex justify-between items-center mb-4">
+          <h2 style="font-size:16px; margin: 0;">Invite Team Member</h2>
+          <button class="icon-btn" aria-label="Close" onclick="closeDrawer('invite-member-drawer')"><i class="ti ti-x"
+              aria-hidden="true"></i></button>
+        </div>
+        <form id="invite-member-form" onsubmit="event.preventDefault(); submitInvite();">
+          <div class="field mt-3">
+            <label for="inv-email">Email Address</label>
+            <input type="email" id="inv-email" required placeholder="colleague@acme.com" style="width: 100%" />
+          </div>
+          <div class="field mt-3">
+            <label for="inv-role">Role</label>
+            <select id="inv-role" required style="width: 100%">
+              <option value="Member">Member</option>
+              <option value="Admin">Admin</option>
+            </select>
+          </div>
+          <div style="margin-top: var(--sp-6); display: flex; gap: var(--sp-2); justify-content: flex-end;">
+            <button type="button" class="btn-secondary" onclick="closeDrawer('invite-member-drawer')">Cancel</button>
+            <button type="submit" class="btn-primary">Send Invitation</button>
+          </div>
+        </form>
+      </aside>
+    </div>
+
+    <script src="js/data.js"></script>
+    <script src="js/app.js"></script>
+    <script src="js/command-palette.js"></script>
+    <script src="js/pages/settings.js"></script>
 </body>
+
 </html>
