@@ -807,28 +807,42 @@ function initUserChip() {
 
   const popover = document.createElement("div");
   popover.className = "account-popover";
-  popover.innerHTML = `
-    <a href="settings.html?panel=profile" class="account-popover-item">
-      <i class="ti ti-user"></i> My Profile
-    </a>
-    <a href="settings.html?panel=workspace" class="account-popover-item">
-      <i class="ti ti-briefcase"></i> Workspace
-    </a>
-    <a href="settings.html?panel=billing" class="account-popover-item">
-      <i class="ti ti-credit-card"></i> Billing & Usage
-    </a>
-    <a href="settings.html?panel=notifications" class="account-popover-item">
-      <i class="ti ti-bell"></i> Notification Settings
-    </a>
-    <a href="settings.html?panel=help" class="account-popover-item">
-      <i class="ti ti-help"></i> Help Center
-    </a>
-    <div class="account-popover-divider"></div>
-    <a href="login.html" class="account-popover-item">
-      <i class="ti ti-logout"></i> Sign Out
-    </a>
-  `;
   document.body.appendChild(popover);
+
+  function renderAccountMenu() {
+    popover.innerHTML = `
+      <a href="settings.html?panel=profile" class="account-popover-item">
+        <i class="ti ti-user"></i> My Profile
+      </a>
+      <a href="settings.html?panel=workspace" class="account-popover-item">
+        <i class="ti ti-briefcase"></i> Workspace
+      </a>
+      <a href="settings.html?panel=billing" class="account-popover-item">
+        <i class="ti ti-credit-card"></i> Billing & Usage
+      </a>
+      <a href="settings.html?panel=notifications" class="account-popover-item">
+        <i class="ti ti-bell"></i> Notification Settings
+      </a>
+      <a href="settings.html?panel=help" class="account-popover-item">
+        <i class="ti ti-help"></i> Help Center
+      </a>
+      <button class="account-popover-item theme-toggle-btn">
+        <i class="ti ti-moon"></i> <span>Dark Mode</span>
+      </button>
+      <div class="account-popover-divider"></div>
+      <a href="login.html" class="account-popover-item">
+        <i class="ti ti-logout"></i> Sign Out
+      </a>
+    `;
+
+    const themeBtn = popover.querySelector(".theme-toggle-btn");
+    const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+    if (isDark) {
+      themeBtn.innerHTML = `<i class="ti ti-sun"></i> <span>Light Mode</span>`;
+    } else {
+      themeBtn.innerHTML = `<i class="ti ti-moon"></i> <span>Dark Mode</span>`;
+    }
+  }
 
   function togglePopover(e) {
     e.stopPropagation();
@@ -842,6 +856,7 @@ function initUserChip() {
     if (isVisible) {
       popover.style.display = "none";
     } else {
+      renderAccountMenu();
       popover.style.display = "flex";
       const rect = userChip.getBoundingClientRect();
       popover.style.left = `${rect.left + window.scrollX}px`;
@@ -853,6 +868,33 @@ function initUserChip() {
   }
 
   userChip.addEventListener("click", togglePopover);
+
+  popover.addEventListener("click", (e) => {
+    const menuItem = e.target.closest('.account-popover-item');
+    if (menuItem) {
+      if (menuItem.classList.contains("theme-toggle-btn")) {
+        e.stopPropagation();
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        const nextTheme = isDark ? "light" : "dark";
+        localStorage.setItem("sf_theme", nextTheme);
+        if (typeof window.applyTheme === "function") {
+          window.applyTheme(nextTheme);
+        } else {
+          document.documentElement.setAttribute("data-theme", nextTheme);
+        }
+        window.dispatchEvent(new Event("sf-theme-changed"));
+        renderAccountMenu();
+      } else {
+        popover.style.display = "none";
+      }
+    }
+  });
+
+  window.addEventListener("sf-theme-changed", () => {
+    if (popover.style.display === "flex") {
+      renderAccountMenu();
+    }
+  });
 
   document.addEventListener("click", (e) => {
     if (!userChip.contains(e.target) && !popover.contains(e.target)) {
