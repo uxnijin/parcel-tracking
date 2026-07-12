@@ -767,10 +767,7 @@ function initUserChip() {
       <i class="ti ti-briefcase"></i> Workspace
     </a>
     <a href="settings.html?panel=billing" class="account-popover-item">
-      <i class="ti ti-credit-card"></i> Billing & Plans
-    </a>
-    <a href="settings.html?panel=billing" class="account-popover-item">
-      <i class="ti ti-chart-pie"></i> Usage
+      <i class="ti ti-credit-card"></i> Billing & Usage
     </a>
     <a href="settings.html?panel=notifications" class="account-popover-item">
       <i class="ti ti-bell"></i> Notification Settings
