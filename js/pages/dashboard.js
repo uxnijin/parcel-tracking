@@ -674,20 +674,45 @@ function submitSaveView() {
   toast(`Saved view "${name}" created`);
 }
 
+let pendingDeleteViewId = null;
+
 function deleteSavedView(e, viewId) {
   if (e) {
     e.preventDefault();
     e.stopPropagation();
   }
   
-  if (!confirm("Are you sure you want to delete this saved view?")) return;
+  const customViews = getCustomViews();
+  const customView = customViews.find(v => v.id === viewId);
+  if (!customView) return;
+
+  pendingDeleteViewId = viewId;
+  const nameEl = document.getElementById('delete-view-name');
+  if (nameEl) nameEl.textContent = `"${customView.name}"`;
+
+  const modal = document.getElementById('delete-view-modal');
+  if (modal) {
+    modal.classList.add('open');
+  }
+}
+
+// Confirm Delete Event Listener
+document.getElementById('btn-confirm-delete-view')?.addEventListener('click', () => {
+  if (!pendingDeleteViewId) return;
 
   let customViews = getCustomViews();
-  customViews = customViews.filter(v => v.id !== viewId);
+  customViews = customViews.filter(v => v.id !== pendingDeleteViewId);
   saveCustomViews(customViews);
+  
+  if (state.activeViewId === pendingDeleteViewId) {
+    state.activeViewId = null;
+  }
+
   renderSavedViews();
+  closeDrawer('delete-view-modal');
   toast("Saved view deleted");
-}
+  pendingDeleteViewId = null;
+});
 
 // Make sure functions are globally accessible
 window.openSaveViewModal = openSaveViewModal;
