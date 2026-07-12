@@ -772,7 +772,7 @@ function initUserChip() {
     <a href="settings.html?panel=notifications" class="account-popover-item">
       <i class="ti ti-bell"></i> Notification Settings
     </a>
-    <a href="help.html" class="account-popover-item">
+    <a href="settings.html?panel=help" class="account-popover-item">
       <i class="ti ti-help"></i> Help Center
     </a>
     <div class="account-popover-divider"></div>

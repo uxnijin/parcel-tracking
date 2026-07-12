@@ -219,3 +219,45 @@ function handleUrlPanel() {
     }
   }
 }
+
+// FAQ Toggle & Help Center interactions
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".faq-question").forEach((item) => {
+    item.addEventListener("click", () => {
+      item.closest(".faq-item").classList.toggle("active");
+    });
+  });
+
+  const helpSearch = document.getElementById("help-search");
+  if (helpSearch) {
+    helpSearch.addEventListener("input", searchHelp);
+  }
+});
+
+function searchHelp() {
+  const query = (document.getElementById("help-search")?.value || "").toLowerCase();
+  document.querySelectorAll(".faq-item").forEach(item => {
+    const question = item.querySelector(".faq-question").textContent.toLowerCase();
+    const answer = item.querySelector(".faq-answer").textContent.toLowerCase();
+    if (question.includes(query) || answer.includes(query)) {
+      item.style.display = "";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
+
+function submitSupportTicket() {
+  const subject = document.getElementById("sup-subject").value;
+  if (!subject) return;
+  if (typeof toast !== "undefined") {
+    toast("Support ticket submitted! We will reply via email shortly.");
+  } else {
+    alert("Support ticket submitted! We will reply via email shortly.");
+  }
+  document.getElementById("support-form").reset();
+}
+
+window.searchHelp = searchHelp;
+window.submitSupportTicket = submitSupportTicket;
+
