@@ -7,9 +7,62 @@ document.querySelectorAll(".settings-nav .item").forEach((item) => {
     document.querySelectorAll(".settings-nav .item").forEach((i) => i.classList.remove("active"));
     document.querySelectorAll(".settings-panel").forEach((p) => p.classList.remove("active"));
     item.classList.add("active");
-    document.getElementById(`panel-${item.dataset.panel}`).classList.add("active");
+    const targetPanel = document.getElementById(`panel-${item.dataset.panel}`);
+    if (targetPanel) {
+      targetPanel.classList.add("active");
+    }
+    if (item.dataset.panel === "billing") {
+      animateBillingUsage();
+    }
   });
 });
+
+let billingAnimFrameId = null;
+function animateBillingUsage() {
+  const panel = document.getElementById("panel-billing");
+  if (!panel) return;
+  const metricsEl = panel.querySelector(".kv-row .v");
+  const progressBar = panel.querySelector(".user-chip-progress-bar");
+  if (!metricsEl || !progressBar) return;
+  
+  const metricsText = "50 / 100 tracks used"; // default initial/target format
+  const match = metricsText.match(/(\d+)\s*\/\s*(\d+)\s*(.*)/);
+  if (!match) return;
+
+  const targetVal = parseInt(match[1], 10);
+  const maxVal = parseInt(match[2], 10);
+  const suffix = match[3] || "tracks used";
+  const targetPercent = maxVal > 0 ? (targetVal / maxVal) * 100 : 50;
+
+  if (billingAnimFrameId) cancelAnimationFrame(billingAnimFrameId);
+  
+  progressBar.style.transition = "none";
+  progressBar.style.width = "0%";
+  metricsEl.textContent = `0 / ${maxVal} ${suffix}`;
+
+  let startTimestamp = null;
+  const duration = 800; // 800ms transition
+
+  function animate(timestamp) {
+    if (!startTimestamp) startTimestamp = timestamp;
+    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+    const easeProgress = progress * (2 - progress); // easeOutQuad
+    
+    const currentVal = Math.floor(easeProgress * targetVal);
+    const currentPercent = easeProgress * targetPercent;
+    
+    progressBar.style.width = `${currentPercent}%`;
+    metricsEl.textContent = `${currentVal} / ${maxVal} ${suffix}`;
+    
+    if (progress < 1) {
+      billingAnimFrameId = requestAnimationFrame(animate);
+    } else {
+      progressBar.style.transition = "width 0.3s ease";
+    }
+  }
+
+  billingAnimFrameId = requestAnimationFrame(animate);
+}
 
 /** Simulates a save round-trip with a validation failure the first time,
     so the panel demonstrates saving / error / saved states without a backend. */
@@ -215,6 +268,9 @@ function handleUrlPanel() {
       const targetPanel = document.getElementById(`panel-${panel}`);
       if (targetPanel) {
         targetPanel.classList.add("active");
+        if (panel === "billing") {
+          animateBillingUsage();
+        }
       }
     }
   }
