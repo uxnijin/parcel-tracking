@@ -695,6 +695,14 @@ button i {
   border-color: var(--fill-primary-hover);
 }
 
+button[onclick*="new-shipment-drawer"] i {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button[onclick*="new-shipment-drawer"]:hover i {
+  transform: rotate(90deg);
+}
+
 .btn-danger {
   color: var(--text-danger);
   border-color: var(--border-danger);
