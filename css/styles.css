@@ -2067,39 +2067,170 @@ kbd {
 }
 
 /* ---------- Permission / dead-end state (403, 404) ---------- */
-.dead-end {
-  min-height: calc(100vh - var(--topbar-h));
+.dead-end-wrapper {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--sp-6);
+  background: radial-gradient(circle at center, var(--surface-1) 0%, var(--surface-0) 100%);
+  position: relative;
+  overflow: hidden;
+}
+
+.dead-end-glow {
+  position: absolute;
+  width: 480px;
+  height: 480px;
+  background: radial-gradient(circle, rgba(24, 24, 21, 0.04) 0%, rgba(24, 24, 21, 0) 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  pointer-events: none;
+  filter: blur(40px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .dead-end-glow {
+    background: radial-gradient(circle, rgba(242, 242, 239, 0.04) 0%, rgba(242, 242, 239, 0) 70%);
+  }
+}
+
+.dead-end-card {
+  max-width: 420px;
+  width: 100%;
+  background: var(--surface-1);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: var(--sp-8) var(--sp-6);
+  box-shadow: var(--shadow-float);
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   text-align: center;
-  padding: var(--sp-6);
+  position: relative;
+  z-index: 2;
+  transition: transform var(--dur-slow) var(--ease-out), box-shadow var(--dur-slow) var(--ease-out);
 }
 
-.dead-end .code {
-  font-size: 13px;
-  color: var(--text-muted);
+.dead-end-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 30px rgba(24, 24, 21, 0.05);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .dead-end-card:hover {
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.2);
+  }
+}
+
+.dead-end-card .card-badge {
+  font-size: var(--fs-caption);
   font-family: var(--font-mono);
-  margin-bottom: var(--sp-3);
-}
-
-.dead-end i {
-  font-size: 32px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
   color: var(--text-muted);
-  margin-bottom: var(--sp-4);
+  background: var(--surface-2);
+  padding: 4px var(--sp-3);
+  border-radius: 100px;
+  border: 1px solid var(--border);
+  margin-bottom: var(--sp-5);
 }
 
-.dead-end h1 {
-  font-size: var(--fs-title);
-  margin-bottom: 6px;
+.dead-end-card .illustration-container {
+  width: 100%;
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: var(--sp-5);
 }
 
-.dead-end p {
+.dead-end-card h1 {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--sp-2);
+  letter-spacing: -0.01em;
+}
+
+.dead-end-card p {
   font-size: var(--fs-footnote);
   color: var(--text-secondary);
-  max-width: 380px;
-  margin-bottom: var(--sp-4);
+  line-height: 1.5;
+  margin-bottom: var(--sp-6);
+  max-width: 320px;
+}
+
+.dead-end-card .actions {
+  display: flex;
+  gap: var(--sp-3);
+  width: 100%;
+  justify-content: center;
+}
+
+.dead-end-card .actions button {
+  height: 36px;
+  padding: 0 var(--sp-4);
+  font-size: var(--fs-footnote);
+}
+
+/* SVG grid / animations tokens */
+:root {
+  --border-grid: rgba(24, 24, 21, 0.04);
+  --accent-glow: #18181B;
+  --border-danger-ping: #E24B4A;
+  --bg-danger-dot: #FCEBEB;
+  --text-danger-dot: #A32D2D;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --border-grid: rgba(242, 242, 239, 0.04);
+    --accent-glow: #F2F2EF;
+    --border-danger-ping: #E24B4A;
+    --bg-danger-dot: #2D1414;
+    --text-danger-dot: #E24B4A;
+  }
+}
+
+/* SVG Keyframes & animations */
+@keyframes error-ping {
+  0% {
+    transform: scale(0.85);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(1.8);
+    opacity: 0;
+  }
+}
+
+@keyframes error-dash {
+  to {
+    stroke-dashoffset: -20;
+  }
+}
+
+.dead-end-card .ping {
+  transform-origin: center;
+  animation: error-ping 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.dead-end-card .ping-warning {
+  transform-origin: center;
+  animation: error-ping 2s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+  animation-delay: 0.5s;
+}
+
+.dead-end-card .ping-danger {
+  transform-origin: center;
+  animation: error-ping 1.5s cubic-bezier(0.16, 1, 0.3, 1) infinite;
+}
+
+.dead-end-card .route-progress {
+  animation: error-dash 2s linear infinite;
 }
 
 /* ---------- Keyboard focus for table rows (row-level nav) ---------- */

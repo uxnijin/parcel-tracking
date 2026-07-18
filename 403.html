@@ -9,14 +9,49 @@
 <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-<div class="dead-end">
-  <div class="code">Error 403</div>
-  <i class="ti ti-lock" aria-hidden="true"></i>
-  <h1>You don't have access to this workspace</h1>
-  <p>This area is limited to workspace admins. Ask an admin to grant you access, or switch to a workspace you belong to.</p>
-  <div class="flex gap-2">
-    <button class="btn-primary" onclick="location.href='index.html'"><i class="ti ti-home" aria-hidden="true"></i>Go to dashboard</button>
-    <button onclick="toast('Access request sent to your admin')"><i class="ti ti-mail" aria-hidden="true"></i>Request access</button>
+<div class="dead-end-wrapper">
+  <div class="dead-end-glow"></div>
+  <div class="dead-end-card">
+    <div class="card-badge">Error 403</div>
+    <div class="illustration-container">
+      <svg class="error-illustration" viewBox="0 0 240 160" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+        <defs>
+          <pattern id="grid-403" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--border-grid)" stroke-width="1" />
+          </pattern>
+          <radialGradient id="glow-403" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="var(--accent-glow)" stop-opacity="0.08" />
+            <stop offset="100%" stop-color="var(--accent-glow)" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+
+        <!-- Background Grid & Glow -->
+        <rect width="240" height="160" fill="url(#grid-403)" />
+        <circle cx="120" cy="80" r="70" fill="url(#glow-403)" />
+
+        <!-- Shield / Lock visual representation -->
+        <g transform="translate(120, 80)">
+          <!-- Pulsing warning rings -->
+          <circle class="ping" cx="0" cy="0" r="28" stroke="var(--text-muted)" stroke-width="1" stroke-dasharray="4,4" fill="none" />
+          <circle class="ping-warning" cx="0" cy="0" r="42" stroke="var(--border-warning)" opacity="0.4" stroke-width="1" fill="none" />
+          
+          <!-- Padlock Body and Shackle -->
+          <!-- Shackle -->
+          <path d="M -12,-4 V -14 A 12,12 0 0,1 12,-14 V -4" stroke="var(--text-primary)" stroke-width="3" stroke-linecap="round" fill="none" />
+          <!-- Body -->
+          <rect x="-20" y="-4" width="40" height="30" rx="6" fill="var(--surface-1)" stroke="var(--text-primary)" stroke-width="2" />
+          <!-- Keyhole -->
+          <circle cx="0" cy="7" r="3" fill="var(--text-primary)" />
+          <path d="M 0,9 L 0,15" stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round" />
+        </g>
+      </svg>
+    </div>
+    <h1>You don't have access to this workspace</h1>
+    <p>This area is limited to workspace admins. Ask an admin to grant you access, or switch to a workspace you belong to.</p>
+    <div class="actions">
+      <button class="btn-primary" onclick="location.href='index.html'"><i class="ti ti-home" aria-hidden="true"></i>Go to dashboard</button>
+      <button onclick="toast('Access request sent to your admin')"><i class="ti ti-mail" aria-hidden="true"></i>Request access</button>
+    </div>
   </div>
 </div>
 <script src="js/app.js"></script>

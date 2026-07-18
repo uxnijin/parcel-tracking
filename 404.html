@@ -9,14 +9,60 @@
 <link rel="stylesheet" href="css/styles.css" />
 </head>
 <body>
-<div class="dead-end">
-  <div class="code">Error 404</div>
-  <i class="ti ti-map-off" aria-hidden="true"></i>
-  <h1>This page doesn't exist</h1>
-  <p>The link may be out of date, or the shipment may have been removed. Check the tracking number and try again.</p>
-  <div class="flex gap-2">
-    <button class="btn-primary" onclick="location.href='index.html'"><i class="ti ti-home" aria-hidden="true"></i>Go to dashboard</button>
-    <button onclick="openCommandPalette()"><i class="ti ti-search" aria-hidden="true"></i>Search</button>
+<div class="dead-end-wrapper">
+  <div class="dead-end-glow"></div>
+  <div class="dead-end-card">
+    <div class="card-badge">Error 404</div>
+    <div class="illustration-container">
+      <svg class="error-illustration" viewBox="0 0 240 160" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 100%; height: 100%;">
+        <defs>
+          <pattern id="grid-404" width="20" height="20" patternUnits="userSpaceOnUse">
+            <path d="M 20 0 L 0 0 0 20" fill="none" stroke="var(--border-grid)" stroke-width="1" />
+          </pattern>
+          <radialGradient id="glow-404" cx="50%" cy="50%" r="50%">
+            <stop offset="0%" stop-color="var(--accent-glow)" stop-opacity="0.08" />
+            <stop offset="100%" stop-color="var(--accent-glow)" stop-opacity="0" />
+          </radialGradient>
+        </defs>
+
+        <!-- Background Grid & Glow -->
+        <rect width="240" height="160" fill="url(#grid-404)" />
+        <circle cx="120" cy="80" r="70" fill="url(#glow-404)" />
+
+        <!-- Dotted path representing transit -->
+        <path d="M30,110 C70,110 80,50 120,50 C160,50 170,110 210,110" stroke="var(--border-strong)" stroke-width="2" stroke-linecap="round" stroke-dasharray="6,6" fill="none" />
+        <path class="route-progress" d="M30,110 C70,110 80,50 120,50 C160,50 170,110 210,110" stroke="var(--text-primary)" stroke-width="2" stroke-linecap="round" stroke-dasharray="6,6" fill="none" />
+
+        <!-- Start point -->
+        <circle cx="30" cy="110" r="5" fill="var(--text-muted)" />
+        
+        <!-- Waypoint -->
+        <g transform="translate(120, 50)">
+          <circle cx="0" cy="0" r="4" fill="var(--text-muted)" />
+        </g>
+
+        <!-- Terminal point (Lost/Warning symbol) -->
+        <g transform="translate(210, 110)">
+          <circle class="ping-danger" cx="0" cy="0" r="16" stroke="var(--border-danger)" stroke-width="1.5" fill="none" />
+          <circle cx="0" cy="0" r="10" fill="var(--bg-danger)" stroke="var(--border-danger)" stroke-width="1" />
+          <path d="M-3,-3 L3,3 M3,-3 L-3,3" stroke="var(--text-danger)" stroke-width="2" stroke-linecap="round" />
+        </g>
+
+        <!-- Floating box / cargo package icon -->
+        <g transform="translate(165, 65)">
+          <path d="M-8,-6 L0,-10 L8,-6 L8,4 L0,8 L-8,4 Z" fill="var(--surface-1)" stroke="var(--text-muted)" stroke-width="1.5" />
+          <path d="M-8,-6 L0,-2 L8,-6" fill="none" stroke="var(--text-muted)" stroke-width="1.5" />
+          <path d="M0,-2 L0,8" fill="none" stroke="var(--text-muted)" stroke-width="1.5" />
+          <text x="6" y="-6" fill="var(--text-danger)" font-family="var(--font-sans)" font-size="12" font-weight="bold">?</text>
+        </g>
+      </svg>
+    </div>
+    <h1>This page doesn't exist</h1>
+    <p>The link may be out of date, or the shipment may have been removed. Check the tracking number and try again.</p>
+    <div class="actions">
+      <button class="btn-primary" onclick="location.href='index.html'"><i class="ti ti-home" aria-hidden="true"></i>Go to dashboard</button>
+      <button onclick="openCommandPalette()"><i class="ti ti-search" aria-hidden="true"></i>Search</button>
+    </div>
   </div>
 </div>
 <script src="js/data.js"></script>
